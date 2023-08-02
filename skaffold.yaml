@@ -1,0 +1,34 @@
+apiVersion: skaffold/v1
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  artifacts:
+    - image: bharatrose1/pasal-auth
+      context: pasal-auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src : 'src/**/*.ts'
+            dest: .
+    - image: bharatrose1/pasal-products
+      context: pasal-products
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src : 'src/**/*.ts'
+            dest: .
+    - image: bharatrose1/pasal-orders
+      context: pasal-orders
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src : 'src/**/*.ts'
+            dest: .

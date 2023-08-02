@@ -1,0 +1,1 @@
+export const mailerEmail = "support@customize.io";

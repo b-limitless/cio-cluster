@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pasal-orders-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pasal-orders
+  template:
+    metadata:
+      labels:
+        app: pasal-orders
+    spec:
+      containers:
+        - name: pasal-orders
+          image: bharatrose1/pasal-orders
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://pasal-orders-mongo-srv:27017/orders'
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
+            - name: RABBIT_MQ_URL
+              value: 'amqp://rabbitmq-srv:5672'
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: pasal-orders-srv
+spec:
+  selector:
+    app: pasal-orders
+  ports:
+    - name: pasal-orders
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
