@@ -12,6 +12,13 @@ router.post(
   febricBodyRequest,
   validateRequest, 
   async (req: Request, res: Response) => {
+
+
+    try {
+
+    } catch(err) {
+      
+    }
     // try {
       
     //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({

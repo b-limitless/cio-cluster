@@ -12,6 +12,12 @@ beforeAll(async() => {
     process.env.NODE_ENV = "test";
     process.env.JWT_KEY = 'asdf';
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
+    process.env.CLOUD_NAME="dun5p8e5d";
+    process.env.CLOUD_API_KEY="997554415655324";
+    process.env.CLOUD_API_SECRET="levxY72Vl-UeqPDDh6mydcGyw9k"
+
+    // For cloudinary
     mongo = await MongoMemoryServer.create();
     const mongoUri = mongo.getUri();
 

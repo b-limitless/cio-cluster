@@ -3,19 +3,23 @@ import fs from "fs";
 import multer from "multer";
 import { uploadFileToCloudinary } from "../common/uploadFileToCloudinary";
 import logger from "@pasal/common/build/logger";
+import { BadRequestError, requireAuth } from "@pasal/common";
 
 const router = express.Router();
 const upload = multer();
 
-router.post('/api/products/v1/upload', upload.single('image'), async (req, res) => {
+router.post('/api/products/v1/upload', 
+requireAuth,
+upload.single('image'), async (req, res) => {
     try {
       const {originalImageUrl, thumbnailImageUrl, filePath} = await uploadFileToCloudinary("ABC", req.file);
       res.send({originalImageUrl, thumbnailImageUrl, filePath});
       fs.unlinkSync(filePath);
       return;
     } catch(err) {
-      res.status(404).send(`Something went wrong could not up ${err}`);
       logger.log("error", err);
+      throw new BadRequestError(`Error while uploading file ${err}`)
+     
     }
   });
 

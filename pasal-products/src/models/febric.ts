@@ -6,7 +6,6 @@ interface FebricAttrs {
   title: string;
   price: number;
   deliveryTime: string;
-  imageLink: object;
   excellence: string;
   warmth: string;
   weight: string;
@@ -28,6 +27,8 @@ interface FebricAttrs {
   threadTypes: string;
   threadCounts: string;
   characters: string[];
+  thumbnailImageUrl:string;
+  originalImageUrl:string;
 }
 
 interface FebricDoc extends mongoose.Document {
@@ -35,7 +36,6 @@ interface FebricDoc extends mongoose.Document {
   title: string;
   price: number;
   deliveryTime: string;
-  imageLink: string;
   excellence: string;
   warmth: string;
   weight: string;
@@ -57,7 +57,10 @@ interface FebricDoc extends mongoose.Document {
   threadTypes: string;
   threadCounts: string;
   characters: string[];
+  thumbnailImageUrl:string;
+  originalImageUrl:string;
   version: number;
+
 }
 
 interface FebricModel extends mongoose.Model<FebricDoc> {
@@ -80,10 +83,6 @@ const febricSchema = new mongoose.Schema(
     },
     deliveryTime: {
       type: String,
-      required: true,
-    },
-    imageLink: {
-      type: Object,
       required: true,
     },
     excellence: {
@@ -170,6 +169,15 @@ const febricSchema = new mongoose.Schema(
       type: [String],
       required: true,
     },
+    thumbnailImageUrl: {
+      type: String,
+      required: true
+    },
+
+    originalImageUrl:{
+      type:String,
+      required:true
+    }
   },
   {
     toJSON: {
