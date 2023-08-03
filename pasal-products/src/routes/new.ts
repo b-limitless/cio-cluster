@@ -5,6 +5,7 @@ import { FebricService } from "../servies/FebricService";
 import logger from "@pasal/common/build/logger";
 
 
+
 const router = express.Router();
 
 router.post(
@@ -196,4 +197,38 @@ router.patch(
   }
 );
 
+router.delete(
+  "/api/products/v1/:id",
+  requireAuth,
+  hasPermissions(["create_febric"]), 
+  async (req: Request, res: Response) => {
+    const {id} = req.params;
+    try {
+      const deleteFebric = await FebricService.findByIdAndDelete(id);
+      res.status(200).send(deleteFebric);
+      return;
+    } catch(err) {
+      logger.log("error", "Could not create febric");
+      throw new Error("Could not create febric"); 
+    }
+    // try {
+      
+    //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
+    //     version: product.version,
+    //     id: product.id,
+    //     userId: product.userId,
+    //     name: product.name,
+    //     price: product.price,
+    //     category: product.category,
+    //     subCategory: product.subCategory,
+    //     availableItems:availableItems
+    //   });
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    
+    
+    // res.status(201).json(product);
+  }
+);
 export { router as createProductRouter };

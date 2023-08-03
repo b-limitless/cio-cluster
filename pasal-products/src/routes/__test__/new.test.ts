@@ -1,5 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
+import { Febric } from "../../models/febric";
 
 
 const  originalImageUrl ="https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056368/images/ABC/aqycbx1lgccrndirskjn.webp";
@@ -182,3 +183,59 @@ it("creates a febric and update it", async() => {
     const updatedResponse = JSON.parse(update.text);
     expect(updatedResponse.title).toEqual("This is new value")
 }); 
+
+it("create and delete a febric", async() => {
+  const sampleData = {
+    title: "Sample Fabric",
+    price: 100,
+    deliveryTime: "2 days",
+    imageLink: "http://example.com/fabric-image.jpg",
+    excellence: "4 rating stars",
+    warmth: "3 rating stars",
+    weight: "500 gr/m^2",
+    season: "Summer",
+    threadStyle: "Plain",
+    brightness: "High",
+    superShiny: false,
+    material: "Cotton",
+    tone: "Blue",
+    threadCount: 300,
+    opacity: "Opaque",
+    waterproof: true,
+    stretchyText: "Stretchy fabric",
+    stretchy: true,
+    mis: "New",
+    type: "Pants",
+    febricTypes: "Cotton",
+    febricSeasons: "Winter",
+    threadTypes: "Cotton",
+    threadCounts: "200-400",
+    characters: ["New", "Comfortable", "Durable"],
+    originalImageUrl, 
+    thumbnailImageUrl
+  };
+
+  const response = await request(app)
+    .post("/api/products/v1")
+    .set("Cookie", global.signin(["create_febric"]))
+    .send({ ...sampleData })
+    .expect(201);
+
+    const parseResponse = JSON.parse(response.text);
+    const {id} = parseResponse;
+
+    try {
+      const deleteFebric = await request(app)
+      .delete(`/api/products/v1/${id}`)
+      .set("Cookie", global.signin(["create_febric"]))
+      .send({ })
+      .expect(200);
+      
+    } catch(err) {
+      console.log("Could not delete", err);
+    }
+
+    const findFebric = await Febric.findById(id);
+
+    expect(findFebric).toBeNull();
+});
