@@ -1,5 +1,9 @@
-import {ReadStream} from "fs";
 import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import { promisify } from "util";
+const writeFileAsync = promisify(fs.writeFile);
+
+
 
 
 cloudinary.config({
@@ -8,33 +12,67 @@ cloudinary.config({
   api_secret: process.env.CLOUD_API_SECRET,
 });
 
-type resoureceType = "auto" | "image" | "video";
 
-interface options {
-    folder: string;
-    resource_type: resoureceType;
+/**
+ * Uploads a file to Cloudinary for the specified user.
+ *
+ * @async
+ * @param {string} userId - The ID of the user for whom the file is being uploaded.
+ * @param {Express.Request["file"] | Express.Request["file"]} file - The file to be uploaded to Cloudinary.
+ * @returns {Promise<{ originalImageUrl: string, thumbnailImageUrl: string }>} An object containing the URLs of the original and thumbnail images.
+ * @throws {Error} If there is an error during the upload process.
+ */
+
+export async function uploadFileToCloudinary(userId:string, file:Express.Request["file"] | Express.Request["file"]) {
+  try {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Add more allowed types if needed
+    const maxFileSizeKB = 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
+
+    if (!file) {
+      throw new Error('Please select a file');
+    }
+
+    if(file.size > maxFileSizeKB) {
+      throw new Error(`File size exceeds, Only ${maxFileSizeKB / 1024} MB allowed`);
+    }
+    
+    if(!allowedTypes.includes(file.mimetype)) {
+      throw new Error(`Invalid image type, only jpeg, png, gif, webp extension is allwoed`)
+    }
+
+    const uploadedFile = file;
+
+    // create file path 
+    const filePath = `/tmp/${uploadedFile.filename}`;
+
+    try {
+      await writeFileAsync(filePath, uploadedFile.buffer);
+    } catch(err) {
+      throw new Error(`Could not upload the file ${err}`);
+    }
+    // Convert buffer to readable stream using streamifier
+   // const stream = streamifier.createReadStream(uploadedFile.buffer);
+
+  
+    // Upload the original image to Cloudinary
+    const uploadResult = await cloudinary.uploader.upload(filePath, { folder: `images/${userId}` });
+
+    // Use Cloudinary SDK to generate the thumbnail
+    const thumbnailResult = await cloudinary.uploader.upload(filePath, {
+      folder: `thumbnails/${userId}`,
+      transformation: { width: 140, height: 103, crop: 'crop' },
+    });
+
+    // Get the URLs for the original and thumbnail images
+    const originalImageUrl = uploadResult.secure_url;
+    const thumbnailImageUrl = thumbnailResult.secure_url;
+    // Send the URLs back to the client
+    // Clean up: Remove the temporary file from /tmp
+    fs.unlinkSync(filePath);
+    return { originalImageUrl, thumbnailImageUrl };
+
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
 }
-
-// const uploadImageWithThumbnail = async (highQualityImage:ReadStream) => {
-//     try {
-//       const uploadResponse = await cloudinary.uploader.upload_large(highQualityImage, {
-//         resource_type: 'image',
-//         folder: 'your_folder_name', // Optional: If you want to organize the images in a specific folder in Cloudinary
-//         transformation: [
-//           { width: 40, height: 40, crop: 'fill' }, // This will create the thumbnail image
-//         ],
-//       });
-  
-//       // The response will contain the URLs for the high-quality image and the thumbnail
-//       const { secure_url: largeSizeURL, eager } = uploadResponse;
-//       const thumbnailURL = eager[0].secure_url;
-  
-//       // You can now send back the URLs to the frontend along with any other form data
-//       return { largeSize: largeSizeURL, thumbnail: thumbnailURL };
-//     } catch (error) {
-//       console.error('Error uploading image with thumbnail:', error);
-//       throw error;
-//     }
-//   };
-
 

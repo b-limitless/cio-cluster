@@ -81,7 +81,7 @@ router.post('/api/products/v1/upload', upload.single('image'), async (req, res) 
     // Use Cloudinary SDK to generate the thumbnail
     const thumbnailResult = await cloudinary.uploader.upload(filePath, {
       folder: 'thumbnails/',
-      transformation: { width: 40, height: 40, crop: 'fill' },
+      transformation: { width: 140, height: 103, crop: 'crop' },
     });
 
     // Get the URLs for the original and thumbnail images
