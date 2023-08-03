@@ -1,14 +1,9 @@
 import { hasPermissions, requireAuth, validateRequest } from "@pasal/common";
 import express, { Request, Response } from "express";
-import fs from "fs";
-import multer from "multer";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
-import { uploadFileToCloudinary } from "../common/uploadFileToCloudinary";
-
 
 
 const router = express.Router();
-const upload = multer();
 
 router.post(
   "/api/products/v1/new",
@@ -40,23 +35,6 @@ router.post(
 );
 
 // Define the route where the file will be uploaded
-
-
-
-
-router.post('/api/products/v1/upload', upload.single('image'), async (req, res) => {
-  try {
-    const {originalImageUrl, thumbnailImageUrl, filePath} = await uploadFileToCloudinary("ABC", req.file);
-    res.send({originalImageUrl, thumbnailImageUrl, filePath});
-    fs.unlinkSync(filePath);
-    return;
-  } catch(err) {
-    res.status(404).send(`Something went wrong could not up ${err}`);
-    console.log(err);
-  }
-});
-
-
 
 
 export { router as createProductRouter };
