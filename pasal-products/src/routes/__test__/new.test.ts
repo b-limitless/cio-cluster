@@ -1,7 +1,9 @@
-import { app } from "../../app";
 import request from "supertest";
+import { app } from "../../app";
 
-import { rabbitMQWrapper } from "../../rabbitmq-wrapper";
+
+const  originalImageUrl ="https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056368/images/ABC/aqycbx1lgccrndirskjn.webp";
+const thumbnailImageUrl= "https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056371/thumbnails/ABC/nqaljl0gyhctkagxj1q7.webp";
 
 it("throw 401 un autorized error when there is no authentication", async () => {
   const response = await request(app)
@@ -25,14 +27,16 @@ it("throw 401 error if user is authenticated but does not have create product pr
   );
 });
 
+
 it("will provided the required permission for the api create_febric", async () => {
   const response = await request(app)
     .post("/api/products/v1/new")
     .set("Cookie", global.signin(["create_febric"]))
-    .send({})
+    .send({originalImageUrl , thumbnailImageUrl})
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
+ 
   expect(parseResponse.errors.length).toEqual(25); // Could change in the future
  
 });
@@ -47,7 +51,9 @@ it("provideds title will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
+
+  console.log("parseResponse", parseResponse)
+  expect(parseResponse.errors.length).toEqual(26); // Could change in the future
 
 });
 
@@ -62,7 +68,7 @@ it("provideds price will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(25); // Could change in the future
 });
 
 it("provideds delivery_time will throw remaining error ", async () => {
@@ -77,7 +83,7 @@ it("provideds delivery_time will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
 });
 
 it("will provide all required data returns 201", async () => {
@@ -107,6 +113,8 @@ it("will provide all required data returns 201", async () => {
     threadTypes: "Cotton",
     threadCounts: "200-400",
     characters: ["New", "Comfortable", "Durable"],
+    originalImageUrl, 
+    thumbnailImageUrl
   };
 
   const response = await request(app)
@@ -117,81 +125,3 @@ it("will provide all required data returns 201", async () => {
 
   console.log(response.text)
 });
-
-// it("response with status 400 if user is authenticated", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({})
-//     .expect(400);
-
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.errors).toBeDefined();
-//   expect(parseResponse.errors.length).toStrictEqual(5);
-// });
-
-// it("response with status 400 if only name is provided", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({ name: "coat" })
-//     .expect(400);
-
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.errors).toBeDefined();
-//   expect(parseResponse.errors.length).toStrictEqual(4);
-// });
-
-// it("response with status 400 if only name and category is provided", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({ name: "coat", category: "cloth" })
-//     .expect(400);
-
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.errors).toBeDefined();
-//   expect(parseResponse.errors.length).toStrictEqual(3);
-// });
-
-// it("response with status 400 if only name and category is provided", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({ name: "coat", category: "cloth" })
-//     .expect(400);
-
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.errors).toBeDefined();
-//   expect(parseResponse.errors.length).toStrictEqual(3);
-// });
-
-// it("response with status 400 if only name and category, subCagegory is provided", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({ name: "coat", category: "cloth", subCategory: "cloth" })
-//     .expect(400);
-
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.errors).toBeDefined();
-//   expect(parseResponse.errors.length).toStrictEqual(2);
-// });
-
-// it("response with 201 code when product is created", async () => {
-//   const response = await request(app)
-//     .post("/api/products/v1/new")
-//     .set("Cookie", global.signin())
-//     .send({
-//       name: "coat",
-//       category: "cloth",
-//       subCategory: "cloth",
-//       price: 100,
-//       availableItems: 100,
-//     })
-//     .expect(201);
-//   const parseResponse = JSON.parse(response.text);
-//   expect(parseResponse.id).toBeDefined();
-//   expect(Object.entries(parseResponse).length).toStrictEqual(9);
-//   expect(rabbitMQWrapper.client.publish).toHaveBeenCalled();
-// });

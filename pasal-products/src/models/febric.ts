@@ -6,7 +6,7 @@ interface FebricAttrs {
   title: string;
   price: number;
   deliveryTime: string;
-  imageLink: string;
+  imageLink: object;
   excellence: string;
   warmth: string;
   weight: string;
@@ -83,7 +83,7 @@ const febricSchema = new mongoose.Schema(
       required: true,
     },
     imageLink: {
-      type: String,
+      type: Object,
       required: true,
     },
     excellence: {

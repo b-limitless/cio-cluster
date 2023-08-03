@@ -2,6 +2,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { promisify } from "util";
 const writeFileAsync = promisify(fs.writeFile);
+import logger from "@pasal/common/build/logger";
 
 
 
@@ -19,14 +20,14 @@ cloudinary.config({
  * @async
  * @param {string} userId - The ID of the user for whom the file is being uploaded.
  * @param {Express.Request["file"] | Express.Request["file"]} file - The file to be uploaded to Cloudinary.
- * @returns {Promise<{ originalImageUrl: string, thumbnailImageUrl: string }>} An object containing the URLs of the original and thumbnail images.
+ * @returns {Promise<{ originalImageUrl: string, thumbnailImageUrl: string, filePath:string }>} An object containing the URLs of the original and thumbnail images.
  * @throws {Error} If there is an error during the upload process.
  */
 
 export async function uploadFileToCloudinary(userId:string, file:Express.Request["file"] | Express.Request["file"]) {
   try {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif']; // Add more allowed types if needed
-    const maxFileSizeKB = 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
+    const allowedTypes = ['image/jpeg', 'image/png', , 'image/webp']; // Add more allowed types if needed
+    const maxFileSizeKB = 1024 * 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
 
     if (!file) {
       throw new Error('Please select a file');
@@ -43,16 +44,13 @@ export async function uploadFileToCloudinary(userId:string, file:Express.Request
     const uploadedFile = file;
 
     // create file path 
-    const filePath = `/tmp/${uploadedFile.filename}`;
+    const filePath = `/tmp/${uploadedFile.originalname}`;
 
     try {
       await writeFileAsync(filePath, uploadedFile.buffer);
     } catch(err) {
       throw new Error(`Could not upload the file ${err}`);
     }
-    // Convert buffer to readable stream using streamifier
-   // const stream = streamifier.createReadStream(uploadedFile.buffer);
-
   
     // Upload the original image to Cloudinary
     const uploadResult = await cloudinary.uploader.upload(filePath, { folder: `images/${userId}` });
@@ -68,11 +66,12 @@ export async function uploadFileToCloudinary(userId:string, file:Express.Request
     const thumbnailImageUrl = thumbnailResult.secure_url;
     // Send the URLs back to the client
     // Clean up: Remove the temporary file from /tmp
-    fs.unlinkSync(filePath);
-    return { originalImageUrl, thumbnailImageUrl };
+    //fs.unlinkSync(filePath);
+    return { originalImageUrl, thumbnailImageUrl, filePath };
 
   } catch (error) {
-    console.error('Error uploading image:', error);
+    logger.log("error", `Error uploading image: ${error}`, )
+    throw new Error(`Error uploading image:${error}`, );
   }
 }
 

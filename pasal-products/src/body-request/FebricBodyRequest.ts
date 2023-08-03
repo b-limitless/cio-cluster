@@ -26,4 +26,7 @@ export const febricBodyRequest: ValidationChain[] = [
   body("threadTypes").notEmpty().withMessage("Thread types must not be empty"),
   body("threadCounts").notEmpty().withMessage("Thread counts must not be empty"),
   body("characters").isArray().withMessage("Characters must be an array"),
+  body("originalImageUrl").notEmpty().withMessage("Opacity must not be empty"),
+  body("thumbnailImageUrl").notEmpty().withMessage("Opacity must not be empty"),
+  
 ];
