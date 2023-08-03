@@ -1,23 +1,85 @@
-import { hasPermissions, requireAuth, validateRequest } from "@pasal/common";
+import { NotAuthorizedError, hasPermissions, requireAuth, validateRequest } from "@pasal/common";
 import express, { Request, Response } from "express";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
+import { FebricService } from "../servies/FebricService";
+import logger from "@pasal/common/build/logger";
 
 
 const router = express.Router();
 
 router.post(
-  "/api/products/v1/new",
+  "/api/products/v1",
   requireAuth,
   hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest, 
   async (req: Request, res: Response) => {
-
-
+    // if(!req.currentUser) {
+    //   throw new NotAuthorizedError();
+    // }
+    const { 
+      title, 
+      price,
+      deliveryTime, 
+      excellence, 
+      warmth, 
+      weight, 
+      season, 
+      threadStyle, 
+      brightness, 
+      superShiny, 
+      material, 
+      tone, 
+      threadCount,
+      opacity, 
+      waterproof,
+      stretchyText, 
+      stretchy,
+      mis, 
+      type, 
+      febricTypes, 
+      febricSeasons, 
+      threadTypes, 
+      threadCounts, 
+      characters,
+      thumbnailImageUrl,
+      originalImageUrl} = req.body;
+    
+    
+    const userId = req?.currentUser?.id;
     try {
-
+      const febric = await FebricService.build({userId, 
+        title, 
+        price,
+        deliveryTime, 
+        excellence, 
+        warmth, 
+        weight, 
+        season, 
+        threadStyle, 
+        brightness, 
+        superShiny, 
+        material, 
+        tone, 
+        threadCount,
+        opacity, 
+        waterproof,
+        stretchyText, 
+        stretchy,
+        mis, 
+        type, 
+        febricTypes, 
+        febricSeasons, 
+        threadTypes, 
+        threadCounts, 
+        characters,
+        thumbnailImageUrl,
+        originalImageUrl});
+      res.status(201).send(febric);
+      return;
     } catch(err) {
-      
+      logger.log("error", "Could not create febric");
+      throw new Error("Could not create febric"); 
     }
     // try {
       
@@ -41,7 +103,97 @@ router.post(
   }
 );
 
-// Define the route where the file will be uploaded
-
+// Delete the febric based on id
+router.patch(
+  "/api/products/v1/:id",
+  requireAuth,
+  hasPermissions(["create_febric"]),
+  febricBodyRequest,
+  validateRequest, 
+  async (req: Request, res: Response) => {
+    const { 
+      title, 
+      price,
+      deliveryTime, 
+      excellence, 
+      warmth, 
+      weight, 
+      season, 
+      threadStyle, 
+      brightness, 
+      superShiny, 
+      material, 
+      tone, 
+      threadCount,
+      opacity, 
+      waterproof,
+      stretchyText, 
+      stretchy,
+      mis, 
+      type, 
+      febricTypes, 
+      febricSeasons, 
+      threadTypes, 
+      threadCounts, 
+      characters,
+      thumbnailImageUrl,
+      originalImageUrl} = req.body;
+    
+    const {id} = req.params;
+    try {
+      const febric = await FebricService.findByIdAndUpdate(id, {
+        title, 
+        price,
+        deliveryTime, 
+        excellence, 
+        warmth, 
+        weight, 
+        season, 
+        threadStyle, 
+        brightness, 
+        superShiny, 
+        material, 
+        tone, 
+        threadCount,
+        opacity, 
+        waterproof,
+        stretchyText, 
+        stretchy,
+        mis, 
+        type, 
+        febricTypes, 
+        febricSeasons, 
+        threadTypes, 
+        threadCounts, 
+        characters,
+        thumbnailImageUrl,
+        originalImageUrl}, {new:true});
+      res.status(201).send(febric);
+      return;
+    } catch(err) {
+      logger.log("error", "Could not create febric");
+      throw new Error("Could not create febric"); 
+    }
+    // try {
+      
+    //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
+    //     version: product.version,
+    //     id: product.id,
+    //     userId: product.userId,
+    //     name: product.name,
+    //     price: product.price,
+    //     category: product.category,
+    //     subCategory: product.subCategory,
+    //     availableItems:availableItems
+    //   });
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    
+    
+    // res.status(201).json(product);
+    res.status(201).send({});
+  }
+);
 
 export { router as createProductRouter };

@@ -1,8 +1,8 @@
 import logger from "@pasal/common/build/logger";
 import { Febric } from "../models/febric";
-import { AnyKeys } from "mongoose";
+import mongoose from "mongoose";
 
-export class UserServiceLocal {
+export class FebricServiceLocal {
     async findById(id:string ) {
         const existingUser = await Febric.findById(id);
 
@@ -29,9 +29,9 @@ export class UserServiceLocal {
         }
     }
 
-    async findOneAndUpdate(conditions:any, update:any, options:any) {
+    async findByIdAndUpdate(id:string, update:any, options:any) {
         try {
-            const updated = await Febric.findOneAndUpdate(conditions, update, options)
+            const updated = await Febric.findByIdAndUpdate(id, update, options)
             return updated;
         } catch(err) {
             logger.log("info", `Can not find and update`);
@@ -40,6 +40,6 @@ export class UserServiceLocal {
     }
 }
 
-const UserService = new UserServiceLocal();
+const FebricService = new FebricServiceLocal();
 
-export {UserService};
+export { FebricService };

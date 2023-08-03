@@ -7,7 +7,7 @@ const thumbnailImageUrl= "https://res.cloudinary.com/dun5p8e5d/image/upload/v169
 
 it("throw 401 un autorized error when there is no authentication", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .send({})
     .expect(401);
   const parseResponse = JSON.parse(response.text);
@@ -16,7 +16,7 @@ it("throw 401 un autorized error when there is no authentication", async () => {
 
 it("throw 401 error if user is authenticated but does not have create product prermission", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin([]))
     .send({})
     .expect(401);
@@ -30,7 +30,7 @@ it("throw 401 error if user is authenticated but does not have create product pr
 
 it("will provided the required permission for the api create_febric", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin(["create_febric"]))
     .send({originalImageUrl , thumbnailImageUrl})
     .expect(400);
@@ -43,7 +43,7 @@ it("will provided the required permission for the api create_febric", async () =
 
 it("provideds title will throw remaining error ", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin(["create_febric"]))
     .send({
       title: "This is febric",
@@ -52,14 +52,14 @@ it("provideds title will throw remaining error ", async () => {
 
   const parseResponse = JSON.parse(response.text);
 
-  console.log("parseResponse", parseResponse)
+  
   expect(parseResponse.errors.length).toEqual(26); // Could change in the future
 
 });
 
 it("provideds price will throw remaining error ", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin(["create_febric"]))
     .send({
       title: "This is febric",
@@ -73,7 +73,7 @@ it("provideds price will throw remaining error ", async () => {
 
 it("provideds delivery_time will throw remaining error ", async () => {
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin(["create_febric"]))
     .send({
       title: "This is febric",
@@ -118,10 +118,67 @@ it("will provide all required data returns 201", async () => {
   };
 
   const response = await request(app)
-    .post("/api/products/v1/new")
+    .post("/api/products/v1")
     .set("Cookie", global.signin(["create_febric"]))
     .send({ ...sampleData })
     .expect(201);
 
-  console.log(response.text)
+    const parseResponse = JSON.parse(response.text);
+    expect(parseResponse.userId).toBeDefined()
+    expect(parseResponse.title).toEqual("Sample Fabric")
 });
+
+it("creates a febric and update it", async() => {
+  const sampleData = {
+    title: "Sample Fabric",
+    price: 100,
+    deliveryTime: "2 days",
+    imageLink: "http://example.com/fabric-image.jpg",
+    excellence: "4 rating stars",
+    warmth: "3 rating stars",
+    weight: "500 gr/m^2",
+    season: "Summer",
+    threadStyle: "Plain",
+    brightness: "High",
+    superShiny: false,
+    material: "Cotton",
+    tone: "Blue",
+    threadCount: 300,
+    opacity: "Opaque",
+    waterproof: true,
+    stretchyText: "Stretchy fabric",
+    stretchy: true,
+    mis: "New",
+    type: "Pants",
+    febricTypes: "Cotton",
+    febricSeasons: "Winter",
+    threadTypes: "Cotton",
+    threadCounts: "200-400",
+    characters: ["New", "Comfortable", "Durable"],
+    originalImageUrl, 
+    thumbnailImageUrl
+  };
+
+  const response = await request(app)
+    .post("/api/products/v1")
+    .set("Cookie", global.signin(["create_febric"]))
+    .send({ ...sampleData })
+    .expect(201);
+
+    const parseResponse = JSON.parse(response.text);
+    expect(parseResponse.userId).toBeDefined()
+    expect(parseResponse.title).toEqual("Sample Fabric");
+
+    // Updating the documents
+
+    const updatedValues = {...sampleData, title: "This is new value"}; 
+    const {id} = parseResponse;
+    const update = await request(app)
+    .patch(`/api/products/v1/${id}`)
+    .set("Cookie", global.signin(["create_febric"]))
+    .send({ ...updatedValues})
+    .expect(201);
+
+    const updatedResponse = JSON.parse(update.text);
+    expect(updatedResponse.title).toEqual("This is new value")
+}); 
