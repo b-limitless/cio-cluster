@@ -1,17 +1,8 @@
 import { BadRequestError, requireAuth, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { UserBodyRequest } from "../body-request/User.body-request";
-import { sendMail } from "../mailar";
-import { UserService } from "../services/User.service";
-import { checkPermissionAllSet } from "./utils";
-import { mailerEmail } from "../config/email";
-import { generateUniqueNumber } from "../functions/generateUniqueNumber";
-import { messages } from "../messages";
-import { VerficationService } from "../services/Verification.service";
-import { readFile } from "../utils/readFile";
 import { UserProfileBodyRequest } from "../body-request/UserProfile.body-request";
+import { UserService } from "../services/User.service";
 
 const router = express.Router();
 
@@ -58,4 +49,4 @@ router.patch(
   }
 );
 
-export { router as userRouter };
+export { router as profileRouter };

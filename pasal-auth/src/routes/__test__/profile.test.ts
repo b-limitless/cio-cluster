@@ -1,6 +1,7 @@
 import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
+
 const permission = {
   name: "list_leads",
   cat: "ifa",
@@ -78,4 +79,8 @@ it("registere user sucessfully initially user is not verified and its sends requ
   } catch (err: any) {
     console.log("err", err.message);
   }
+});
+
+it("will update the user passoword as well, If user specify new password, set new token", async() => {
+
 });
