@@ -1,3 +1,10 @@
+// Since we are developing in isolate model
+// Any event which is listening and publishing visa RabbitMQ has been disabled
+// So that we can develop fast few features which RabbitMQ does not required
+// We will have to keep the copy of state in each services 
+// For example in User Service, Febric model should be available 
+// In Product Service - Febric, User model should be present and 
+// As soon as User is created it must publish the event and store the data
 import { NotAuthorizedError, hasPermissions, requireAuth, validateRequest } from "@pasal/common";
 import express, { Request, Response } from "express";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
@@ -211,6 +218,7 @@ router.delete(
       logger.log("error", "Could not create febric");
       throw new Error("Could not create febric"); 
     }
+    
     // try {
       
     //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
