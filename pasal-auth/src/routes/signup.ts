@@ -24,14 +24,7 @@ router.post(
       password,
       permissions,
       role,
-      industry,
-      employeeCount,
-      targetMarket,
-      currentWorkFlow,
-      currentSoftware,
-      painPoint,
-      requirements,
-      tranningAndSupport,
+     
     } = req.body;
 
     const existingUser = await UserService.findOne(email);
@@ -52,15 +45,7 @@ router.post(
       email,
       password,
       permissions,
-      role,
-      industry,
-      employeeCount,
-      targetMarket,
-      currentWorkFlow,
-      currentSoftware,
-      painPoint,
-      requirements,
-      tranningAndSupport,
+      role
     });
 
     // Use a model to store the code for the verification
