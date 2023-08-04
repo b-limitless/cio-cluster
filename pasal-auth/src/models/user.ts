@@ -5,7 +5,6 @@ interface UserAttrs {
   password: string;
   role:string;
   permissions: string[];
-  industry: string[];
   firstName: string | null;
   lastName: string | null;
   country: string | null;

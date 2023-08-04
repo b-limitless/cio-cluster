@@ -199,8 +199,6 @@ router.patch(
     // }
     
     
-    // res.status(201).json(product);
-    res.status(201).send({});
   }
 );
 

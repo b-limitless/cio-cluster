@@ -1,4 +1,4 @@
-import { BadRequestError, validateRequest } from "@pasal/common";
+import { BadRequestError, requireAuth, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -11,98 +11,50 @@ import { generateUniqueNumber } from "../functions/generateUniqueNumber";
 import { messages } from "../messages";
 import { VerficationService } from "../services/Verification.service";
 import { readFile } from "../utils/readFile";
+import { UserProfileBodyRequest } from "../body-request/UserProfile.body-request";
 
 const router = express.Router();
 
 router.patch(
-  "/api/users/:id",
-  UserBodyRequest,
+  "/api/users/:id?",
+  UserProfileBodyRequest,
+  requireAuth,
   validateRequest,
   async (req: Request, res: Response) => {
+    const {
+      firstName,
+      lastName,
+      country,
+      spokenLanguage,
+      about,
+      profileImageLink,
+    } = req.body;
 
-    res.send("Hello wrld")
-    // const {
-    //   email,
-    //   password,
-    //   permissions,
-    //   role,
-    //   industry,
-    //   employeeCount,
-    //   targetMarket,
-    //   currentWorkFlow,
-    //   currentSoftware,
-    //   painPoint,
-    //   requirements,
-    //   tranningAndSupport,
-    // } = req.body;
+    const id = process.env.NODE_ENV !== "test" ? req?.currentUser?.id : req.params.id;
+    
+    if(!id) {
+      throw new BadRequestError("No authenticated user found");
+    }
 
-    // const existingUser = await UserService.findOne(email);
-
-    // if (existingUser) {
-    //   throw new BadRequestError(messages.emailExists);
-    // }
-
-    // let selectedPermissionExists = await checkPermissionAllSet(permissions);
-
-    // if (!selectedPermissionExists.status) {
-    //   throw new BadRequestError(
-    //     `Error ${selectedPermissionExists.permissions}`
-    //   );
-    // }
-
-    // const user = await UserService.build({
-    //   email,
-    //   password,
-    //   permissions,
-    //   role,
-    //   industry,
-    //   employeeCount,
-    //   targetMarket,
-    //   currentWorkFlow,
-    //   currentSoftware,
-    //   painPoint,
-    //   requirements,
-    //   tranningAndSupport,
-    // });
-
-    // // Use a model to store the code for the verification
-    // // Generate the code using dedicated algorithm
-    // const verificationCode = generateUniqueNumber();
-    // await VerficationService.build({ userId: user.id, verificationCode });
-
-    // res.status(201).send({ user, verificationCode });
-
-    // try {
-    //   const getWelcomeEmailTempalte = await readFile("welcome.html", {});
-  
-    //   const sendWelcomeEmail = await sendMail({
-    //     from: mailerEmail,
-    //     to: email,
-    //     subject: "Welcome to Customize.io",
-    //     text: "",
-    //     html: getWelcomeEmailTempalte,
-    //   });
-    //   logger.log("info", messages.wcSent, sendWelcomeEmail);
-    // } catch (err) {
-    //   logger.log("error", `${messages.wcCanNotSent} ${err}`);
-    // }
-
-    // try {
-    //   const getHTMLTemplate = await readFile("email-verification.signup.html", {
-    //     verificationCode,
-    //   });
-
-    //   const sendVerificationEmail = await sendMail({
-    //     from: mailerEmail,
-    //     to: email,
-    //     subject: messages.verifyEmail,
-    //     text: "",
-    //     html: getHTMLTemplate,
-    //   });
-    //   logger.log("info", sendVerificationEmail);
-    // } catch (err) {
-    //   logger.log("error", err);
-    // }
+    try {
+      const findAndUpdate = await UserService.findByIdAndUpdate(
+        id,
+        {
+          firstName,
+          lastName,
+          country,
+          spokenLanguage,
+          about,
+          profileImageLink,
+        },
+        { new: true }
+      );
+      res.send(findAndUpdate);
+    } catch(err) {
+      logger.log("error", `An error occurred while processing your request. ${err}`);
+      res.status(500).send({message: "An error occurred while processing your request."});
+    }
+    
   }
 );
 
