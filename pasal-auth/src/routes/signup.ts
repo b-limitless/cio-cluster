@@ -24,7 +24,6 @@ router.post(
       password,
       permissions,
       role,
-     
     } = req.body;
 
     const existingUser = await UserService.findOne(email);

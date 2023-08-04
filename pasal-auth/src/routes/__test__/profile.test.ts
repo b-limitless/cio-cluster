@@ -68,7 +68,7 @@ it("registere user sucessfully initially user is not verified and its sends requ
 
       const updateUser = await request(app)
         .patch(`/api/users/${id}`)
-        .set("Cookie", global.signin())
+        .set("Cookie", global.signin([]))
         .send(updatedUserModel)
         .expect(200);
         const parseUpdateResponse = JSON.parse(updateUser.text);

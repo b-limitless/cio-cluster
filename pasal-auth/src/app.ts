@@ -12,6 +12,7 @@ import { currentUserRouter } from "./routes/current-user";
 import { verificationRouter } from "./routes/verify";
 import { KYCRouter } from "./routes/kyc";
 import { profileRouter } from "./routes/profile";
+import { teamRouter } from "./routes/team";
 
 // 
 const app = express();
@@ -36,6 +37,7 @@ app.use(permissionRouter);
 app.use(verificationRouter);
 app.use(KYCRouter);
 app.use(profileRouter);
+app.use(teamRouter)
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route did not find");
 });
