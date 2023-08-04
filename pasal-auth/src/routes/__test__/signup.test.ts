@@ -177,64 +177,64 @@ const commonRequiredFiles = {
   targetMarket: ["fashion"],
 }
 
-it("Rester with optional model currentWorkFlow", async () => {
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({
-      ...commonRequiredFiles,
-      currentWorkFlow: "We Tailor everthing",
-    })
-    .expect(201);
+// it("Rester with optional model currentWorkFlow", async () => {
+//   const response = await request(app)
+//     .post("/api/users/signup")
+//     .send({
+//       ...commonRequiredFiles,
+//       currentWorkFlow: "We Tailor everthing",
+//     })
+//     .expect(201);
 
-  const { text} = response;
-  const { user: {currentWorkFlow} } = JSON.parse(text);
-  expect(currentWorkFlow).toEqual("We Tailor everthing");
-});
+//   const { text} = response;
+//   const { user: {currentWorkFlow} } = JSON.parse(text);
+//   expect(currentWorkFlow).toEqual("We Tailor everthing");
+// });
 
-it("Rester with optional model currentSoftware", async () => {
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({
-      ...commonRequiredFiles,
-      currentWorkFlow: "We Tailor everthing",
-      currentSoftware: "We do no any any",
-    })
-    .expect(201);
+// it("Rester with optional model currentSoftware", async () => {
+//   const response = await request(app)
+//     .post("/api/users/signup")
+//     .send({
+//       ...commonRequiredFiles,
+//       currentWorkFlow: "We Tailor everthing",
+//       currentSoftware: "We do no any any",
+//     })
+//     .expect(201);
 
-    const { text} = response;
-    const { user: {currentSoftware} } = JSON.parse(text);
-    expect(currentSoftware).toEqual("We do no any any");
-});
+//     const { text} = response;
+//     const { user: {currentSoftware} } = JSON.parse(text);
+//     expect(currentSoftware).toEqual("We do no any any");
+// });
 
-it("Rester with optional model painPoint", async () => {
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({
-      ...commonRequiredFiles,
-      currentWorkFlow: "We Tailor everthing",
-      currentSoftware: "We do no any any",
-      painPoint: "Well no good cusomer care",
-    })
-    .expect(201);
+// it("Rester with optional model painPoint", async () => {
+//   const response = await request(app)
+//     .post("/api/users/signup")
+//     .send({
+//       ...commonRequiredFiles,
+//       currentWorkFlow: "We Tailor everthing",
+//       currentSoftware: "We do no any any",
+//       painPoint: "Well no good cusomer care",
+//     })
+//     .expect(201);
 
-    const { text} = response;
-    const { user: {painPoint} } = JSON.parse(text);
-    expect(painPoint).toEqual("Well no good cusomer care");
-});
+//     const { text} = response;
+//     const { user: {painPoint} } = JSON.parse(text);
+//     expect(painPoint).toEqual("Well no good cusomer care");
+// });
 
-it("Regiser without requirement and will return null", async () => {
-  const response = await request(app)
-    .post("/api/users/signup")
-    .send({
-      ...commonRequiredFiles,
-      currentWorkFlow: "We Tailor everthing",
-      currentSoftware: "We do no any any",
-      painPoint: "Lets discuss about",
-      requirements: "Hello World"
-    })
-    .expect(201);
+// it("Regiser without requirement and will return null", async () => {
+//   const response = await request(app)
+//     .post("/api/users/signup")
+//     .send({
+//       ...commonRequiredFiles,
+//       currentWorkFlow: "We Tailor everthing",
+//       currentSoftware: "We do no any any",
+//       painPoint: "Lets discuss about",
+//       requirements: "Hello World"
+//     })
+//     .expect(201);
 
-    const { text} = response;
-    const { user: {requirements} } = JSON.parse(text);
-    expect(requirements).toEqual("Hello World");
-});
+//     const { text} = response;
+//     const { user: {requirements} } = JSON.parse(text);
+//     expect(requirements).toEqual("Hello World");
+// });

@@ -9,13 +9,19 @@ interface UserAttrs {
   role:string;
   permissions: string[];
   industry: string[];
-  employeCount:number;
-  targetMarket: string[];
-  currentWorkFlow: string | null;
-  currentSoftware: string | null;
-  painPoint: string | null;
-  requirements: string | null;
-  tranningAndSupport: string | null;
+  // employeCount:number;
+  // targetMarket: string[];
+  // currentWorkFlow: string | null;
+  // currentSoftware: string | null;
+  // painPoint: string | null;
+  // requirements: string | null;
+  // tranningAndSupport: string | null;
+  firstName: string | null;
+  lastName: string | null;
+  country: string | null;
+  spokenLanguage: string[];
+  about: string | null;
+  profileImageLink: string | null; 
 }
 
 // An interface descript the properties that a user document pass
@@ -24,15 +30,21 @@ interface UserDoc extends mongoose.Document {
   password: string;
   role:string;
   permissions: string[];
-  industry: string[];
-  employeCount:number;
-  targetMarket?: string[];
-  currentWorkFlow?: string | null;
-  currentSoftware?: string | null;
-  painPoint?: string | null;
-  requirements?: string | null;
-  tranningAndSupport?: string | null;
+  // industry: string[];
+  // employeCount:number;
+  // targetMarket?: string[];
+  // currentWorkFlow?: string | null;
+  // currentSoftware?: string | null;
+  // painPoint?: string | null;
+  // requirements?: string | null;
+  // tranningAndSupport?: string | null;
   verified:boolean;
+  firstName: string | null;
+  lastName: string | null;
+  country: string | null;
+  spokenLanguage: string[];
+  about: string | null;
+  profileImageLink: string | null; 
 }
 
 // An interface define build function is available to the model
@@ -59,42 +71,67 @@ const userSchema = new mongoose.Schema(
       type: [String],
       default: [],
     },
-    industry: {
-      type: [String],
-      default: [],
-    },
-    employeeCount: {
-      type: Number,
-      required: true,
-    },
-    targetMarket: {
-      type: [String],
-      default: [],
-    },
-    currentWorkFlow: {
-      type: String,
-      default: null,
-    },
-    currentSoftware: {
-      type: String,
-      default: null,
-    },
-    painPoint: {
-      type: String,
-      default: null,
-    },
-    requirements: {
-      type: String,
-      default: null,
-    },
-    trainingAndSupport: {
-      type: String,
-      default: null,
-    },
+    // industry: {
+    //   type: [String],
+    //   default: [],
+    // },
+    // employeeCount: {
+    //   type: Number,
+    //   required: true,
+    // },
+    // targetMarket: {
+    //   type: [String],
+    //   default: [],
+    // },
+    // currentWorkFlow: {
+    //   type: String,
+    //   default: null,
+    // },
+    // currentSoftware: {
+    //   type: String,
+    //   default: null,
+    // },
+    // painPoint: {
+    //   type: String,
+    //   default: null,
+    // },
+    // requirements: {
+    //   type: String,
+    //   default: null,
+    // },
+    // trainingAndSupport: {
+    //   type: String,
+    //   default: null,
+    // },
     verified: {
       type: Boolean, 
       default: false
-    }
+    }, 
+    firstName: {
+      type: String,
+      default: null,
+    },
+    lastName: {
+      type: String,
+      default: null,
+    },
+    country: {
+      type: String,
+      default: null,
+    },
+    spokenLanguage: {
+      type: [String],
+      default: [],
+    },
+    about: {
+      type: String,
+      default: null,
+    },
+    profileImageLink: {
+      type: String,
+      default: null,
+    },
+    
   },
   {
     toJSON: {
