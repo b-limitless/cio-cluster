@@ -11,6 +11,7 @@ import { errorHandler, NotFoundError, currentUser } from "@pasal/common";
 import { currentUserRouter } from "./routes/current-user";
 import { verificationRouter } from "./routes/verify";
 import { KYCRouter } from "./routes/kyc";
+import { userRouter } from "./routes/user";
 
 // 
 const app = express();
@@ -34,6 +35,7 @@ app.use(resetPasswordRouter);
 app.use(permissionRouter);
 app.use(verificationRouter);
 app.use(KYCRouter);
+app.use(userRouter);
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route did not find");
 });

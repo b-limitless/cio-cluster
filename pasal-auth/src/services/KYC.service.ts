@@ -13,6 +13,16 @@ export class KYCServiceLocal {
       throw new Error(err);
     }
   }
+
+  async findByIdAndUpdate(id:string, update:any, options:any) {
+    try {
+        const updated = await KYC.findByIdAndUpdate(id, update, options)
+        return updated;
+    } catch(err) {
+        logger.log("info", `Can not find and update`);
+        throw new Error(`Can not find and update`);
+    }
+}
 }
 
 const KYCService = new KYCServiceLocal();

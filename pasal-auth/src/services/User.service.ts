@@ -18,6 +18,16 @@ export class UserServiceLocal {
             throw new Error(err);
         }
     }
+
+    async findByIdAndUpdate(id:string, update:any, options:any) {
+        try {
+            const updated = await User.findByIdAndUpdate(id, update, options)
+            return updated;
+        } catch(err) {
+            logger.log("info", `Can not find and update`);
+            throw new Error(`Can not find and update`);
+        }
+    }
 }
 
 const UserService = new UserServiceLocal();
