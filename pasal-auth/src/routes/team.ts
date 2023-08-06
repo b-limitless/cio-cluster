@@ -56,40 +56,23 @@ router.post(
 
     res.send(user);
 
-//     try {
-//       const getWelcomeEmailTempalte = await readFile("welcome.html", {});
+    // We need to send an email to team that user have been created
+    // You can login to your account with password
+    // Your can chenge the password after
+    // try {
+    //   const getWelcomeEmailTempalte = await readFile("welcome.html", {});
   
-//       const sendWelcomeEmail = await sendMail({
-//         from: mailerEmail,
-//         to: email,
-//         subject: "Welcome to Customize.io",
-//         text: "",
-//         html: getWelcomeEmailTempalte,
-//       });
-//       logger.log("info", messages.wcSent, sendWelcomeEmail);
-//     } catch (err) {
-//       logger.log("error", `${messages.wcCanNotSent} ${err}`);
-//     }
-
-//     try {
-//       const getHTMLTemplate = await readFile("email-verification.signup.html", {
-//         verificationCode,
-//       });
-
-//       const sendVerificationEmail = await sendMail({
-//         from: mailerEmail,
-//         to: email,
-//         subject: messages.verifyEmail,
-//         text: "",
-//         html: getHTMLTemplate,
-//       });
-//       logger.log("info", sendVerificationEmail);
-//     } catch (err) {
-//       logger.log("error", err);
-//     }
-//   }
-
-res.send({})
+    //   const sendWelcomeEmail = await sendMail({
+    //     from: mailerEmail,
+    //     to: email,
+    //     subject: "Welcome to Customize.io",
+    //     text: "",
+    //     html: getWelcomeEmailTempalte,
+    //   });
+    //   logger.log("info", messages.wcSent, sendWelcomeEmail);
+    // } catch (err) {
+    //   logger.log("error", `${messages.wcCanNotSent} ${err}`);
+    // }
   });
 
 export { router as teamRouter };
