@@ -9,5 +9,9 @@ export enum Subjects {
 
     PaymentCreated = 'payment-created',
 
-    OrderConfirmedEmailCreated = 'order-confirmed-email:created'
+    OrderConfirmedEmailCreated = 'order-confirmed-email:created', 
+
+    UserCreated = 'user-created', 
+    ProfileUpdated = 'profile-updated',
+    UserVerified = 'user-verified'
 }
