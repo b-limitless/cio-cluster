@@ -2,7 +2,7 @@ import { Subjects } from "./subjects";
 
 export interface ProfileUpdatedEvent {
   exchange?: string;
-  subject: Subjects.ProductUpdate;
+  subject: Subjects.ProfileUpdated;
   data: {
     userId: string;
     email: string;
