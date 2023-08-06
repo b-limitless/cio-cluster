@@ -3,6 +3,8 @@ import logger from "@pasal/common/build/logger";
 import { app } from "./app";
 import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection"
 import mongoose from "mongoose";
+import { UserCreatedListener } from './events/listeners/user-created-listener';
+import { rabbitMQWrapper } from '@pasal/common';
 
 // While working on isolated mode
 // process.env.JWT_KEY = "asdf";
@@ -44,6 +46,14 @@ const start = async () => {
     throw new Error("MONGO_URI must be defined");
   }
 
+  // Listening user created listener
+  try {
+    connectToRabbitMQ(() => {
+      new UserCreatedListener(rabbitMQWrapper.client).listen();
+    });
+  } catch(err) {
+    logger.log("error", "Could not listen to user created event");
+  }
 
   try {
     await mongoose.connect(process.env.MONGO_URI, {
@@ -61,7 +71,7 @@ const start = async () => {
       message: `Error while connecting to MonogDB: ${error}`
     })
   }
-  // connectToRabbitMQ();
+  
 };
 
 start();
