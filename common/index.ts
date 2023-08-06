@@ -17,8 +17,10 @@ export * from './events/base-listener';
 export * from './events/base-publisher';
 export * from './events/subjects';
 export * from './events/product-created-event'
-
 export * from './events/types/order-status';
+export * from './events/user-create-event';
+export * from './events/user-verified-event';
+export * from './events/profile-updated-even';
 
 // Logger
 export * from './logger';
