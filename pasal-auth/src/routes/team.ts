@@ -1,17 +1,13 @@
 import { BadRequestError, hasPermissions, requireAuth, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
-import { UserBodyRequest } from "../body-request/User.body-request";
-import { sendMail } from "../mailar";
-import { UserService } from "../services/User.service";
-import { checkPermissionAllSet } from "./utils";
-import { mailerEmail } from "../config/email";
-import { generateUniqueNumber } from "../functions/generateUniqueNumber";
-import { messages } from "../messages";
-import { VerficationService } from "../services/Verification.service";
-import { readFile } from "../utils/readFile";
 import { TeamBodyRequest } from "../body-request/Team.body-request";
+import { mailerEmail } from "../config/email";
+import { sendMail } from "../mailar";
+import { messages } from "../messages";
+import { UserService } from "../services/User.service";
+import { readFile } from "../utils/readFile";
+import { checkPermissionAllSet } from "./utils";
 
 const router = express.Router();
 
@@ -51,28 +47,27 @@ router.post(
       email,
       password,
       permissions,
-      role
+      role,
+      verified:true
+
     });
 
-    res.send(user);
+    res.status(201).send(user);
 
-    // We need to send an email to team that user have been created
-    // You can login to your account with password
-    // Your can chenge the password after
-    // try {
-    //   const getWelcomeEmailTempalte = await readFile("welcome.html", {});
+    try {
+      const getWelcomeEmailTempalte = await readFile("welcome-team.html", {firstName, email, password});
   
-    //   const sendWelcomeEmail = await sendMail({
-    //     from: mailerEmail,
-    //     to: email,
-    //     subject: "Welcome to Customize.io",
-    //     text: "",
-    //     html: getWelcomeEmailTempalte,
-    //   });
-    //   logger.log("info", messages.wcSent, sendWelcomeEmail);
-    // } catch (err) {
-    //   logger.log("error", `${messages.wcCanNotSent} ${err}`);
-    // }
+      const sendWelcomeEmail = await sendMail({
+        from: mailerEmail,
+        to: email,
+        subject: "Welcome to Customize.io - Your Account Has Been Created!",
+        text: "",
+        html: getWelcomeEmailTempalte,
+      });
+      logger.log("info", messages.wcSent, sendWelcomeEmail);
+    } catch (err) {
+      logger.log("error", `${messages.wcCanNotSent} ${err}`);
+    }
   });
 
 export { router as teamRouter };
