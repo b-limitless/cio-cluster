@@ -1,8 +1,8 @@
 import { Subjects } from "./subjects";
 
-export interface UserCreatedEvent {
+export interface ProfileUpdatedEvent {
   exchange?: string;
-  subject: Subjects.UserCreated;
+  subject: Subjects.ProductUpdate;
   data: {
     userId: string;
     email: string;
