@@ -1,6 +1,5 @@
 import request from "supertest";
 import { app } from "../../app";
-import { signUpVerifyUserGetToken } from "./common";
 
 it("Throw an 403 error if user is not authenticaled", async () => {
   await request(app).post("/api/users/kyc").send({}).expect(401);
@@ -9,7 +8,7 @@ it("Throw an 403 error if user is not authenticaled", async () => {
 it("will singup, verify user and will receive token, kyc will start, ", async () => {
   await request(app)
     .post("/api/users/kyc")
-    .set("Cookie", global.signin())
+    .set("Cookie", global.signin([]))
     .send({ employeeCount: 20 })
     .expect(201);
 });
@@ -17,7 +16,7 @@ it("will singup, verify user and will receive token, kyc will start, ", async ()
 it("create kyc with industry data", async () => {
   const res = await request(app)
     .post("/api/users/kyc")
-    .set("Cookie", global.signin())
+    .set("Cookie", global.signin([]))
     .send({
       employeeCount: 20,
       industry: ["json"],

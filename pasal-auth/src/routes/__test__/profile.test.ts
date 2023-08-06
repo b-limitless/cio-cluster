@@ -72,7 +72,7 @@ it("registere user sucessfully initially user is not verified and its sends requ
         .send(updatedUserModel)
         .expect(200);
         const parseUpdateResponse = JSON.parse(updateUser.text);
-        console.log("updated user ", parseUpdateResponse);
+        // console.log("updated user ", parseUpdateResponse);
     } catch (err) {
       console.log("Error while updating the user", err);
     }
