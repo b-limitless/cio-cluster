@@ -15,5 +15,6 @@ export interface UserCreatedEvent {
     spokenLanguage: string[];
     about: string | null;
     profileImageLink: string | null;
+    verified:boolean
   };
 }
