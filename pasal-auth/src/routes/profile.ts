@@ -1,8 +1,9 @@
-import { BadRequestError, requireAuth, validateRequest } from "@pasal/common";
+import { BadRequestError, rabbitMQWrapper, requireAuth, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
 import { UserProfileBodyRequest } from "../body-request/UserProfile.body-request";
 import { UserService } from "../services/User.service";
+import { UserProfileUpdatedPublisher } from "../events/publishers/profile-updated-publisher";
 
 const router = express.Router();
 
@@ -41,6 +42,12 @@ router.patch(
         { new: true }
       );
       res.send(findAndUpdate);
+      // Pulish the event that profile is updated
+      try { 
+        new UserProfileUpdatedPublisher(rabbitMQWrapper.client).publish(findAndUpdate);
+      } catch(err) {
+        logger.log("error", "Could not publish profile updated event");
+      }
     } catch(err) {
       logger.log("error", `An error occurred while processing your request. ${err}`);
       res.status(500).send({message: "An error occurred while processing your request."});

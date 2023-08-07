@@ -2,11 +2,12 @@ import { Request, Response } from "express";
 import { Verification } from "../models/verification";
 import { Router } from "express";
 import { VerificationBodyRequest } from "../body-request/Verification.body-request";
-import { NotFoundError, validateRequest } from "@pasal/common";
+import { NotFoundError, rabbitMQWrapper, validateRequest } from "@pasal/common";
 import { VerficationService } from "../services/Verification.service";
 import { User } from "../models/user";
 import logger from "../logger";
 import jwt from "jsonwebtoken"; 
+import { UserVerifiedPublisher } from "../events/publishers/user-verified-publisher";
 const router = Router();
 
 /**
@@ -54,6 +55,15 @@ async(req:Request, res:Response) => {
           req.session = {
             jwt: userJWT,
         };
+        //  PUblish the event that use is verified
+        try {
+            new UserVerifiedPublisher(rabbitMQWrapper.client).publish({
+                userId: user.id
+            });
+            logger.log("info", `User verified event has been published`);
+        } catch(err) {
+            logger.log("error", "Could not pulish the verify user event")
+        }
         logger.log("info", `User successfully verified`);
         res.send(user);
         return;

@@ -10,7 +10,8 @@ import express, { Request, Response } from "express";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
 import { FebricService } from "../servies/FebricService";
 import logger from "@pasal/common/build/logger";
-
+import { ProductCreatedPublisher } from "../events/publishers/product-created-publisher";
+import { rabbitMQWrapper } from "@pasal/common";
 
 
 const router = express.Router();
@@ -18,7 +19,7 @@ const router = express.Router();
 router.post(
   "/api/products/v1",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest, 
   async (req: Request, res: Response) => {
@@ -84,30 +85,32 @@ router.post(
         thumbnailImageUrl,
         originalImageUrl});
       res.status(201).send(febric);
+
+      try {
+      
+        new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
+          version: 1,
+          id: febric.id,
+          userId:"rt",
+          name: 'product.name',
+          price: 4,
+          category: 'd',
+          subCategory: 'product.subCategory',
+          availableItems:'100'
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    
+      
+
       return;
     } catch(err) {
       logger.log("error", "Could not create febric");
       throw new Error("Could not create febric"); 
     }
-    // try {
-      
-    //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
-    //     version: product.version,
-    //     id: product.id,
-    //     userId: product.userId,
-    //     name: product.name,
-    //     price: product.price,
-    //     category: product.category,
-    //     subCategory: product.subCategory,
-    //     availableItems:availableItems
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    
-    
-    // res.status(201).json(product);
-    res.status(201).send({});
+   
+  
   }
 );
 
@@ -182,23 +185,7 @@ router.patch(
       logger.log("error", "Could not create febric");
       throw new Error("Could not create febric"); 
     }
-    // try {
-      
-    //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
-    //     version: product.version,
-    //     id: product.id,
-    //     userId: product.userId,
-    //     name: product.name,
-    //     price: product.price,
-    //     category: product.category,
-    //     subCategory: product.subCategory,
-    //     availableItems:availableItems
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    
-    
+   
   }
 );
 
@@ -217,24 +204,6 @@ router.delete(
       throw new Error("Could not create febric"); 
     }
     
-    // try {
-      
-    //   new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
-    //     version: product.version,
-    //     id: product.id,
-    //     userId: product.userId,
-    //     name: product.name,
-    //     price: product.price,
-    //     category: product.category,
-    //     subCategory: product.subCategory,
-    //     availableItems:availableItems
-    //   });
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    
-    
-    // res.status(201).json(product);
   }
 );
 export { router as createProductRouter };

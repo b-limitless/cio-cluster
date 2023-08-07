@@ -1,4 +1,4 @@
-import { BadRequestError, validateRequest } from "@pasal/common";
+import { BadRequestError, rabbitMQWrapper, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -11,6 +11,7 @@ import { generateUniqueNumber } from "../functions/generateUniqueNumber";
 import { messages } from "../messages";
 import { VerficationService } from "../services/Verification.service";
 import { readFile } from "../utils/readFile";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
 
 const router = express.Router();
 
@@ -53,6 +54,26 @@ router.post(
     await VerficationService.build({ userId: user.id, verificationCode });
 
     res.status(201).send({ user, verificationCode });
+
+    // Publish the event 
+    try {
+      new UserCreatedPublisher(rabbitMQWrapper.client).publish({
+        userId: user.id,
+        email,
+        password,
+        permissions,
+        role,
+        firstName: null,
+        lastName: null,
+        country: null,
+        spokenLanguage: [],
+        about: null,
+        profileImageLink: null,
+        verified:false
+      });
+    } catch(err) {
+      logger.log("error", `Could not publish user created event ${err}`)
+    }
 
     try {
       const getWelcomeEmailTempalte = await readFile("welcome.html", {});

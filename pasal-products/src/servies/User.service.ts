@@ -29,6 +29,16 @@ export class UserServiceLocal {
         }
     }
 
+    async findOneAndUpdate(filter:any, update:any, options:any) {
+        try {
+            const updated = await User.findOneAndUpdate(filter, update, options)
+            return updated;
+        } catch(err) {
+            logger.log("info", `Can not find and update`);
+            throw new Error(`Can not find and update`);
+        }
+    }
+
     async findById(id:string) {
         try {
             const user = await User.findByIdAndUpdate(id)

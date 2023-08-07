@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 interface UserAttrs {
+  userId: string;
   email: string;
   password: string;
   role:string;
@@ -10,8 +11,10 @@ interface UserAttrs {
   spokenLanguage: string[];
   about: string | null;
   profileImageLink: string | null; 
+  verified:boolean;
 }
 interface UserDoc extends mongoose.Document {
+  userId: string;
   email: string;
   password: string;
   role:string;
@@ -28,7 +31,11 @@ interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
 }
 const userSchema = new mongoose.Schema(
+  
   {
+    userId: {
+      type: String
+    },
     email: {
       type: String,
       required: true,

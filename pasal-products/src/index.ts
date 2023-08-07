@@ -5,6 +5,8 @@ import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection"
 import mongoose from "mongoose";
 import { UserCreatedListener } from './events/listeners/user-created-listener';
 import { rabbitMQWrapper } from '@pasal/common';
+import { UserVerifiedListener } from './events/listeners/user-verified-listener';
+import { ProfileUpdatedListener } from './events/listeners/profile-updated-listener';
 
 // While working on isolated mode
 // process.env.JWT_KEY = "asdf";
@@ -14,13 +16,13 @@ import { rabbitMQWrapper } from '@pasal/common';
 
 const start = async () => {
 
-  // if (!process.env.RABBIT_MQ_URL) {
-  //   logger.log({
-  //     level: "error", 
-  //     message: "Rabbit MQ URL is not defined"
-  //   })
-  //   throw new Error("Rabbit MQ URL is not defined");
-  // }
+  if (!process.env.RABBIT_MQ_URL) {
+    logger.log({
+      level: "error", 
+      message: "Rabbit MQ URL is not defined"
+    })
+    throw new Error("Rabbit MQ URL is not defined");
+  }
   // Cloudinary Configurations
   if(!process.env.CLOUD_NAME 
      || !process.env.CLOUD_API_KEY 
@@ -50,9 +52,12 @@ const start = async () => {
   try {
     connectToRabbitMQ(() => {
       new UserCreatedListener(rabbitMQWrapper.client).listen();
+      new UserVerifiedListener(rabbitMQWrapper.client).listen();
+      new ProfileUpdatedListener(rabbitMQWrapper.client).listen();
     });
+    
   } catch(err) {
-    logger.log("error", "Could not listen to user created event");
+    logger.log("error", `Could not listen to user created event: ${err}`);
   }
 
   try {
