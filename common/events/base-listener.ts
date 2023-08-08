@@ -1,5 +1,5 @@
 import { Channel } from "amqplib";
-
+import logger from "../logger";
 interface Event {
   data: any;
   subject: string;
@@ -38,7 +38,7 @@ abstract class Listener<T extends Event> {
         }
       );
     } catch (err) {
-      console.log(err);
+      logger.log("error",err);
     }
   }
 }

@@ -1,5 +1,5 @@
 import {Channel} from 'amqplib';
-
+import logger from '../logger';
 
 interface Event {
     data: any;
@@ -22,6 +22,6 @@ export abstract class Publisher<T extends Event> {
           });
           
         await channel.publish(this.subject, '', Buffer.from(JSON.stringify(data)));
-        console.log(" [x] Sent %s", data);
+        logger.log("info", " [x] Sent %s", data);
     }
 }
