@@ -1,6 +1,6 @@
 import { Subjects } from "./subjects";
 import mongoose from "mongoose";
-
+// 
 export interface FebricCreatedEvent {
   exchange?: string;
   subject: Subjects.FebricCreated;
