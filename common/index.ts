@@ -22,6 +22,11 @@ export * from './events/user-create-event';
 export * from './events/user-verified-event';
 export * from './events/profile-updated-even';
 
+// Febrics 
+export * from './events/febric-created-event';
+export * from './events/febric-deleted-event';
+export * from './events/febric-updated-event';
+
 // Logger
 export * from './logger';
 export * from './rabbitmq/RabbitMQWrapper';

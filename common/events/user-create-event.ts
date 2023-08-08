@@ -1,5 +1,6 @@
 import { Subjects } from "./subjects";
 
+//
 export interface UserCreatedEvent {
   exchange?: string;
   subject: Subjects.UserCreated;
