@@ -1,8 +1,8 @@
 import { Subjects } from "./subjects";
 
-export interface FebricCreatedEvent {
+export interface FebricUpdatedEvent {
   exchange?: string;
-  subject: Subjects.FebricCreated;
+  subject: Subjects.FebricUpdated;
   data: {
     febricId: string;
     userId: string;
