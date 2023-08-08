@@ -13,5 +13,9 @@ export enum Subjects {
 
     UserCreated = 'user-created', 
     ProfileUpdated = 'profile-updated',
-    UserVerified = 'user-verified'
+    UserVerified = 'user-verified',
+
+    FebricCreated='febric-created',
+    FebricUpdated='febric-updated',
+    FebricDeleted='febric-deleted'
 }
