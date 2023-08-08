@@ -20,7 +20,7 @@ abstract class Listener<T extends Event> {
   async listen() {
     try {
       await this.channel.assertExchange(this.subject, "fanout", {
-        durable: false,
+        durable: true,
       });
       const q = await this.channel.assertQueue("", { exclusive: true });
       console.log(

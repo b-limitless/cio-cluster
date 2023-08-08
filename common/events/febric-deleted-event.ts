@@ -4,6 +4,6 @@ export interface FebricDeletedEvent {
     exchange?:string;
     subject: Subjects.FebricDeleted, 
     data: {
-        febricId: mongoose.Types.ObjectId;
+        febricId: mongoose.Types.ObjectId | string;
     }
 }

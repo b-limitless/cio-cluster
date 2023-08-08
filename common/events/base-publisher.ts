@@ -18,7 +18,7 @@ export abstract class Publisher<T extends Event> {
     async publish(data: T["data"]) {
         const channel = this.client;
         await channel.assertExchange(this.subject, "fanout", {
-            durable: false,
+            durable: true,
           });
           
         await channel.publish(this.subject, '', Buffer.from(JSON.stringify(data)));
