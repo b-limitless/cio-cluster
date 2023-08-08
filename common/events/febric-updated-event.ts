@@ -1,11 +1,12 @@
 import { Subjects } from "./subjects";
+import mongoose from "mongoose";
 
 export interface FebricUpdatedEvent {
   exchange?: string;
   subject: Subjects.FebricUpdated;
   data: {
-    febricId: string;
-    userId: string;
+    febricId: mongoose.Schema.Types.ObjectId;
+    userId: mongoose.Schema.Types.ObjectId;
     title: string;
     price: number;
     deliveryTime: string;
