@@ -5,8 +5,8 @@ export interface FebricUpdatedEvent {
   exchange?: string;
   subject: Subjects.FebricUpdated;
   data: {
-    febricId: mongoose.Schema.Types.ObjectId;
-    userId: mongoose.Schema.Types.ObjectId;
+    febricId: mongoose.Types.ObjectId;
+    userId: mongoose.Types.ObjectId;
     title: string;
     price: number;
     deliveryTime: string;
