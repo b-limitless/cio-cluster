@@ -2,7 +2,7 @@ import { FebricDeletedEvent, Listener, Subjects } from "@pasal/common";
 import { Channel } from "amqplib";
 import { FebricService } from "../../services/FebricService";
 import mongoose from "mongoose";
-import logger from "../../logger";
+import logger from "@pasal/common/build/logger";
 
 export class FebricDeletedListener extends Listener<FebricDeletedEvent> {
   subject: Subjects.FebricDeleted = Subjects.FebricDeleted;
@@ -13,7 +13,7 @@ export class FebricDeletedListener extends Listener<FebricDeletedEvent> {
   async onMessage(data: FebricDeletedEvent["data"], message: any) {
     let { febricId } = JSON.parse(data as any);
 
-    febricId = mongoose.Types.ObjectId(febricId);
+    febricId = new mongoose.Types.ObjectId(febricId);
 
     // Find and delete one
     try {

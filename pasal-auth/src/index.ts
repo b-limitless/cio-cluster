@@ -1,6 +1,5 @@
 import { app } from "./app";
 import mongoose from "mongoose";
-import { ProductCreatedListener } from "./events/listeners/product-created-listener";
 import logger from "./logger";
 import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection";
 import { rabbitMQWrapper } from "@pasal/common";

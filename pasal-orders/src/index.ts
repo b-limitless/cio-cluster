@@ -2,12 +2,12 @@ import { app } from "./app";
 import mongoose from "mongoose";
 import { rabbitMQWrapper } from "@pasal/common";
 import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection";
-import { FebricCreatedListener } from "events/listeners/febric-created-listener";
-import { FebricUpdatedListener } from "events/listeners/febric-updated-listener";
-import { FebricDeletedListener } from "events/listeners/febric-deleted.listener";
-import { UserCreatedListener } from "events/listeners/user-created-listener";
-import { ProfileUpdatedListener } from "events/listeners/profile-updated-listener";
-import { UserVerifiedListener } from "events/listeners/user-verified-listener";
+import { FebricCreatedListener } from "./events/listeners/febric-created-listener";
+import { FebricUpdatedListener } from "./events/listeners/febric-updated-listener";
+import { FebricDeletedListener } from "./events/listeners/febric-deleted.listener";
+import { UserCreatedListener } from "./events/listeners/user-created-listener";
+import { ProfileUpdatedListener } from "./events/listeners/profile-updated-listener";
+import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
 
 
 const start = async () => {
