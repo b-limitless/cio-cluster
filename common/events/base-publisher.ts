@@ -20,7 +20,7 @@ export abstract class Publisher<T extends Event> {
       durable: true,
     });
 
-    await channel.publish(this.subject, "", Buffer.from(JSON.stringify(data)));
+    channel.publish(this.subject, "", Buffer.from(JSON.stringify(data)));
     logger.log("info", " [x] Sent %s", data);
   }
 }
