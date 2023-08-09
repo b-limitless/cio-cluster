@@ -1,8 +1,13 @@
 import { app } from "./app";
 import mongoose from "mongoose";
-import { ProductCreatedListener } from "./events/listeners/product-created-listener";
 import { rabbitMQWrapper } from "@pasal/common";
 import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection";
+import { FebricCreatedListener } from "events/listeners/febric-created-listener";
+import { FebricUpdatedListener } from "events/listeners/febric-updated-listener";
+import { FebricDeletedListener } from "events/listeners/febric-deleted.listener";
+import { UserCreatedListener } from "events/listeners/user-created-listener";
+import { ProfileUpdatedListener } from "events/listeners/profile-updated-listener";
+import { UserVerifiedListener } from "events/listeners/user-verified-listener";
 
 
 const start = async () => {
@@ -28,7 +33,17 @@ const start = async () => {
   }
 
   connectToRabbitMQ(() => {
-    new ProductCreatedListener(rabbitMQWrapper.client).listen();
+    const rabbitClient = rabbitMQWrapper.client;
+
+    // Febric events listener
+    new FebricCreatedListener(rabbitClient).listen();
+    new FebricUpdatedListener(rabbitClient).listen();
+    new FebricDeletedListener(rabbitClient).listen();
+
+    // User events listener
+    new UserCreatedListener(rabbitClient).listen();
+    new ProfileUpdatedListener(rabbitClient).listen();
+    new UserVerifiedListener(rabbitClient).listen();
   });
 };
 
