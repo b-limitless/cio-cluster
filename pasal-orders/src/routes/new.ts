@@ -39,7 +39,7 @@ router.post(
     const product = await Product.findById(productId);
 
     if (!product) {
-      throw new NotFoundError();
+      throw new NotFoundError("Unable to find product");
     }
 
     let orders;

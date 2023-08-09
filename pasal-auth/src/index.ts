@@ -4,6 +4,9 @@ import { ProductCreatedListener } from "./events/listeners/product-created-liste
 import logger from "./logger";
 import connectToRabbitMQ from "@pasal/common/build/rabbitmq/connection";
 import { rabbitMQWrapper } from "@pasal/common";
+import { FebricCreatedListener } from "./events/listeners/febric-created-listener";
+import { FebricDeletedListener } from "./events/listeners/febric-deleted.listener";
+import { FebricUpdatedListener } from "./events/listeners/febric-updated-listener";
 
 // process.env.JWT_KEY = "asdf";
 // process.env.MONGO_URI = "mongodb+srv://bharatrosedb:ThisIsMyLife123@mydb59589.l8gpx.mongodb.net/mydb59589";
@@ -52,9 +55,18 @@ const start = async () => {
     });
   }
 
-  connectToRabbitMQ(() => {
-    new ProductCreatedListener(rabbitMQWrapper.client).listen();
-  });
+  try {
+    connectToRabbitMQ(() => {
+      new FebricCreatedListener(rabbitMQWrapper.client).listen();
+      new FebricDeletedListener(rabbitMQWrapper.client).listen();
+      new FebricUpdatedListener(rabbitMQWrapper.client).listen();
+    });
+
+  } catch(err) {
+    logger.log("error", "Could not listen to the events");
+    logger.log("error", err)
+  }
+  
   
 };
 

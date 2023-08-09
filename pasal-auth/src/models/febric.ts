@@ -3,6 +3,7 @@ import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 
 interface FebricAttrs {
   userId: mongoose.Schema.Types.ObjectId;
+  febricId: any;
   title: string;
   price: number;
   deliveryTime: string;
@@ -33,6 +34,7 @@ interface FebricAttrs {
 
 interface FebricDoc extends mongoose.Document {
   userId: mongoose.Schema.Types.ObjectId;
+  febricId: any;
   title: string;
   price: number;
   deliveryTime: string;
@@ -71,8 +73,10 @@ const febricSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true
+    },
+    febricId: {
+      type: mongoose.Schema.Types.ObjectId,
+  
     },
     title: {
       type: String,

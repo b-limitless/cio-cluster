@@ -63,7 +63,7 @@ router.post(
       originalImageUrl,
     } = req.body;
 
-    const userId = req?.currentUser?.id;
+    const userId = new mongoose.Types.ObjectId(req?.currentUser?.id);
     try {
       const febric = await FebricService.build({
         userId,
@@ -97,22 +97,13 @@ router.post(
       res.status(201).send(febric);
 
       try {
-        // new ProductCreatedPublisher(rabbitMQWrapper.client).publish({
-        //   version: 1,
-        //   id: febric.id,
-        //   userId:"rt",
-        //   name: 'product.name',
-        //   price: 4,
-        //   category: 'd',
-        //   subCategory: 'product.subCategory',
-        //   availableItems:'100'
-        // });
-
-        const { id, ...rest } = febric;
-
+        let { id, userId:uId } = febric;
+        const febricId = new mongoose.Types.ObjectId(id);
+        
         new FebricCreatedPublisher(rabbitMQWrapper.client).publish({
-          febricId: id,
-          ...rest,
+          febricId,
+          userId,
+          ...req.body,
         });
       } catch (err) {
         console.log(err);

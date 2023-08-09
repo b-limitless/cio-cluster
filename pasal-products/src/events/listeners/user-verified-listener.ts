@@ -1,7 +1,6 @@
-import { UserVerifiedEvent, Listener, Subjects } from "@pasal/common";
+import { Listener, Subjects, UserVerifiedEvent } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import { UserService } from "../../servies/User.service";
-import { User } from "../../models/user";
 
 export class UserVerifiedListener extends Listener<UserVerifiedEvent> {
   subject: Subjects.UserVerified = Subjects.UserVerified;

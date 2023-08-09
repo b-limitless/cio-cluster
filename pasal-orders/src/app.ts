@@ -21,7 +21,7 @@ app.use(orderIndexRouter);
 app.use(orderNewRouter);
 
 app.all('*', async (req, res) => {
-    throw new NotFoundError();
+    throw new NotFoundError("Unable to find the route");
 });
 
 app.use(errorHandler);
