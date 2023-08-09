@@ -18,7 +18,8 @@ export class FebricDeletedListener extends Listener< FebricDeletedEvent > {
         // Find and delete one
         try {
             await FebricService.findOneAndDelete({febricId});
-            logger.log("info", "febric is sucessfully deleted");
+            logger.log("info", `febric is sucessfully deleted with id ${febricId}`);
+            
         } catch(err) {
             logger.log("error", `Could not delete the febric with id ${febricId}`);
         }

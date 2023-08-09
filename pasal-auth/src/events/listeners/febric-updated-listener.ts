@@ -12,13 +12,13 @@ export class FebricUpdatedListener extends Listener<FebricUpdatedEvent> {
     febricId = mongoose.Types.ObjectId(febricId);
 
     try {
-      await FebricService.findOneAndUpdate(
+      const updtaedFebric = await FebricService.findOneAndUpdate(
         { febricId },
         { ...rest },
         { new: true }
       );
       logger.log("info", "Febric has been successfully updated");
-      logger.log("info", FebricService);
+      logger.log("info", updtaedFebric);
     } catch (err) {
       logger.log("error", `Could not updated febric with id ${febricId}`);
     }

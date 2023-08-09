@@ -15,7 +15,6 @@ export class FebricServiceLocal {
       await febric.save();
       return febric;
     } catch (err: any) {
-      logger.log("error", `Could not save febric: ${err}`);
       throw new Error(err);
     }
   }
@@ -23,9 +22,8 @@ export class FebricServiceLocal {
   async findByIdAndDelete(id: string) {
     try {
       await Febric.findByIdAndDelete(id);
-    } catch (err) {
-      logger.log("info", `Can not find and remove document`);
-      throw new Error(`Can not find and remove document`);
+    } catch (err:any) {
+      throw new Error(err);
     }
   }
 
@@ -33,19 +31,17 @@ export class FebricServiceLocal {
     try {
       const updated = await Febric.findByIdAndUpdate(id, update, options);
       return updated;
-    } catch (err) {
-      logger.log("info", `Can not find and update`);
-      throw new Error(`Can not find and update`);
+    } catch (err:any) {
+      throw new Error(err);
     }
   }
 
   async findOneAndDelete(filter: any) {
     try {
       const deleteFebric = await Febric.findOneAndDelete(filter);
-      logger.log("info", "Febric is deleted");
-      logger.log("info", deleteFebric);
-    } catch (err) {
-      logger.log("error", "Could not delete the document");
+      return deleteFebric;
+    } catch (err:any) {
+      throw new Error(err);
     }
   }
 
@@ -58,7 +54,7 @@ export class FebricServiceLocal {
       );
       return updatedFebric;
     } catch (err:any) {
-        throw new err;
+        throw new Error(err);
     }
   }
 }
