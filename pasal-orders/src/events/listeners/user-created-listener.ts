@@ -1,6 +1,6 @@
 import { UserCreatedEvent, Listener, Subjects } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
-import { UserService } from "../../servies/User.service";
+import { UserService } from "../../services/User.service";
 import { Channel } from "amqplib";
 
 export class UserCreatedListener extends Listener<UserCreatedEvent> {

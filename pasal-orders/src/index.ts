@@ -10,6 +10,7 @@ import { ProfileUpdatedListener } from "./events/listeners/profile-updated-liste
 import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
 
 
+
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
     throw new Error("Rabbit MQ URL is not defined");

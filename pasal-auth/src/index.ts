@@ -12,15 +12,14 @@ import { FebricUpdatedListener } from "./events/listeners/febric-updated-listene
 // process.env.NODE_ENV = "development"
 
 
-
 const start = async () => {
-  // if (!process.env.RABBIT_MQ_URL) {
-  //   logger.log({
-  //     level: "error",
-  //     message: "Rabbit MQ URL is not defined"
-  //   });
-  //   throw new Error("Rabbit MQ URL is not defined");
-  // }
+  if (!process.env.RABBIT_MQ_URL) {
+    logger.log({
+      level: "error",
+      message: "Rabbit MQ URL is not defined"
+    });
+    throw new Error("Rabbit MQ URL is not defined");
+  }
   if (!process.env.JWT_KEY) {
     logger.log({
       level: "error",

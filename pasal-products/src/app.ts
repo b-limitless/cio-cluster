@@ -3,10 +3,10 @@ import 'express-async-errors';
 import {json} from 'body-parser';
 import cookieSession from 'cookie-session';
 import { errorHandler, NotFoundError, currentUser } from '@pasal/common';
-import { createProductRouter } from './routes/new';
+import { createFebricRouter } from './routes/new';
 import { indexProductRouter  } from './routes';
 import { showProductRouter  } from './routes/show';
-import { updateProductRouter } from './routes/update';
+import { updateFebricRouter } from './routes/update';
 import { uploadeRouter } from './routes/upload';
 
 const app = express();
@@ -19,10 +19,10 @@ app.use(
     })
 );
 app.use(currentUser);
-app.use(createProductRouter);
+app.use(createFebricRouter);
 app.use(indexProductRouter);
 app.use(showProductRouter);
-app.use(updateProductRouter);
+app.use(updateFebricRouter);
 app.use(uploadeRouter);
 app.all('*', async (req, res) => {
     throw new NotFoundError("Route not foud");

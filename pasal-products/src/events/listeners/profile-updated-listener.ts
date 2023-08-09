@@ -1,6 +1,6 @@
 import { Listener, ProfileUpdatedEvent, Subjects } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
-import { UserService } from "../../servies/User.service";
+import { UserService } from "../../services/User.service";
 
 export class ProfileUpdatedListener extends Listener<ProfileUpdatedEvent> {
   subject: Subjects.ProfileUpdated = Subjects.ProfileUpdated;
