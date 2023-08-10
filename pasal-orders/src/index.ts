@@ -10,7 +10,7 @@ import { ProfileUpdatedListener } from "./events/listeners/profile-updated-liste
 import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
 
 
-
+// Hello World
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
     throw new Error("Rabbit MQ URL is not defined");
@@ -21,7 +21,7 @@ const start = async () => {
   if (!process.env.MONGO_URI) {
     throw new Error("MONGO_URI must be defined");
   }
-
+// 
   try {
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,

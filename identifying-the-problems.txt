@@ -1,0 +1,19 @@
+1.Well one issue with this system is something rabbit mq does no fire any event
+2. When I do update my code in termal I should see all console that I have in index.ts file
+3. In the entry file i have lets say connect to the server, connected with mongodb and rabbitMQ as well
+4. All of those somethimes does not work, I am not certainly sure about in which condition its not working 
+5. Is that rabbitMQ is the issue, If it was then at least the console which I have in entry file
+6. Which state that listening to port 3000 and its not printing at all to the terminal sometimes
+7. Til this point of time I an unable to identify
+8. In the term of data replication in different services I had logged in to my pods and check in many 
+10 Condition data are replicated when event is fired but when there is nothing in console then there is no daevent is fired
+
+
+Suspect issues
+1. I am suspecting this issue perpahs in kubernetes cluster when its use the docker container 
+and installed all dependencies to each codebase it use the dev version of typescript 
+rather it should build he codebase and script show start the server from build index.js file 
+not from the index.ts entry file
+
+2. I am still thinking about this at least at this point of time I am assure that there is something 
+is wrong 

@@ -71,6 +71,7 @@ router.post(
         profileImageLink: null,
         verified:false
       });
+      logger.log("info", "User created event has been published");
     } catch(err) {
       logger.log("error", `Could not publish user created event ${err}`)
     }

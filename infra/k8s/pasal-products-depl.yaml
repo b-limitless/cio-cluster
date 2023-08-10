@@ -38,3 +38,4 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
+#  'mongodb://pasal-products-mongo-srv:27017/products'

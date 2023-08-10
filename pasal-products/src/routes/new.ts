@@ -100,7 +100,7 @@ router.post(
         logger.log("info", "product created event has been fired");
         logger.log("info", {febricId,
           userId,
-          ...req.body})
+          ...req.body});
       } catch (err) {
         console.log(err);
       }
