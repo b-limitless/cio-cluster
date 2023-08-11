@@ -7,20 +7,20 @@ import { FebricCreatedListener } from "./events/listeners/febric-created-listene
 import { FebricDeletedListener } from "./events/listeners/febric-deleted.listener";
 import { FebricUpdatedListener } from "./events/listeners/febric-updated-listener";
 
-// process.env.JWT_KEY = "asdf";
-// process.env.MONGO_URI = "mongodb+srv://bharatrosedb:ThisIsMyLife123@mydb59589.l8gpx.mongodb.net/mydb59589";
-// process.env.NODE_ENV = "development"
+process.env.JWT_KEY = "asdf";
+process.env.MONGO_URI = "mongodb+srv://bharatrosedb:ThisIsMyLife123@mydb59589.l8gpx.mongodb.net/mydb59589";
+process.env.NODE_ENV = "development"
 
 
 
 const start = async () => {
-  if (!process.env.RABBIT_MQ_URL) {
-    logger.log({
-      level: "error",
-      message: "Rabbit MQ URL is not defined"
-    });
-    throw new Error("Rabbit MQ URL is not defined");
-  }
+  // if (!process.env.RABBIT_MQ_URL) {
+  //   logger.log({
+  //     level: "error",
+  //     message: "Rabbit MQ URL is not defined"
+  //   });
+  //   throw new Error("Rabbit MQ URL is not defined");
+  // }
   if (!process.env.JWT_KEY) {
     logger.log({
       level: "error",
@@ -54,17 +54,17 @@ const start = async () => {
     });
   }
 
-  try {
-    connectToRabbitMQ(() => {
-      new FebricCreatedListener(rabbitMQWrapper.client).listen();
-      new FebricDeletedListener(rabbitMQWrapper.client).listen();
-      new FebricUpdatedListener(rabbitMQWrapper.client).listen();
-    });
+  // try {
+  //   connectToRabbitMQ(() => {
+  //     new FebricCreatedListener(rabbitMQWrapper.client).listen();
+  //     new FebricDeletedListener(rabbitMQWrapper.client).listen();
+  //     new FebricUpdatedListener(rabbitMQWrapper.client).listen();
+  //   });
 
-  } catch(err) {
-    logger.log("error", "Could not listen to the events");
-    logger.log("error", err)
-  }
+  // } catch(err) {
+  //   logger.log("error", "Could not listen to the events");
+  //   logger.log("error", err)
+  // }
   
   
 };

@@ -16,13 +16,13 @@ import { ProfileUpdatedListener } from './events/listeners/profile-updated-liste
 //
 const start = async () => {
 
-  if (!process.env.RABBIT_MQ_URL) {
-    logger.log({
-      level: "error", 
-      message: "Rabbit MQ URL is not defined"
-    })
-    throw new Error("Rabbit MQ URL is not defined");
-  }
+  // if (!process.env.RABBIT_MQ_URL) {
+  //   logger.log({
+  //     level: "error", 
+  //     message: "Rabbit MQ URL is not defined"
+  //   })
+  //   throw new Error("Rabbit MQ URL is not defined");
+  // }
   // Cloudinary Configurations
   if(!process.env.CLOUD_NAME 
      || !process.env.CLOUD_API_KEY 
@@ -49,16 +49,16 @@ const start = async () => {
   }
 
   // Listening user created listener
-  try {
-    connectToRabbitMQ(() => {
-      new UserCreatedListener(rabbitMQWrapper.client).listen();
-      new UserVerifiedListener(rabbitMQWrapper.client).listen();
-      new ProfileUpdatedListener(rabbitMQWrapper.client).listen();
-    });
+  // try {
+  //   connectToRabbitMQ(() => {
+  //     new UserCreatedListener(rabbitMQWrapper.client).listen();
+  //     new UserVerifiedListener(rabbitMQWrapper.client).listen();
+  //     new ProfileUpdatedListener(rabbitMQWrapper.client).listen();
+  //   });
     
-  } catch(err) {
-    logger.log("error", `Could not listen to user created event: ${err}`);
-  }
+  // } catch(err) {
+  //   logger.log("error", `Could not listen to user created event: ${err}`);
+  // }
   
 
   try {
