@@ -6,8 +6,8 @@
   "scripts": {
     "start": "ts-node-dev --poll src/index.ts",
     "test": "jest --watchAll --no-cache",
-    "startNode": "node dist/index.js",
     "test:ci": "jest",
+    "startNode": "node dist/index.js",
     "build": "tsc"
   },
   "jest": {

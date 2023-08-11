@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { app } from "./app";
 import mongoose from "mongoose";
 import { rabbitMQWrapper } from "@pasal/common";
@@ -9,12 +10,11 @@ import { UserCreatedListener } from "./events/listeners/user-created-listener";
 import { ProfileUpdatedListener } from "./events/listeners/profile-updated-listener";
 import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
 
-
 // Hello World
 const start = async () => {
-  if (!process.env.RABBIT_MQ_URL) {
-    throw new Error("Rabbit MQ URL is not defined");
-  }
+  // if (!process.env.RABBIT_MQ_URL) {
+  //   throw new Error("Rabbit MQ URL is not defined");
+  // }
   if (!process.env.JWT_KEY) {
     throw new Error("JWT key must be defined");
   }
@@ -33,19 +33,19 @@ const start = async () => {
     console.log(error);
   }
 
-  connectToRabbitMQ(() => {
-    const rabbitClient = rabbitMQWrapper.client;
+  // connectToRabbitMQ(() => {
+  //   const rabbitClient = rabbitMQWrapper.client;
 
-    // Febric events listener
-    new FebricCreatedListener(rabbitClient).listen();
-    new FebricUpdatedListener(rabbitClient).listen();
-    new FebricDeletedListener(rabbitClient).listen();
+  //   // Febric events listener
+  //   new FebricCreatedListener(rabbitClient).listen();
+  //   new FebricUpdatedListener(rabbitClient).listen();
+  //   new FebricDeletedListener(rabbitClient).listen();
 
-    // User events listener
-    new UserCreatedListener(rabbitClient).listen();
-    new ProfileUpdatedListener(rabbitClient).listen();
-    new UserVerifiedListener(rabbitClient).listen();
-  });
+  //   // User events listener
+  //   new UserCreatedListener(rabbitClient).listen();
+  //   new ProfileUpdatedListener(rabbitClient).listen();
+  //   new UserVerifiedListener(rabbitClient).listen();
+  // });
 };
 
 start();
