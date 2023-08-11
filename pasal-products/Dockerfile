@@ -4,4 +4,5 @@ WORKDIR /app
 COPY package.json .
 RUN npm install --only=prod
 COPY . .
-CMD ["npm", "start"]
+RUN npm run build
+CMD ["npm", "startNode"]
