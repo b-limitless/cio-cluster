@@ -9,16 +9,18 @@ import { FebricDeletedListener } from "./events/listeners/febric-deleted.listene
 import { UserCreatedListener } from "./events/listeners/user-created-listener";
 import { ProfileUpdatedListener } from "./events/listeners/profile-updated-listener";
 import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
-
+import logger from '@pasal/common/build/logger';
 // Hello World
 const start = async () => {
   // if (!process.env.RABBIT_MQ_URL) {
   //   throw new Error("Rabbit MQ URL is not defined");
   // }
   if (!process.env.JWT_KEY) {
+    logger.log("error", "JWT key must be defined")
     throw new Error("JWT key must be defined");
   }
   if (!process.env.MONGO_URI) {
+    logger.log("error", "MONGO_URI must be defined")
     throw new Error("MONGO_URI must be defined");
   }
 // 
@@ -28,9 +30,9 @@ const start = async () => {
       useUnifiedTopology: true,
       useCreateIndex: true,
     });
-    console.log("Connected to MongoDB");
+    logger.log("info", "Conneced with MongoDB")
   } catch (error) {
-    console.log(error);
+    logger.log("info", `Cound not connect to MongoDB ${error}`);
   }
 
   // connectToRabbitMQ(() => {
@@ -51,5 +53,5 @@ const start = async () => {
 start();
 
 app.listen(3000, () => {
-  console.log(`Listening on port 3000`);
+  logger.log("info", "Listening on port 3000")
 });
