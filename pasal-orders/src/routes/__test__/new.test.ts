@@ -39,7 +39,7 @@ it("throw 400 bad request error while providing qty", async () => {
   const response = await request(app)
     .post("/api/orders/v1")
     .set("Cookie", global.signin())
-    .send({ productId: mongoose.Types.ObjectId().toString() })
+    .send({ productId: new mongoose.Types.ObjectId().toString() })
     .expect(400);
   const parseErrors = JSON.parse(response.text);
   expect(parseErrors.errors.length).toEqual(1);
@@ -49,7 +49,7 @@ it("throw 400 bad request error while providing invalid quty", async () => {
   const response = await request(app)
     .post("/api/orders/v1")
     .set("Cookie", global.signin())
-    .send({ productId: mongoose.Types.ObjectId().toString(), qty: "hello" })
+    .send({ productId: new mongoose.Types.ObjectId().toString(), qty: "hello" })
     .expect(400);
   const parseErrors = JSON.parse(response.text);
   expect(parseErrors.errors.length).toEqual(1);
@@ -58,7 +58,7 @@ it("throw 400 bad request error while providing invalid quty", async () => {
 it("will throw 404 error, while product is not found", async () => {
   await request(app)
     .post("/api/orders/v1")
-    .send({ productId: mongoose.Types.ObjectId().toHexString(), qty: 1 })
+    .send({ productId: new mongoose.Types.ObjectId().toHexString(), qty: 1 })
     .set("Cookie", global.signin())
     .expect(404);
 });
@@ -68,7 +68,7 @@ it("will create the product and, will create the order with status 201", async (
   // Product, While refactoring just remove the new path
   const singin = global.signin();
   const product = Product.build({
-    userId: mongoose.Types.ObjectId().toHexString(),
+    userId: new mongoose.Types.ObjectId().toHexString(),
     name: "coat",
     category: "cloth",
     subCategory: "cloth",
@@ -76,7 +76,7 @@ it("will create the product and, will create the order with status 201", async (
     availableItems: 100,
   });
   const product1 = Product.build({
-    userId: mongoose.Types.ObjectId().toHexString(),
+    userId: new mongoose.Types.ObjectId().toHexString(),
     name: "coat",
     category: "cloth",
     subCategory: "cloth",
@@ -85,7 +85,7 @@ it("will create the product and, will create the order with status 201", async (
   });
 
   const product2 = Product.build({
-    userId: mongoose.Types.ObjectId().toHexString(),
+    userId: new mongoose.Types.ObjectId().toHexString(),
     name: "coat3",
     category: "cloth3",
     subCategory: "cloth3",

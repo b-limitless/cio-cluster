@@ -8,7 +8,8 @@
     "test": "jest --watchAll --no-cache",
     "test:ci": "jest", 
     "startNode": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc", 
+    "watch": "tsc -w"
   },
   "jest": {
     "preset": "ts-jest",

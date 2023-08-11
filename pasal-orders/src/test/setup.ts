@@ -44,7 +44,7 @@ afterAll(async () => {
 
 global.signin = () => {
   const payload = {
-    id: mongoose.Types.ObjectId().toHexString(),
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: "bharatrose1@gmail.com",
     permissions: ["create_product"],
   };
