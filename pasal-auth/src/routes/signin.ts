@@ -4,6 +4,8 @@ import {User} from '../models/user';
 import { BadRequestError, validateRequest } from "@pasal/common";
 import {Password} from '../utils/password';
 import jwt from 'jsonwebtoken';
+import { UserService } from "../../src/services/User.service";
+import { resetPasswordRouter } from "./reset-password";
 
 const router = express.Router();
 
@@ -22,17 +24,19 @@ router.post(
   async (req: Request, res: Response) => {
     const {email, password} = req.body;
 
-    const existingUser = await User.findOne({email, verified: true});
+    const existingUser = await UserService.findByWhereCluse({email, verified: true});
 
     if(!existingUser) {
       throw new BadRequestError("Invalid credentials");
     }
     
-    const passwordMatch = Password.compare(existingUser.password, password);
+    const passwordMatch = await Password.compare(existingUser.password, password);
 
     if(!passwordMatch) {
+      
       throw new BadRequestError('Invalid credentials');
     }
+
 
     const userJWT = jwt.sign({
       id: existingUser.id,

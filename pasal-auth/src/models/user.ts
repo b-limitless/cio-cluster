@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Password } from "../utils/password";
-interface UserAttrs {
+export interface UserAttrs {
   email: string;
   password: string;
   role:string;

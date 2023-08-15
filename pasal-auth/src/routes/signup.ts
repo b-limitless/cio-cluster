@@ -12,6 +12,7 @@ import { messages } from "../messages";
 import { VerficationService } from "../services/Verification.service";
 import { readFile } from "../utils/readFile";
 import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
+import { Password } from "../../src/utils/password";
 
 const router = express.Router();
 
@@ -41,9 +42,12 @@ router.post(
       );
     }
 
+    // Build a password
+    const hasPassword = await Password.toHash(password);
+
     const user = await UserService.build({
       email,
-      password,
+      password:hasPassword,
       permissions,
       role
     });
@@ -56,25 +60,25 @@ router.post(
     res.status(201).send({ user, verificationCode });
 
     // Publish the event 
-    try {
-      new UserCreatedPublisher(rabbitMQWrapper.client).publish({
-        userId: user.id,
-        email,
-        password,
-        permissions,
-        role,
-        firstName: null,
-        lastName: null,
-        country: null,
-        spokenLanguage: [],
-        about: null,
-        profileImageLink: null,
-        verified:false
-      });
-      logger.log("info", "User created event has been published");
-    } catch(err) {
-      logger.log("error", `Could not publish user created event ${err}`)
-    }
+    // try {
+    //   new UserCreatedPublisher(rabbitMQWrapper.client).publish({
+    //     userId: user.id,
+    //     email,
+    //     password,
+    //     permissions,
+    //     role,
+    //     firstName: null,
+    //     lastName: null,
+    //     country: null,
+    //     spokenLanguage: [],
+    //     about: null,
+    //     profileImageLink: null,
+    //     verified:false
+    //   });
+    //   logger.log("info", "User created event has been published");
+    // } catch(err) {
+    //   logger.log("error", `Could not publish user created event ${err}`)
+    // }
 
     try {
       const getWelcomeEmailTempalte = await readFile("welcome.html", {});

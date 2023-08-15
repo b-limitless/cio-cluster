@@ -11,7 +11,7 @@ import logger from "@pasal/common/build/logger";
 import { readFile } from "../../src/utils/readFile";
 import { sendMail } from "../../src/mailar";
 import { mailerEmail } from "../../src/config/email";
-import { messages } from "src/messages";
+import { messages } from "../../src/messages";
 const router = express.Router();
 
 router.post(
@@ -20,41 +20,42 @@ router.post(
   validateRequest,
   async (req: Request, res: Response) => {
     const { email } = req.body;
-    const user = await UserService.findByWhereCluse({ email, verify: true });
+    const user = await UserService.findByWhereCluse({ email, verified: true });
 
     if (!user) {
+      logger.log("info", `User was not found with email ${email}`);
       return res.status(201).send(true);
     }
-    await PasswordService.build({
+    const passwordReset = await PasswordService.build({
       user_id: user.id,
       code: new mongoose.mongo.ObjectId().toHexString(),
     });
 
-    res.status(201).send(true);
+    // For testing we need code
+    res.status(201).send(passwordReset);
+    
 
     const {firstName} = user;
 
     // Send main to the user for reseting password
 
-    const resetPasswordLink = (process.env.BASE_DOMIN_URI || "") + process.env.RESET_PASSWORD;
+    // const resetPasswordLink = (process.env.BASE_DOMIN_URI || "") + process.env.RESET_PASSWORD;
     //  resetPasswordLink
     //  firstName
-    try {
-      const getResetPasswordLinkTemplate = await readFile("request-reset-password.html", {firstName, resetPasswordLink}); 
-      const sendResetPasswordEmail = await sendMail({
-        from: mailerEmail,
-        to: email,
-        subject: "Reset password",
-        text: "",
-        html: getResetPasswordLinkTemplate,
-      });
-      logger.log("info", messages.resetPasswordMessage, sendResetPasswordEmail );
-    } catch (err:any) {
-      logger.log("error", err);
-      throw new Error(err);
-    }
-
-
+    // try {
+    //   const getResetPasswordLinkTemplate = await readFile("request-reset-password.html", {firstName, resetPasswordLink}); 
+    //   const sendResetPasswordEmail = await sendMail({
+    //     from: mailerEmail,
+    //     to: email,
+    //     subject: "Reset password",
+    //     text: "",
+    //     html: getResetPasswordLinkTemplate,
+    //   });
+    //   logger.log("info", messages.resetPasswordMessage, sendResetPasswordEmail );
+    // } catch (err:any) {
+    //   logger.log("error", err);
+    //   throw new Error(err);
+    // }
   }
 );
 
@@ -109,7 +110,7 @@ router.patch(
       if (!updatePassword) {
         throw new Error(`Unable to update the password`);
       }
-      return res.status(204).json({ message: "Password updated sucessfully" });
+      return res.status(200).json({ message: "Password updated sucessfully" });
     } catch (err) {
       return res.status(500).json({ err });
     }
