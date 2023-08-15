@@ -10,17 +10,21 @@ const permission = {
 
 it("throw 400 bad request error if no email address is supplied", async () => {
   await request(app)
-    .post("/api/users/request_reset_password")
+    .post("/api/users/reset-password/request")
     .send({})
     .expect(400);
 });
 
-// it("400 bad request error if user is not found", async () => {
-//   await request(app)
-//     .post("/api/users/request_reset_password")
-//     .send({ email: "bharatrose1@gmail.com" })
-//     .expect(400);
-// });
+it("will response with 201 regardless of existing user or not", async () => {
+  const response = await request(app)
+    .post("/api/users/reset-password/request")
+    .send({ email: "bharatrose1@gmail.com" })
+    .expect(201);
+
+  const parseResponse = JSON.parse(response.text); 
+
+  expect(parseResponse).toEqual(true);
+});
 
 // it("create permission, users and password request", async () => {
 //   await request(app)

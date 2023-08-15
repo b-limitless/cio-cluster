@@ -6,23 +6,21 @@ export class KYCServiceLocal {
     try {
       const buildKYC = KYC.build({ ...data });
       await buildKYC.save();
-      logger.log("info", "KYC successfully build", buildKYC);
+
       return buildKYC;
     } catch (err: any) {
-      logger.log("error", `Could not save KYC: ${err}`);
       throw new Error(err);
     }
   }
 
-  async findByIdAndUpdate(id:string, update:any, options:any) {
+  async findByIdAndUpdate(id: string, update: any, options: any) {
     try {
-        const updated = await KYC.findByIdAndUpdate(id, update, options)
-        return updated;
-    } catch(err) {
-        logger.log("info", `Can not find and update`);
-        throw new Error(`Can not find and update`);
+      const updated = await KYC.findByIdAndUpdate(id, update, options);
+      return updated;
+    } catch (err) {
+      throw new Error(`Can not find and update`);
     }
-}
+  }
 }
 
 const KYCService = new KYCServiceLocal();

@@ -5,28 +5,61 @@ import { User } from "../models/user";
 import { ResetPassword } from "../models/resetpassword";
 import mongoose from "mongoose";
 import { Password } from "../utils/password";
+import { UserService } from "../../src/services/User.service";
+import { PasswordService } from "../../src/services/PasswordService";
+import logger from "@pasal/common/build/logger";
+import { readFile } from "../../src/utils/readFile";
+import { sendMail } from "../../src/mailar";
+import { mailerEmail } from "../../src/config/email";
+import { messages } from "src/messages";
 const router = express.Router();
 
 router.post(
-  "/api/users/request_reset_password",
+  "/api/users/reset-password/request",
   [body("email").isEmail().withMessage("Please provide email address")],
   validateRequest,
   async (req: Request, res: Response) => {
     const { email } = req.body;
-    const user = await User.findOne({ email });
+    const user = await UserService.findByWhereCluse({ email, verify: true });
+
     if (!user) {
-      throw new BadRequestError(`Can not find the user with email ${email}`);
+      return res.status(201).send(true);
     }
-    const resetPassword = ResetPassword.build({
+    await PasswordService.build({
       user_id: user.id,
       code: new mongoose.mongo.ObjectId().toHexString(),
     });
-    res.status(201).json(resetPassword);
+
+    res.status(201).send(true);
+
+    const {firstName} = user;
+
+    // Send main to the user for reseting password
+
+    const resetPasswordLink = (process.env.BASE_DOMIN_URI || "") + process.env.RESET_PASSWORD;
+    //  resetPasswordLink
+    //  firstName
+    try {
+      const getResetPasswordLinkTemplate = await readFile("request-reset-password.html", {firstName, resetPasswordLink}); 
+      const sendResetPasswordEmail = await sendMail({
+        from: mailerEmail,
+        to: email,
+        subject: "Reset password",
+        text: "",
+        html: getResetPasswordLinkTemplate,
+      });
+      logger.log("info", messages.resetPasswordMessage, sendResetPasswordEmail );
+    } catch (err:any) {
+      logger.log("error", err);
+      throw new Error(err);
+    }
+
+
   }
 );
 
-router.post(
-  "/api/users/updated_password",
+router.patch(
+  "/api/users/reset-password/request",
   [
     body("code")
       .isLength({ min: 24, max: 24 })
@@ -47,27 +80,26 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    
     const { code, user_id, password } = req.body;
-    
+
     const isValid = await ResetPassword.findOne({
       user_id: user_id,
       code: code,
       expire_at: { $lt: new Date() },
     });
-    
+
     if (isValid) {
       throw new BadRequestError(`Invalid code or code has been expired`);
     }
-    
+
     const user = await User.findById(user_id);
-   
+
     if (!user) {
       throw new BadRequestError("Unable find the user");
     }
-    
+
     const hashedPassword = await Password.toHash(password);
-    
+
     try {
       const updatePassword = await User.findOneAndUpdate(
         { _id: user_id },

@@ -38,6 +38,15 @@ export class UserServiceLocal {
             throw new Error(`Can not find and update`);
         }
     }
+
+    async findByWhereCluse(data:any) {
+        try {   
+            const user = await User.findOne({...data}); 
+            return user;
+        } catch(err:any) {
+            throw new Error(err.message);
+        }
+    }
 }
 
 const UserService = new UserServiceLocal();
