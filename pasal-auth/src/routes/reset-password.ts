@@ -35,7 +35,9 @@ router.post(
     res.status(201).send(passwordReset);
     
 
-    const {firstName, id} = user;
+    let {firstName, id} = user;
+
+    firstName = firstName || "Customer"
 
     // Send main to the user for reseting password
 
