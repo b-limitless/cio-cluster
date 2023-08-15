@@ -1,11 +1,9 @@
+import { BadRequestError, validateRequest } from "@pasal/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import {User} from '../models/user';
-import { BadRequestError, validateRequest } from "@pasal/common";
-import {Password} from '../utils/password';
 import jwt from 'jsonwebtoken';
 import { UserService } from "../../src/services/User.service";
-import { resetPasswordRouter } from "./reset-password";
+import { Password } from '../utils/password';
 
 const router = express.Router();
 

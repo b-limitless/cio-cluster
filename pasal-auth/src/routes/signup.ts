@@ -1,18 +1,17 @@
 import { BadRequestError, rabbitMQWrapper, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
-import jwt from "jsonwebtoken";
+import { Password } from "../../src/utils/password";
 import { UserBodyRequest } from "../body-request/User.body-request";
-import { sendMail } from "../mailar";
-import { UserService } from "../services/User.service";
-import { checkPermissionAllSet } from "./utils";
 import { mailerEmail } from "../config/email";
+import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
 import { generateUniqueNumber } from "../functions/generateUniqueNumber";
+import { sendMail } from "../mailar";
 import { messages } from "../messages";
+import { UserService } from "../services/User.service";
 import { VerficationService } from "../services/Verification.service";
 import { readFile } from "../utils/readFile";
-import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";
-import { Password } from "../../src/utils/password";
+import { checkPermissionAllSet } from "./utils";
 
 const router = express.Router();
 
@@ -60,25 +59,25 @@ router.post(
     res.status(201).send({ user, verificationCode });
 
     // Publish the event 
-    // try {
-    //   new UserCreatedPublisher(rabbitMQWrapper.client).publish({
-    //     userId: user.id,
-    //     email,
-    //     password,
-    //     permissions,
-    //     role,
-    //     firstName: null,
-    //     lastName: null,
-    //     country: null,
-    //     spokenLanguage: [],
-    //     about: null,
-    //     profileImageLink: null,
-    //     verified:false
-    //   });
-    //   logger.log("info", "User created event has been published");
-    // } catch(err) {
-    //   logger.log("error", `Could not publish user created event ${err}`)
-    // }
+    try {
+      new UserCreatedPublisher(rabbitMQWrapper.client).publish({
+        userId: user.id,
+        email,
+        password,
+        permissions,
+        role,
+        firstName: null,
+        lastName: null,
+        country: null,
+        spokenLanguage: [],
+        about: null,
+        profileImageLink: null,
+        verified:false
+      });
+      logger.log("info", "User created event has been published");
+    } catch(err) {
+      logger.log("error", `Could not publish user created event ${err}`)
+    }
 
     try {
       const getWelcomeEmailTempalte = await readFile("welcome.html", {});
