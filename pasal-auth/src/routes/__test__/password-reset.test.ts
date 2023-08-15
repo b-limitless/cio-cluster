@@ -2,6 +2,8 @@ import request from "supertest";
 import { User } from "../../../src/models/user";
 import { app } from "../../app";
 
+let verifiedUser = {} as any;
+
 const permission = {
   name: "list_leads",
   cat: "ifa",
@@ -14,6 +16,43 @@ beforeEach(async () => {
     .post("/api/users/permission/create")
     .send(permission)
     .expect(200);
+
+
+    try {
+      const res = await request(app)
+        .post("/api/users/signup")
+        .send({
+          email: "abcdefgh86@gmail.com",
+          password: "test",
+          permissions: ["list_leads"],
+          role: "admin",
+          employeeCount: 50,
+          industry: ["fashion"],
+        })
+        .expect(201);
+  
+      // Extract verification code
+      const {
+        verificationCode,
+        user: { id, verified },
+      } = JSON.parse(res.text);
+  
+      expect(verified).toEqual(false);
+      // // Send the verification code to the api
+      await request(app)
+        .post("/api/users/verify")
+        .send({ verificationCode })
+        .expect(200);
+  
+      // // //  Find the user by that id
+      verifiedUser = await User.findById(id);
+  
+      // const {verified} = findUser;
+      expect(verifiedUser?.verified).toEqual(true);
+    } catch (err: any) {
+      console.log("err", err.message);
+    }
+  
 });
 
 it("throw 400 bad request error if no email address is supplied", async () => {
@@ -37,44 +76,6 @@ it("will response with 201 regardless of existing user or not", async () => {
 it("should initiate password reset and send a reset code", async () => {
   // ... code to initiate password reset and send a reset code ...
   // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
-  // Request to verify the users
-
   const { email } = verifiedUser;
   const response = await request(app)
     .post("/api/users/reset-password/request")
@@ -84,45 +85,7 @@ it("should initiate password reset and send a reset code", async () => {
 
 it("should not update password without a password in the request", async () => {
   // ... code to test password update without providing a password ...
-  // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
-  // Request to verify the users
-
+  
   const { email } = verifiedUser;
   const response = await request(app)
     .post("/api/users/reset-password/request")
@@ -146,45 +109,6 @@ it("should not update password without a password in the request", async () => {
 });
 
 it("should not update password if passwords do not match", async () => {
-  // ... code to test password update with non-matching passwords ...
-  // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
-  // Request to verify the users
 
   const { email } = verifiedUser;
   const response = await request(app)
@@ -222,45 +146,6 @@ it("should not update password if passwords do not match", async () => {
 
 it("should successfully update password after providing matching passwords", async () => {
   // ... code to test successful password update ...
-  // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
-  // Request to verify the users
-
   const { email } = verifiedUser;
   const response = await request(app)
     .post("/api/users/reset-password/request")
@@ -309,42 +194,7 @@ it("should successfully update password after providing matching passwords", asy
 it("should prevent login with the old password", async () => {
   // ... code to test login attempt with old password ...
   // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
+  
   // Request to verify the users
 
   const { email } = verifiedUser;
@@ -411,42 +261,7 @@ it("should prevent login with the old password", async () => {
 it("should prevent login with incorrect credentials", async () => {
   // ... code to test login attempt with incorrect credentials ...
   // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
+  
   // Request to verify the users
 
   const { email } = verifiedUser;
@@ -512,42 +327,7 @@ it("should prevent login with incorrect credentials", async () => {
 
 it("should allow login with the updated password", async () => {
   // Create user first
-  let verifiedUser: any = {};
-
-  try {
-    const res = await request(app)
-      .post("/api/users/signup")
-      .send({
-        email: "abcdefgh86@gmail.com",
-        password: "test",
-        permissions: ["list_leads"],
-        role: "admin",
-        employeeCount: 50,
-        industry: ["fashion"],
-      })
-      .expect(201);
-
-    // Extract verification code
-    const {
-      verificationCode,
-      user: { id, verified },
-    } = JSON.parse(res.text);
-
-    expect(verified).toEqual(false);
-    // // Send the verification code to the api
-    await request(app)
-      .post("/api/users/verify")
-      .send({ verificationCode })
-      .expect(200);
-
-    // // //  Find the user by that id
-    verifiedUser = await User.findById(id);
-
-    // const {verified} = findUser;
-    expect(verifiedUser?.verified).toEqual(true);
-  } catch (err: any) {
-    console.log("err", err.message);
-  }
+  
   // Request to verify the users
 
   const { email } = verifiedUser;

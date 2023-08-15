@@ -35,27 +35,26 @@ router.post(
     res.status(201).send(passwordReset);
     
 
-    const {firstName} = user;
+    const {firstName, id} = user;
 
     // Send main to the user for reseting password
 
-    // const resetPasswordLink = (process.env.BASE_DOMIN_URI || "") + process.env.RESET_PASSWORD;
-    //  resetPasswordLink
-    //  firstName
-    // try {
-    //   const getResetPasswordLinkTemplate = await readFile("request-reset-password.html", {firstName, resetPasswordLink}); 
-    //   const sendResetPasswordEmail = await sendMail({
-    //     from: mailerEmail,
-    //     to: email,
-    //     subject: "Reset password",
-    //     text: "",
-    //     html: getResetPasswordLinkTemplate,
-    //   });
-    //   logger.log("info", messages.resetPasswordMessage, sendResetPasswordEmail );
-    // } catch (err:any) {
-    //   logger.log("error", err);
-    //   throw new Error(err);
-    // }
+    const resetPasswordLink = (process.env.BASE_DOMIN_URI || "") + process.env.RESET_PASSWORD + `/${passwordReset.code}/${id}`;
+  
+    try {
+      const getResetPasswordLinkTemplate = await readFile("request-reset-password.html", {firstName, resetPasswordLink}); 
+      const sendResetPasswordEmail = await sendMail({
+        from: mailerEmail,
+        to: email,
+        subject: "Reset password",
+        text: "",
+        html: getResetPasswordLinkTemplate,
+      });
+      logger.log("info", messages.resetPasswordMessage, sendResetPasswordEmail );
+    } catch (err:any) {
+      logger.log("error", err);
+      throw new Error(err);
+    }
   }
 );
 
