@@ -42,11 +42,11 @@ router.post(
     }
 
     // Build a password
-    const hasPassword = await Password.toHash(password);
+    
 
     const user = await UserService.build({
       email,
-      password:hasPassword,
+      password,
       permissions,
       role
     });

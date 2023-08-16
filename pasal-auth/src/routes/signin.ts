@@ -1,49 +1,58 @@
-import { BadRequestError, validateRequest } from "@pasal/common";
+import {
+  BadRequestError,
+  NotAuthorizedError,
+  validateRequest,
+} from "@pasal/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import { UserService } from "../../src/services/User.service";
-import { Password } from '../utils/password';
-
+import { Password } from "../utils/password";
+import { User } from "../../src/models/user";
 const router = express.Router();
 
 router.post(
   "/api/users/signin",
   [
-     body("email")
-     .isEmail()
-     .withMessage("Email must be valid"),
-     body('password')
+    body("email").isEmail().withMessage("Email must be valid"),
+    body("password")
       .trim()
       .notEmpty()
-      .withMessage('You must supply a password')
-   ],
+      .withMessage("You must supply a password"),
+  ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const {email, password} = req.body;
+    const { email, password } = req.body;
 
-    const existingUser = await UserService.findByWhereCluse({email, verified: true});
+    const existingUser = await UserService.findByWhereCluse({
+      email,
+      verified: true,
+    });
 
-    if(!existingUser) {
+    if (!existingUser) {
       throw new BadRequestError("Invalid credentials");
     }
-    
-    const passwordMatch = await Password.compare(existingUser.password, password);
 
-    if(!passwordMatch) {
-      
-      throw new BadRequestError('Invalid credentials');
+    const passwordMatch = await Password.compare(
+      existingUser.password,
+      password
+    );
+
+    if (!passwordMatch) {
+      throw new BadRequestError("Invalid credentials");
     }
 
+    const userJWT = jwt.sign(
+      {
+        id: existingUser.id,
+        email: existingUser.email,
+        permission: existingUser.permissions,
+        role: existingUser.role,
+      },
+      process.env.JWT_KEY!
+    );
 
-    const userJWT = jwt.sign({
-      id: existingUser.id,
-      email: existingUser.email,
-      permission: existingUser.permissions, 
-      role: existingUser.role
-    }, process.env.JWT_KEY!)
-
-    req.session = {jwt: userJWT};
+    req.session = { jwt: userJWT };
     res.status(201).json(existingUser);
   }
 );

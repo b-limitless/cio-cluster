@@ -1,6 +1,9 @@
 import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
+import { rabbitMQWrapper } from "../../__mock__/rabbitMQWrapper";
+import { UserCreatedPublisher } from "../../../src/events/publishers/user-created-publisher";
+
 
 const permission = {
   name: "list_leads",
@@ -8,6 +11,22 @@ const permission = {
   guard_name: "sales",
   role: "sales executive",
 };
+
+
+
+
+beforeAll(async() => {
+  jest.mock("@pasal/common", () => ({
+    ...jest.requireActual("@pasal/common"),
+    rabbitMQWrapper: rabbitMQWrapper // Use your custom mock implementation
+  }));
+  
+  await rabbitMQWrapper.connect();
+});
+
+afterAll(async() => {
+  await rabbitMQWrapper.close();
+});
 
 beforeEach(async () => {
   await request(app)

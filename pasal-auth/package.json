@@ -8,7 +8,7 @@
     "test": "jest --watchAll --no-cache",
     "test:ci": "jest",
     "startNode": "node dist/index.js",
-    "build": "tsc", 
+    "build": "tsc",
     "watch": "tsc -w"
   },
   "jest": {
@@ -21,7 +21,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@pasal/common": "^1.0.38",
+    "@pasal/common": "^1.0.39",
     "amqplib": "^0.8.0",
     "body-parser": "^1.20.1",
     "cookie-session": "^1.4.0",
