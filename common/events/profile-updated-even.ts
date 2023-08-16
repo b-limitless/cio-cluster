@@ -5,10 +5,6 @@ export interface ProfileUpdatedEvent {
   subject: Subjects.ProfileUpdated;
   data: {
     userId: string;
-    email: string;
-    password: string;
-    role: string;
-    permissions: string[];
     firstName: string | null;
     lastName: string | null;
     country: string | null;
@@ -17,3 +13,4 @@ export interface ProfileUpdatedEvent {
     profileImageLink: string | null;
   };
 }
+
