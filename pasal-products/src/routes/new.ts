@@ -16,13 +16,14 @@ import mongoose from "mongoose";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
 import { FebricCreatedPublisher } from "../events/publishers/febric-created-publisher";
 import { FebricService } from "../services/FebricService";
+import { hasPermissions } from "@pasal/common";
 
 const router = express.Router();
 
 router.post(
   "/api/products/v1",
   requireAuth,
-  // hasPermissions(["create_febric"]),
+  hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest,
   async (req: Request, res: Response) => {

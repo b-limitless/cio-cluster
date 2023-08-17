@@ -19,6 +19,7 @@ router.delete(
     const { id } = req.params;
     try {
       const deleteFebric = await FebricService.findByIdAndDelete(id);
+      console.log("deleteFebric", deleteFebric);
       res.status(200).send(deleteFebric);
       // Publish the event that febric is deleted
       const febricId = new mongoose.Types.ObjectId(id);

@@ -8,6 +8,7 @@ import { indexProductRouter  } from './routes';
 import { showProductRouter  } from './routes/show';
 import { updateFebricRouter } from './routes/update';
 import { uploadeRouter } from './routes/upload';
+import { deleteFebricRouter } from './routes/delete';
 
 const app = express();
 app.set('trust proxy', true);
@@ -24,6 +25,7 @@ app.use(indexProductRouter);
 app.use(showProductRouter);
 app.use(updateFebricRouter);
 app.use(uploadeRouter);
+app.use(deleteFebricRouter);
 app.all('*', async (req, res) => {
     throw new NotFoundError("Route not foud");
 });
