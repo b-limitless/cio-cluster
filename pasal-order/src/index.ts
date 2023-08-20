@@ -10,7 +10,8 @@ import { UserCreatedListener } from "./events/listeners/user-created-listener";
 import { ProfileUpdatedListener } from "./events/listeners/profile-updated-listener";
 import { UserVerifiedListener } from "./events/listeners/user-verified-listener";
 import logger from '@pasal/common/build/logger';
-// Hello World..
+
+
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
     throw new Error("Rabbit MQ URL is not defined");
