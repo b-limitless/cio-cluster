@@ -1,7 +1,7 @@
 import { BadRequestError, rabbitMQWrapper, validateRequest } from "@pasal/common";
 import logger from "@pasal/common/build/logger";
 import express, { Request, Response } from "express";
-import { Password } from "../../src/utils/password";
+import { Password } from "../utils/password";
 import { UserBodyRequest } from "../body-request/User.body-request";
 import { mailerEmail } from "../config/email";
 import { UserCreatedPublisher } from "../events/publishers/user-created-publisher";

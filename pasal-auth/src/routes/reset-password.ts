@@ -5,13 +5,13 @@ import { User } from "../models/user";
 import { ResetPassword } from "../models/resetpassword";
 import mongoose from "mongoose";
 import { Password } from "../utils/password";
-import { UserService } from "../../src/services/User.service";
-import { PasswordService } from "../../src/services/PasswordService";
+import { UserService } from "../services/User.service";
+import { PasswordService } from "../services/PasswordService";
 import logger from "@pasal/common/build/logger";
-import { readFile } from "../../src/utils/readFile";
-import { sendMail } from "../../src/mailar";
-import { mailerEmail } from "../../src/config/email";
-import { messages } from "../../src/messages";
+import { readFile } from "../utils/readFile";
+import { sendMail } from "../mailar";
+import { mailerEmail } from "../config/email";
+import { messages } from "../messages";
 const router = express.Router();
 
 router.post(

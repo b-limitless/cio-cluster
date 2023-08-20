@@ -1,4 +1,4 @@
-import { ResetPassword } from "../../src/models/resetpassword";
+import { ResetPassword } from "../models/resetpassword";
 
 export default class PasswordServiceLocal {
   async build(data: any) {
