@@ -1,14 +1,12 @@
 import {
   BadRequestError,
-  NotAuthorizedError,
-  validateRequest,
+  validateRequest
 } from "@pasal/common";
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import jwt from "jsonwebtoken";
-import { UserService } from "../../src/services/User.service";
+import { UserService } from "../services/User.service";
 import { Password } from "../utils/password";
-import { User } from "../../src/models/user";
 const router = express.Router();
 
 router.post(

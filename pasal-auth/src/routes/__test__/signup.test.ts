@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
 import { rabbitMQWrapper } from "../../__mock__/rabbitMQWrapper";
-import { UserCreatedPublisher } from "../../../src/events/publishers/user-created-publisher";
+import { UserCreatedPublisher } from "../../events/publishers/user-created-publisher";
 
 
 const permission = {

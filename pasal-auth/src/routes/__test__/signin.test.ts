@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import { User } from "../../../src/models/user";
+import { User } from "../../models/user";
 
 it("throw 400 error when no email supplied", async () => {
   await request(app).post("/api/users/signin").send({}).expect(400);

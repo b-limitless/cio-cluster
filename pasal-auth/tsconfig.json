@@ -10,7 +10,7 @@
     "removeComments": true,
     "noImplicitAny": false,
     "noUnusedLocals": false,
-    "baseUrl": ".", 
+    //"baseUrl": ".", 
      "sourceMap": true,
      
   },
