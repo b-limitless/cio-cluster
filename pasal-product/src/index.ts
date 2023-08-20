@@ -13,7 +13,7 @@ import { ProfileUpdatedListener } from './events/listeners/profile-updated-liste
 // process.env.MONGO_URI = "mongodb+srv://bharatrose1:thisismylife123@product.0cuszy8.mongodb.net/product";
 // process.env.NODE_ENV = "development"
 
-//
+
 const start = async () => {
 
   if (!process.env.RABBIT_MQ_URL) {

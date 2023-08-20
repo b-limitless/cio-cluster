@@ -9,6 +9,7 @@ import { FebricDeletedListener } from "./events/listeners/febric-deleted.listene
 import { FebricUpdatedListener } from "./events/listeners/febric-updated-listener";
 
 
+
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
     logger.log({
