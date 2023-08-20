@@ -13,7 +13,7 @@ export class FebricDeletedListener extends Listener<FebricDeletedEvent> {
   async onMessage(data: FebricDeletedEvent["data"], message: any) {
     let { febricId } = JSON.parse(data as any);
 
-    febricId = mongoose.Types.ObjectId(febricId);
+    febricId = new mongoose.Types.ObjectId(febricId);
 
     // Find and delete one
     try {
