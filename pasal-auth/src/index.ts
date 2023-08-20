@@ -50,6 +50,7 @@ const start = async () => {
       message: `Error while connecting with MongoDB:${error}`
     });
   }
+  // Would like to run depl file 
 
   try {
     connectToRabbitMQ(() => {
