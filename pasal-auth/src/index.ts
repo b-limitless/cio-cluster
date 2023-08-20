@@ -9,7 +9,7 @@ import { FebricDeletedListener } from "./events/listeners/febric-deleted.listene
 import { FebricUpdatedListener } from "./events/listeners/febric-updated-listener";
 
 
-
+// 
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
     logger.log({
@@ -50,6 +50,7 @@ const start = async () => {
       message: `Error while connecting with MongoDB:${error}`
     });
   }
+  // Would like to run depl file 
 
   try {
     connectToRabbitMQ(() => {
