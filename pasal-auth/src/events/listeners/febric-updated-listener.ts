@@ -9,7 +9,7 @@ export class FebricUpdatedListener extends Listener<FebricUpdatedEvent> {
     const parseData = JSON.parse(data as any);
     let { febricId, ...rest } = parseData;
 
-    febricId = mongoose.Types.ObjectId(febricId);
+    febricId = new mongoose.Types.ObjectId(febricId);
 
     try {
       const updtaedFebric = await FebricService.findOneAndUpdate(
