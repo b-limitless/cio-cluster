@@ -12,9 +12,9 @@ import { UserVerifiedListener } from "./events/listeners/user-verified-listener"
 import logger from '@pasal/common/build/logger';
 // Hello World
 const start = async () => {
-  // if (!process.env.RABBIT_MQ_URL) {
-  //   throw new Error("Rabbit MQ URL is not defined");
-  // }
+  if (!process.env.RABBIT_MQ_URL) {
+    throw new Error("Rabbit MQ URL is not defined");
+  }
   if (!process.env.JWT_KEY) {
     logger.log("error", "JWT key must be defined")
     throw new Error("JWT key must be defined");
@@ -35,19 +35,19 @@ const start = async () => {
     logger.log("info", `Cound not connect to MongoDB ${error}`);
   }
 
-  // connectToRabbitMQ(() => {
-  //   const rabbitClient = rabbitMQWrapper.client;
+  connectToRabbitMQ(() => {
+    const rabbitClient = rabbitMQWrapper.client;
 
-  //   // Febric events listener
-  //   new FebricCreatedListener(rabbitClient).listen();
-  //   new FebricUpdatedListener(rabbitClient).listen();
-  //   new FebricDeletedListener(rabbitClient).listen();
+    // Febric events listener
+    new FebricCreatedListener(rabbitClient).listen();
+    new FebricUpdatedListener(rabbitClient).listen();
+    new FebricDeletedListener(rabbitClient).listen();
 
-  //   // User events listener
-  //   new UserCreatedListener(rabbitClient).listen();
-  //   new ProfileUpdatedListener(rabbitClient).listen();
-  //   new UserVerifiedListener(rabbitClient).listen();
-  // });
+    // User events listener
+    new UserCreatedListener(rabbitClient).listen();
+    new ProfileUpdatedListener(rabbitClient).listen();
+    new UserVerifiedListener(rabbitClient).listen();
+  });
 };
 
 start();
