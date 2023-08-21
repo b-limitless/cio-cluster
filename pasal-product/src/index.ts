@@ -48,7 +48,7 @@ const start = async () => {
     throw new Error("MONGO_URI must be defined");
   }
 
-  // Listening user created listener
+
   try {
     connectToRabbitMQ(() => {
       new UserCreatedListener(rabbitMQWrapper.client).listen();
