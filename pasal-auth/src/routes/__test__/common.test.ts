@@ -44,3 +44,7 @@ export async function signUpVerifyUserGetToken(app: any) {
 
   return token;
 }
+
+it("is a dummy test", async() => {
+  
+})
