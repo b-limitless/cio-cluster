@@ -1,6 +1,6 @@
 import request from "supertest";
 import { app } from "../../app";
-import { signUpVerifyUserGetToken } from "./common";
+import { signUpVerifyUserGetToken } from "./common.test";
 
 const permission = {
   name: "list_leads",
