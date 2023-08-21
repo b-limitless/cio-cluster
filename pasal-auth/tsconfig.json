@@ -14,6 +14,6 @@
      "sourceMap": true,
      
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/test", "**/*.test.ts"],
   "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }
