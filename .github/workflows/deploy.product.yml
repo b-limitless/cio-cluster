@@ -1,0 +1,20 @@
+name: deploy-pasal-product
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'pasal-product/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd pasal-product && docker build -t bharatrose1/pasal-product .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env: 
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORE}}
+      - run: docker push bharatrose1/pasal-product

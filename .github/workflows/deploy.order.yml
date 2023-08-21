@@ -1,0 +1,20 @@
+name: deploy-pasal-order
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'pasal-order/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd pasal-order && docker build -t bharatrose1/pasal-order .
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        env: 
+          DOCKER_USERNAME: ${{secrets.DOCKER_USERNAME}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORE}}
+      - run: docker push bharatrose1/pasal-order
