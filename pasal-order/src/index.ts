@@ -14,7 +14,8 @@ import logger from '@pasal/common/build/logger';
 
 const start = async () => {
   if (!process.env.RABBIT_MQ_URL) {
-    throw new Error("Rabbit MQ URL is not defined");
+    logger.log("error", "Rabbit MQ URL is not defined")
+    // throw new Error("Rabbit MQ URL is not defined");
   }
   if (!process.env.JWT_KEY) {
     logger.log("error", "JWT key must be defined")
