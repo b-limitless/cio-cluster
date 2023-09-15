@@ -5,7 +5,7 @@ export class BadRequestError extends CustomError {
    
 
     constructor(public message:string, public field?:string) {
-        super(message);
+        super(message, field);
         Object.setPrototypeOf(this, BadRequestError.prototype);
     }
 
