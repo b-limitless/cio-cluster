@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pasal-orders-mongo-depl
+  name: pasal-order-mongo-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pasal-orders-mongo
+      app: pasal-order-mongo
   template:
     metadata:
       labels:
-        app: pasal-orders-mongo
+        app: pasal-order-mongo
     spec:
       containers:
-        - name: pasal-orders
+        - name: pasal-order
           image: mongo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: pasal-orders-mongo-srv
+  name: pasal-order-mongo-srv
 spec:
   selector:
-    app: pasal-orders-mongo
+    app: pasal-order-mongo
   ports:
     - name: db
       protocol: TCP

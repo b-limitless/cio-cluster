@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pasal-orders-depl
+  name: pasal-order-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pasal-orders
+      app: pasal-order
   template:
     metadata:
       labels:
-        app: pasal-orders
+        app: pasal-order
     spec:
       containers:
-        - name: pasal-orders
-          image: bharatrose1/pasal-orders
+        - name: pasal-order
+          image: bharatrose1/pasal-order
           env:
             - name: MONGO_URI
-              value: 'mongodb://pasal-orders-mongo-srv:27017/orders'
+              value: 'mongodb://pasal-order-mongo-srv:27017/order'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -29,12 +29,12 @@ spec:
 apiVersion: v1
 kind: Service 
 metadata:
-  name: pasal-orders-srv
+  name: pasal-order-srv
 spec:
   selector:
-    app: pasal-orders
+    app: pasal-order
   ports:
-    - name: pasal-orders
+    - name: pasal-order
       protocol: TCP
       port: 3000
       targetPort: 3000

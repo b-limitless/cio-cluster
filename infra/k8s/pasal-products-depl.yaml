@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pasal-products-depl
+  name: pasal-product-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pasal-products
+      app: pasal-product
   template:
     metadata:
       labels:
-        app: pasal-products
+        app: pasal-product
     spec:
       containers:
-        - name: pasal-products
-          image: bharatrose1/pasal-products
+        - name: pasal-product
+          image: bharatrose1/pasal-product
           env:
             - name: MONGO_URI
-              value: 'mongodb://pasal-products-mongo-srv:27017/products'
+              value: 'mongodb://pasal-product-mongo-srv:27017/product'
             - name: JWT_KEY
               valueFrom:
                 secretKeyRef:
@@ -29,13 +29,13 @@ spec:
 apiVersion: v1
 kind: Service 
 metadata:
-  name: pasal-products-srv
+  name: pasal-product-srv
 spec:
   selector:
-    app: pasal-products
+    app: pasal-product
   ports:
-    - name: pasal-products
+    - name: pasal-product
       protocol: TCP
       port: 3000
       targetPort: 3000
-#  'mongodb://pasal-products-mongo-srv:27017/products'
+#  'mongodb://pasal-product-mongo-srv:27017/product'

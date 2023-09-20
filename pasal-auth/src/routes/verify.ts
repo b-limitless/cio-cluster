@@ -52,9 +52,13 @@ async(req:Request, res:Response) => {
             },
             process.env.JWT_KEY!
           );
+        
           req.session = {
             jwt: userJWT,
         };
+
+        // Using token in header for the testing purpose
+        
         //  PUblish the event that use is verified
         try {
             new UserVerifiedPublisher(rabbitMQWrapper.client).publish({
@@ -65,6 +69,7 @@ async(req:Request, res:Response) => {
             logger.log("error", "Could not pulish the verify user event")
         }
         logger.log("info", `User successfully verified`);
+        res.setHeader('Authorization', `Bearer ${userJWT}`);
         res.send(user);
         return;
     } catch(err) {
@@ -72,5 +77,6 @@ async(req:Request, res:Response) => {
     }
     res.send({});
 });
+
 
 export {router as verificationRouter};

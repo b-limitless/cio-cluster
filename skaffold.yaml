@@ -16,19 +16,27 @@ build:
         manual:
           - src : 'src/**/*.ts'
             dest: .
-    - image: bharatrose1/pasal-products
-      context: pasal-products
+    - image: bharatrose1/pasal-product
+      context: pasal-product
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src : 'src/**/*.ts'
             dest: .
-    - image: bharatrose1/pasal-orders
-      context: pasal-orders
+    - image: bharatrose1/pasal-order
+      context: pasal-order
       docker:
         dockerfile: Dockerfile
       sync:
         manual:
           - src : 'src/**/*.ts'
+            dest: .
+    - image: bharatrose1/pasal-client
+      context: pasal-client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src : '**/*.js'
             dest: .

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pasal-client-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pasal-client
+  template:
+    metadata:
+      labels:
+        app: pasal-client
+    spec:
+      containers:
+        - name: pasal-client
+          image: bharatrose1/pasal-client
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pasal-client-srv
+spec:
+  selector:
+    app: pasal-client
+  ports:
+    - name: pasal-client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

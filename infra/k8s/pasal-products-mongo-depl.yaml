@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pasal-products-mongo-depl
+  name: pasal-product-mongo-depl
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pasal-products-mongo
+      app: pasal-product-mongo
   template:
     metadata:
       labels:
-        app: pasal-products-mongo
+        app: pasal-product-mongo
     spec:
       containers:
-        - name: pasal-products
+        - name: pasal-product
           image: mongo
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: pasal-products-mongo-srv
+  name: pasal-product-mongo-srv
 spec:
   selector:
-    app: pasal-products-mongo
+    app: pasal-product-mongo
   ports:
     - name: db
       protocol: TCP
