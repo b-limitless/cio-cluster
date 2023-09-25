@@ -1,0 +1,6 @@
+.tab__panel {
+    // display: none;
+    height: calc(100vh - (58px + 49px));
+    display: grid;
+    place-items: center;
+}

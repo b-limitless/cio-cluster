@@ -1,0 +1,39 @@
+.model.show {
+  right: 0;
+}
+
+.model.hide {
+  right: -562px;
+}
+
+.model {
+  width: 562px;
+  height: 100vh;
+  position: fixed;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  top: 0;
+  background-color: #fff;
+}
+
+@media only screen and (max-width: 43.75em) {
+  .model {
+    width: 100%;
+  }
+}
+
+.model .model__side .close {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  padding: 20px 28px;
+  margin-left: auto;
+}
+
+.model .model__side .close svg {
+  cursor: pointer;
+}
+/*# sourceMappingURL=model.module.css.map */

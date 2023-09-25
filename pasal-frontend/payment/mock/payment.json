@@ -1,0 +1,42 @@
+{
+    "paymentId": "123456789",
+    "paymentMethod": "creditCard",
+    "paymentStatus": "completed",
+    "billingAddress": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "addressLine1": "123 Main St",
+      "addressLine2": "",
+      "city": "Anytown",
+      "state": "CA",
+      "postalCode": "12345",
+      "country": "USA"
+    },
+    "shippingAddress": {
+      "firstName": "John",
+      "lastName": "Doe",
+      "addressLine1": "123 Main St",
+      "addressLine2": "",
+      "city": "Anytown",
+      "state": "CA",
+      "postalCode": "12345",
+      "country": "USA"
+    },
+    "paymentAmount": 99.99,
+    "transactionId": "987654321",
+    "paymentTimestamp": "2023-07-07T10:30:00Z",
+    "paymentGatewayResponse": {
+      "code": "SUCCESS",
+      "message": "Payment successful"
+    },
+    "orderReference": "ORD-123456789",
+    "fraudDetectionInfo": {
+      "ipAddress": "192.168.0.1",
+      "deviceInfo": "Browser: Chrome, OS: Windows 10",
+      "authenticationDetails": {
+        "authMethod": "3DSecure",
+        "authStatus": "authenticated"
+      }
+    }
+  }
+  

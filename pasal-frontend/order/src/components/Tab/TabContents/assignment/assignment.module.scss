@@ -1,0 +1,22 @@
+.assignment {
+    display: flex;
+    flex-direction: column;
+    // align-content: space-between;
+    justify-content: space-between;
+    height: calc(100vh - ( 49px + 58px));
+    position: relative;
+
+    .form {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+
+        .row {
+            textarea {
+                width: calc(100% - 24px);
+            }
+        }
+    }
+
+}

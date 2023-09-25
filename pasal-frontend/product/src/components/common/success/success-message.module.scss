@@ -1,0 +1,43 @@
+@import "@pasal/common-style/styles/base/functions.scss";
+@import "@pasal/common-style/styles/abstract/variables.scss";
+
+.base {
+  max-width: 651px;
+  margin: auto;
+  background-color: #ffffff;
+  // padding: pxToRem(47) pxToRem(39);
+  width: 100%;
+  font-family:$secondary-font-family;
+}
+
+.order__completed {
+  display: none;
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  align-items: center;
+  * {
+    font-family: $secondary-font-family;
+  }
+  .bold__message {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 46px;
+    color: #1a1a1c;
+    margin-top: 30px;
+  }
+  .confirmation {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    color: #848484;
+  }
+  button {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 34px;
+  }
+}

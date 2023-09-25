@@ -1,0 +1,55 @@
+@import "@pasal/common-style/styles/base/functions.scss";
+@import "@pasal/common-style/styles/abstract/variables.scss";
+.febric__wrapper {
+    display: flex;
+  justify-content: center;
+    // height:100vh;
+    width: 100%;
+  
+    .febric__container {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+        // new styles 
+        width: 100%;
+        @media only screen and (max-width: $bp-700) {
+            width: 100vw;
+        }
+
+
+        .row {
+            display: flex;
+            width: 100%;
+            flex-direction: row;
+            align-items: center;
+
+            @media only screen and (max-width: $bp-700) {
+                flex-direction: column;
+                align-items: flex-start;
+                row-gap: 1rem;
+            }
+    
+            .title {
+                margin-right: auto;
+                font-family: $secondary-font-family;
+            }
+    
+            .table__container {
+                width: 100%;
+                .filters {
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 1rem 0;
+                    font-family: $secondary-font-family;
+                }
+                .pagination {
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 1rem 0;
+                    font-family: $secondary-font-family;
+                }
+            }
+    
+        }
+    }
+}

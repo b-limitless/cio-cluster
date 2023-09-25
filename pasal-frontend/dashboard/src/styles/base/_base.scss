@@ -1,0 +1,45 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+}
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root,
+.App {
+  min-height: 100vh;
+  overflow: initial !important;
+  margin: 0;
+}
+
+html {
+  font-size: 100%;
+}
+
+body {
+  font-family: $secondary-font-family;
+  background-color: $light-gray;
+}
+a {
+  text-decoration: none;
+}
+
+input:focus,
+textarea {
+  outline: none;
+}
+li {
+  list-style: none;
+}
+
+.container {
+  min-height: 100vh;
+  height: 100%;
+  min-width: 100vw;
+  width: 100%;
+}
