@@ -3,16 +3,20 @@ const commonConfig = require("./webpack.common");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const packageJson = require("../package.json");
 
+const port = 80;
+
 const devConfig = {
   mode: "development",
   output: {
-    publicPath: 'http://localhost:8080/'
+    publicPath: `http://pasal.dev:${port}/`
   },
   devServer: {
-    port: 8080,
+    host: '0.0.0.0',
+    port,
     historyApiFallback: {
       index: "/index.html",
     },
+    allowedHosts: ['pasal.dev'],
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -26,10 +30,6 @@ const devConfig = {
         // payment: "payment@http://localhost:8087/remoteEntry.js",
         
       },
-      exposes: {
-        './scssVariables': './src/styles/abstract/_variables.scss',
-      },
-
       shared: packageJson.dependencies,
       
     }),

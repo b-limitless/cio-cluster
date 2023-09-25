@@ -25,17 +25,6 @@ spec:
                   key: JWT_KEY
             - name: RABBIT_MQ_URL
               value: 'amqp://rabbitmq-srv:5672'
-          readinessProbe:
-            exec:
-              command: ["sh", "-c", "nc -z rabbitmq-srv 5672"]
-            initialDelaySeconds: 10
-            periodSeconds: 5
-          livenessProbe:
-            exec:
-              command: ["sh", "-c", "nc -z rabbitmq-srv 5672"]
-            initialDelaySeconds: 60
-            periodSeconds: 10
-      restartPolicy: Always
 ---
 apiVersion: v1
 kind: Service 

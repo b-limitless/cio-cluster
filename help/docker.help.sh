@@ -12,3 +12,10 @@ kubectl get configmap custom-nginx-config
 
 # SSH to container
 kubectl exec -it pod_name -- /bin/sh
+
+
+
+# TEst
+docker tag bharatrose1:pasal-static-server bharatrose1/pasal-static-server
+
+docker push bharatrose1/pasal-static-server
