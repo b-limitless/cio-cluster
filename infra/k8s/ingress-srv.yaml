@@ -15,31 +15,31 @@ spec:
       http:
         paths:
           - path: /api/users/?(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: pasal-auth-srv
                 port:
                   number: 3000
           - path: /api/products/?(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: pasal-products-srv
                 port:
                   number: 3000
           - path: /api/orders/?(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: pasal-orders-srv
                 port:
                   number: 3000
-          - path: /?(.*)
-            pathType: ImplementationSpecific
+          - path: /
+            pathType: Prefix
             backend:
               service:
-                name: pasal-client-srv
+                name: pasal-static-server-srv
                 port:
-                  number: 3000
+                  number: 80
 

@@ -1,0 +1,288 @@
+.left {
+  z-index: 10;
+}
+.left-menu {
+  height: 100vh;
+  background-color: $light;
+  position: fixed;
+  width: pxToRem($left-menu-width);
+  z-index: 10;
+ 
+  @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+    width: pxToRem(92);
+  }
+  .menu-wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: pxToRem(72) 1rem 1rem 2rem;
+    .top {
+      .logo--arrow {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .logo {
+          display: flex;
+          align-items: center;
+          column-gap: 8.62px;
+          @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+            display: none;
+          }
+        }
+        .arrow {
+          .left-arrow-checkbox {
+            display: none;
+          }
+          @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+            display: none;
+          }
+        }
+      }
+      .navigation {
+        top: 4rem;
+        position: relative;
+        .navigation--ul {
+          .item {
+            padding: 0.5rem 0;
+            overflow: hidden;
+            a {
+              cursor: pointer ;
+            }
+            @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+              position: relative;
+              overflow: visible;
+            }
+            .sub--ul {
+              position: relative;
+              margin-left: 2rem;
+              top: 0px;
+              height: 0px;
+              visibility: hidden;
+              -webkit-transition: all 0.11s ease;
+              -moz-transition: all 0.11s ease;
+              -ms-transition: all 0.11s ease;
+              -o-transition: all 0.11s ease;
+              transition: all 0.11s ease;
+              @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+                position: absolute;
+                margin-left: pxToRem(44) !important;
+                width: 200px;
+                top: 2rem !important;
+                background-color: $light-gray1;
+                padding: 1rem 1rem;
+              }
+              .sub--li {
+                padding: 4px 8px;
+                font-family: $secondary-font-family;
+                font-size: 1rem;
+                font-weight: 400;
+                color: rgba(0, 0, 0, 0.45);
+                font-size: 16px;
+                line-height: 20px;
+                opacity: 0.8;
+                cursor: pointer;
+                &:hover {
+                  opacity: 1;
+                }
+              }
+              .sub-menu-checkbox {
+                display: none;
+              }
+              .sub-menu-checkbox:checked + label li {
+                font-weight: 600;
+              }
+            }
+            .major-list {
+              display: none;
+            }
+            .major-list:checked + .title-icon  svg {
+              opacity: 1;
+            }
+            .major-list:checked ~ .sub--ul {
+              top: 0.5rem !important;
+              visibility: visible !important;
+              height: auto !important;
+              @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+                top: 2rem !important;
+                left: 22px !important;
+              }
+            }
+            .major-list:checked ~ .title-icon .arrow {
+              transform: rotate(0deg) !important;
+            }
+            .major-list:checked ~ .title-icon .title {
+              font-weight: 600;
+            }
+          }
+          .title-icon {
+            display: flex;
+            align-items: center;
+            .arrow {
+              transform: rotate(-90deg) !important;
+              transition: all 0.25s ease;
+            }
+            .title {
+              position: relative;
+              left: 1rem;
+              font-size: pxToRem(18);
+              font-family: $secondary-font-family;
+              font-weight: 500;
+              color: rgba(0, 0, 0, 0.45);
+              margin-right: auto;
+            }
+          }
+        }
+      }
+    }
+    .bottom {
+      display: flex;
+      flex-direction: column;
+      row-gap: 4rem;
+      &--top {
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+        .bottom-checkbox {
+          display: none;
+        }
+        .switch--account {
+          display: flex;
+          column-gap: 0.5rem;
+          background-color: $light-gray3;
+          border-radius: 5px;
+          padding: 1rem 0.5rem;
+          @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+            display: none;
+          }
+          .details {
+            display: flex;
+            flex-direction: column;
+            row-gap: 1rem;
+            flex-grow: 1;
+            .switch {
+              font-size: pxToRem(18);
+              color: $gray;
+              line-height: 110%;
+              span {
+                font-weight: 600;
+              }
+            }
+            .unlinited {
+              font-style: normal;
+              font-weight: 400;
+              font-size: 13px;
+              color: $gray;
+              line-height: 130%;
+            }
+            .ico-getpro {
+              display: flex;
+              align-items: center;
+              .get-pro {
+                margin-right: auto;
+                color: $yellow;
+              }
+            }
+          }
+        }
+        .item {
+          display: flex;
+          column-gap: pxToRem(18.21);
+          position: relative;
+          .text {
+            color: gray;
+            font-style: normal;
+            font-weight: 500;
+            font-size: pxToRem(18);
+            cursor: pointer;
+            @media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+              top: 0px;
+              position: absolute;
+              left: 4rem;
+              display: none;
+              background-color: $light-gray1;
+              padding: 1rem 2rem;
+            }
+          }
+        }
+      }
+      &--bottom {
+        display: flex;
+        align-items: center;
+        column-gap: pxToRem(12);
+        .avatar-profile-info {
+          display: none;
+        }
+        .profile-logout {
+          flex-grow: 1;
+          display: flex;
+          align-items: center;
+          .name--role {
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            row-gap: 4px;
+            .name {
+              font-weight: 500;
+              font-size: 18px;
+              line-height: 23px;
+              display: flex;
+              align-items: center;
+              color: rgba(0, 0, 0, 0.65);
+            }
+            .role {
+              font-style: normal;
+              font-weight: 300;
+              font-size: 14px;
+              line-height: 18px;
+              color: rgba(0, 0, 0, 0.65);
+            }
+          }
+        }
+        .logout {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: $bp-largest) and (min-width: $bp-medium) {
+  .major-list:checked ~ .title-icon .title {
+    display: block !important;
+    left: pxToRem(66) !important;
+    cursor: pointer;
+    position: absolute !important;
+    background-color: $light-gray1;
+    width: 200px !important;
+    padding: 1rem;
+  }
+  .bottom {
+    &--top {
+      .bottom-checkbox:checked ~ label + .text {
+        display: block !important;
+      }
+    }
+    &--bottom {
+      .profile-logout {
+        display: none !important;
+      }
+      .avatar-profile-info:checked ~ .profile-logout {
+        display: flex !important;
+        position: absolute;
+        background-color: $light-gray1;
+        left: pxToRem(97);
+        padding: 1rem;
+        bottom: 6px;
+        column-gap: 1rem;
+      }
+    }
+  }
+  .arrow,
+  .title {
+    display: none !important;
+    background-color: $light-gray1;
+  }
+}
+.side--navbar:has(.left-arrow-checkbox:checked) {
+  left: -(pxToRem($left-menu-width)) ;
+}

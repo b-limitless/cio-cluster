@@ -27,18 +27,18 @@ const isProd = () => {
   return process.env.NODE_ENV === "production";
 }
 
+
+// app.use(
+//   cors({
+//     origin: allowedOrigins,
+//   })
+// );
+app.set("trust proxy", true);
 app.use(json());
 app.use(
-  cors({
-    origin: allowedOrigins,
-  })
-);
-app.set("trust proxy", true);
-app.use(
   cookieSession({
-    signed: isProd(),
-    secure: isProd(),
-    httpOnly: isProd(),
+    signed: false,
+    secure: false,
   })
 );
 
