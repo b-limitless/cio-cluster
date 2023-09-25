@@ -1,3 +1,4 @@
+# Use this only in the production image-name:pasal-static-server
 # Use an offical Node JS runtime as the base image
 FROM node:16 as auth-builder
 

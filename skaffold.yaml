@@ -33,7 +33,7 @@ build:
           - src : 'src/**/*.ts'
             dest: .
     - image: bharatrose1/pasal-static-server
-      context: pasal-frontend
+      context: pasal-frontend/container
       docker:
         dockerfile: Dockerfile
       sync:
