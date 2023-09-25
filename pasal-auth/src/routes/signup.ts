@@ -27,10 +27,12 @@ router.post(
       role,
     } = req.body;
 
+    console.log("req.body", req.body)
+
     const existingUser = await UserService.findOne(email);
 
     if (existingUser) {
-      throw new BadRequestError(messages.emailExists);
+      throw new BadRequestError(messages.emailExists, 'email');
     }
 
     let selectedPermissionExists = await checkPermissionAllSet(permissions);

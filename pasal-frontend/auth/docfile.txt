@@ -1,0 +1,9 @@
+FROM node:alpine
+ENV CI=true
+WORKDIR /app
+COPY package.json .
+COPY . .
+RUN npm install --omit-dev
+RUN npm run build 
+COPY dist/ .
+# CMD ["npm", "start"]

@@ -1,0 +1,7 @@
+While working with the authentication we recognize that in development working with secure cookie based authentication with SameSite, HttpOnly, Secure, CORS.
+In localhost it is important to test the application or we won't have motivation to push this to the testing server. 
+We tried to test a different situation due to security reasons. Even though the server is sending cookies to the client, the client is not able to set that cookie because we are serving our Micro Front end from a localhost host. 
+We are serving our minikube ip with pasal.dev local domain when this domain sends cookie to localhost browser refused to set them because it security which brought challenges in testing despite tries to relax the security measure of backend system 
+If we would have a simple system with front end then we would serve the same local domain with the same codebase where all our backend services lie. Unfortunately we have architectured the application in a different way by focusing on some different aspects of the requirement. 
+Long story short we will enable JWT base token authorization for the testing purpose and in the future in production when we serve our front end and backend services from same domain or subdomain then we would enable cookie based authentication because it would be more secure in this situation
+Now we are not checking cookie base auth but user need to send authorization token by itself to server and server will validate that token and response accordingly 

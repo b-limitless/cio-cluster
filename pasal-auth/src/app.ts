@@ -1,5 +1,6 @@
 import express from "express";
 import "express-async-errors";
+import cors from "cors";
 import { json } from "body-parser";
 import cookieSession from "cookie-session";
 import { signInRouter } from "./routes/signin";
@@ -14,18 +15,33 @@ import { KYCRouter } from "./routes/kyc";
 import { profileRouter } from "./routes/profile";
 import { teamRouter } from "./routes/team";
 
-// 
+// process.env.ALLOWED_ORIGINS
+const allowedOrigins =  process.env.ALLOWED_ORIGINS|| "*";
+
+//
 const app = express();
+
+// Enbling CORS only for the development purpose
+
+const isProd = () => {
+  return process.env.NODE_ENV === "production";
+}
+
+
+// app.use(
+//   cors({
+//     origin: allowedOrigins,
+//   })
+// );
 app.set("trust proxy", true);
 app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: process.env.NODE_ENV === "production",
-    httpOnly: true,
-    // maxAge: 3600000, 
+    secure: false,
   })
 );
+
 
 app.use(currentUser);
 app.use(currentUserRouter);
@@ -37,12 +53,12 @@ app.use(permissionRouter);
 app.use(verificationRouter);
 app.use(KYCRouter);
 app.use(profileRouter);
-app.use(teamRouter)
+app.use(teamRouter);
 app.all("*", async (req, res) => {
   throw new NotFoundError("Route did not find");
 });
 
+console.log("well this is working")
 app.use(errorHandler);
 
 export { app };
-
