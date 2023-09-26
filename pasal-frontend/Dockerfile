@@ -1,3 +1,4 @@
+# Use this only in the production image-name:pasal-static-server
 # Use an offical Node JS runtime as the base image
 FROM node:16 as auth-builder
 
@@ -31,9 +32,9 @@ COPY --from=container-builder /app/container/dist /usr/share/nginx/html
 # Expose port 80 for HTTP traffic
 EXPOSE 80
 
-RUN rm -rf /app
+# Remove this only when you are in production
+#RUN rm -rf /app
 
 # Start Nginx  
 CMD ["nginx", "-g", "daemon off;"]
 
-#

@@ -1,0 +1,23 @@
+@import "@pasal/common-style/styles/base/functions.scss";
+@import "@pasal/common-style/styles/abstract/variables.scss";
+
+.permission__container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media only screen and (max-width: $bp-700) {
+    grid-template-columns: 1fr;
+  }
+
+  .permission__col {
+    flex-grow: 1;
+  }
+  .item {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: pxToRem(32);
+    justify-content: space-between;
+    
+  }
+}

@@ -27,50 +27,50 @@ export default function App({ }: Props) {
   const [showSettingModel, setShowSettingModel] = useState<boolean>(false);
 
 
-  // useEffect(() => {
-  //   if (selectedMenu === menuEnum.Dashboard) {
-  //     history.push(splitTitleToUrl(menuEnum.Dashboard));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Products_Febric) {
-  //     history.push(splitTitleToUrl(menuEnum.Products_Febric));
-  //   }
-  //   if (selectedMenu === menuEnum.Product_Thread) {
-  //     history.push(splitTitleToUrl(menuEnum.Product_Thread));
-  //   }
-  //   if (selectedMenu === menuEnum.Users) {
-  //     history.push(splitTitleToUrl(menuEnum.Users));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Orders) {
-  //     history.push(splitTitleToUrl(menuEnum.Orders));
-  //   }
-
-  //   if(selectedMenu === menuEnum.Payments) {
-  //     history.push(splitTitleToUrl(menuEnum.Payments));
-  //   }
-
-  // }, [selectedMenu]);
-
   useEffect(() => {
-    if (auth) {
+    if (selectedMenu === menuEnum.Dashboard) {
       history.push(splitTitleToUrl(menuEnum.Dashboard));
     }
 
-    // if (!auth) {
-    //   history.push(splitTitleToUrl(menuEnum.Auth_Signin));
-    // }
-  }, [auth]);
+    if (selectedMenu === menuEnum.Products_Febric) {
+      history.push(splitTitleToUrl(menuEnum.Products_Febric));
+    }
+    if (selectedMenu === menuEnum.Product_Thread) {
+      history.push(splitTitleToUrl(menuEnum.Product_Thread));
+    }
+    if (selectedMenu === menuEnum.Users) {
+      history.push(splitTitleToUrl(menuEnum.Users));
+    }
+
+    if (selectedMenu === menuEnum.Orders) {
+      history.push(splitTitleToUrl(menuEnum.Orders));
+    }
+
+    if(selectedMenu === menuEnum.Payments) {
+      history.push(splitTitleToUrl(menuEnum.Payments));
+    }
+
+  }, [selectedMenu]);
+
+  // useEffect(() => {
+  //   if (auth) {
+  //     history.push(splitTitleToUrl(menuEnum.Dashboard));
+  //   }
+
+  //   if (!auth) {
+  //     history.push(splitTitleToUrl(menuEnum.Auth_Signin));
+  //   }
+  // }, [auth]);
 
 
 
- 
+ console.log(" I am cotnainer")
 
   return (
     <>
       <Router history={history}>
         <Switch>
-          {/* <Route exact path="/dashboard">
+          <Route exact path="/dashboard">
             <Container
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu}
@@ -85,15 +85,15 @@ export default function App({ }: Props) {
                 isSignIn={false}
                 setShowProfileSideModel={setShowProfileSideModel}
                 showProfileSideModel={showProfileSideModel} />
-
             </Container>
-          </Route> */}
+            
+          </Route>
 
           <Route path="/auth">
             <AuthApp onSingIn={() => { }} isSignIn={false} />
           </Route>
 
-          {/* <Route path="/users">
+          <Route path="/users">
             <Container selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}>
               <UserApp onSingIn={() => { }} isSignIn={false} />
@@ -120,7 +120,7 @@ export default function App({ }: Props) {
               showSettingModel={showSettingModel} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} >
               <OrderApp onSingIn={() => { }} isSignIn={false} />
             </Container>
-          </Route> */}
+          </Route>
         </Switch>
       </Router>
 

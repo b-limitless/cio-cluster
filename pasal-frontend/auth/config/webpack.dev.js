@@ -22,9 +22,9 @@ let devConfig = {
     historyApiFallback: {
       index: '/index.html',
     }, 
-    allowedHosts: 'all',
+    allowedHosts: ['pasal.dev'],
     host: '0.0.0.0',
-    port: 8083,
+    
   },
   plugins: [ 
     new ModuleFederationPlugin({
@@ -33,9 +33,7 @@ let devConfig = {
       exposes: {
         './AuthApp': './src/bootstrap',
       },
-      remotes: {
-         
-      },
+     
       shared: packageJson.dependencies,
     }),
     new HtmlWebpackPlugin({

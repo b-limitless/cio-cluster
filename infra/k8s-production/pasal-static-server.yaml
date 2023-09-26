@@ -1,0 +1,41 @@
+# Just an
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pasal-static-server-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pasal-static-server
+  template:
+    metadata:
+      labels:
+        app: pasal-static-server
+    spec:
+      containers:
+        - name: pasal-static-server
+          image: bharatrose1/pasal-static-server
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: custom-nginx-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pasal-static-server-srv
+spec:
+  selector:
+    app: pasal-static-server
+  ports:
+    - name: pasal-static-server
+      protocol: TCP
+      port: 80
+      targetPort: 80

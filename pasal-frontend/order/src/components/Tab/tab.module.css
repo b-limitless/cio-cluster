@@ -1,0 +1,7 @@
+.tab__panel {
+  height: calc(100vh - (58px + 49px));
+  display: -ms-grid;
+  display: grid;
+  place-items: center;
+}
+/*# sourceMappingURL=tab.module.css.map */

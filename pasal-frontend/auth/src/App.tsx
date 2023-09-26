@@ -15,6 +15,7 @@ interface AppInterface {
 }
 
 export default function App({ history }: AppInterface) {
+
   return (
     <div className="app">
       <Router history={history}>

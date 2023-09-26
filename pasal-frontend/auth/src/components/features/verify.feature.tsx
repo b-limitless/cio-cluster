@@ -178,7 +178,6 @@ export default function VerifyFeature({ }: Props) {
         <div className="purpose">
           {gePurpose()}
         </div>
-
         {!userVerified && <div className="verfication-form">
           {inputRefs.map((inputRef, index) => (
             <Input
