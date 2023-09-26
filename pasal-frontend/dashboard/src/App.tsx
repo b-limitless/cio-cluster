@@ -23,7 +23,6 @@ interface AppInterface {
 }
 
 export default function App({ setShowSettingModel, showSettingModel, history, onSignin, isSignedIn, showProfileSideModel, setShowProfileSideModel }: AppInterface) {
-    console.log("showSettingModel", showSettingModel)
     return (
         <>
             <StylesProvider generateClassName={gererateClassName}>
