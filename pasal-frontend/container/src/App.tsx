@@ -15,7 +15,7 @@ import "./styles/main.scss";
 
 
 type Props = {}
-// Import all microfrontend here
+
 // Use them based on the clicked menu we can load the required component
 // Need to track the state which will measure 
 const history = createBrowserHistory();
