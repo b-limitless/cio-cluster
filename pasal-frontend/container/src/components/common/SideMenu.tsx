@@ -4,10 +4,11 @@ import ArrowLeft from "../../assets/svg/arrow-left.svg";
 import FaqIcon from "../../assets/svg/faq.svg";
 import LogoIcon from "../../assets/svg/logo-icon.svg";
 import LogoText from "../../assets/svg/logo-text.svg";
-import logout from "../../assets/svg/logout.svg";
+import LogoutIcon from "../../assets/svg/logout.svg";
 import rightArrowRound from "../../assets/svg/right-arrow-round.svg";
 import Setting from "../../assets/svg/settings.svg";
 import SwitchPro from "../../assets/svg/switch-pro.svg";
+
 import { sideNavConfig } from '../../config/navMenu';
 import NavList from './NavList';
 
@@ -108,6 +109,8 @@ export default function SideMenu({setShowSettingModel, showSettingModel, setSele
               </label>
               <div className="text settings">FAQ</div>
             </div>
+
+            
           </div>
           <div className="bottom--bottom" onClick={() => sideModelToggleHandler(sidebarNavClick.profile)}>
             <input type="checkbox" id="avatar-profile-info" className="avatar-profile-info" />
@@ -122,7 +125,7 @@ export default function SideMenu({setShowSettingModel, showSettingModel, setSele
                 <div className="role">Administrator</div>
               </div>
               <div className="col logout">
-                <img src={logout} alt="" />
+                <LogoutIcon/>
               </div>
             </div>
           </div>
