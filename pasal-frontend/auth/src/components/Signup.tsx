@@ -16,6 +16,7 @@ import { request } from '../utils/request';
 import { APIS } from '../config/apis';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { onSubmitHandler } from '../../common/onSubmitHandler';
 
 const initialFormErrorState = {
   fullName: null,
@@ -125,24 +126,27 @@ export default function Signup() {
     }
   }
 
-  const onSubmitHandler = () => {
+  // const onSubmitHandler = () => {
 
-    Object.keys(form).forEach((key) => {
+  //   Object.keys(form).forEach((key) => {
+  //     const formKey = key as keyof FormInterface;
+  //     const value = form[formKey] as string;
 
-      const formKey = key as keyof FormInterface;
-      const value = form[formKey] as string;
+  //     if (!userModel[formKey].test(value)) {
+  //       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: formKey, value: `${camelCaseToNormal(formKey, true)} is required` } })
+  //     }
 
-      if (!userModel[formKey].test(value)) {
-        dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: formKey, value: `${camelCaseToNormal(formKey, true)} is required` } })
-      }
+  //     if (userModel[formKey].test(value)) {
+  //       console.log(`${formKey} value ${value} is valid`)
+  //       dispatch({ type: 'FORM_ERROR', payload: { formHasError: false, name: formKey, value: null } })
+  //     }
 
-      if (userModel[formKey].test(value)) {
-        console.log(`${formKey} value ${value} is valid`)
-        dispatch({ type: 'FORM_ERROR', payload: { formHasError: false, name: formKey, value: null } })
-      }
+  //   });
+  //   dispatch({ type: 'FORM_SUBMITTED', payload: true });
+  // }
 
-    });
-    dispatch({ type: 'FORM_SUBMITTED', payload: true });
+  const onSubmitHandlerLocal = () => {
+    onSubmitHandler(form, userModel, dispatch, 'signup')
   }
 
   useEffect(() => {
@@ -202,12 +206,10 @@ export default function Signup() {
           onMouseLeaveEventHandler={onMouseLeaveEventHandler}
           form={form}
           formError={formError}
-          onSubmitHandler={onSubmitHandler}
+          onSubmitHandler={onSubmitHandlerLocal}
           submitting={submitting}
         />}
-        {/* {success && <VerifyFeature/>} */}
-
-        <VerifyFeature/>
+        
       </div>
     </Template>
   );

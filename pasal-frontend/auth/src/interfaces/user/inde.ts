@@ -1,6 +1,6 @@
 export interface SigninForm {
-  email: string | null;
-  password: string | null;
+  email: string;
+  password: string;
 }
 
 export interface FormInterface extends SigninForm {

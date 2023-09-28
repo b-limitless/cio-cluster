@@ -1,13 +1,12 @@
 import React, { useReducer, useState } from "react";
 import Template from "../common/Template";
-import { Select, Button, Input, Checkbox, InputWithIcon, InputAdornments } from "@pasal/cio-component-library"
+import { Select, Button, Input, Checkbox, InputWithIcon, InputAdornments, camelCaseToNormal } from "@pasal/cio-component-library"
 import BackLeftIcon from "../assets/svg/back-left-icon.svg";
 import { onChangeHandler } from "../../common/onChangeHandler";
+import { SigninForm } from "../interfaces/user/inde";
+import { signInModel } from "../model/user";
+import { onSubmitHandler } from "../../common/onSubmitHandler";
 
-interface SigninForm {
-  email: string | null;
-  password: string | null;
-}
 
 interface SigninProcess {
   form: SigninForm,
@@ -27,8 +26,8 @@ const signinInitialState: SigninProcess = {
   form: { email: '', password: '' },
   formHasError: false,
   formError: {
-    email: null,
-    password: null
+    email: '',
+    password: ''
   },
   submissionError: null,
   success: false,
@@ -83,7 +82,22 @@ function signInProcessReducer(state: SigninProcess, action: any) {
 export default function Signin() {
 
 
-  const [{form}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
+  const [{form, formError}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
+
+  const onMouseLeaveEventHandler = (name: keyof SigninForm, value: string) => {
+    if (!signInModel[name].test(value)) {
+      dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name, value: `${camelCaseToNormal(name, true)} is required` } })
+    } else {
+      dispatch({ type: 'FORM_ERROR', payload: { name, value: null, formHasError: false } })
+    }
+  }
+
+   const onSubmitHandlerLocal = () => {
+    onSubmitHandler(form, signInModel, dispatch, 'signin')
+   }
+
+  
+
   return (
     <Template>
       <div className="right col">
@@ -119,9 +133,10 @@ export default function Signin() {
                 name="email"
                 value={form.email}
                 type="email"
-                error={true}
-                helperText="Incorrect entry."
-                onChageHalder={(e:any) => onChangeHandler(e, dispatch)}
+                error={formError.email}
+                helperText={formError.email ? formError.email : ''}
+                onChange={(e:any) => onChangeHandler(e, dispatch)}
+                onBlur={() => onMouseLeaveEventHandler('email', form.email)}
               />
               <InputAdornments
                 label="Password"
@@ -129,9 +144,12 @@ export default function Signin() {
                 name="password"
                 value={form.password}
                 type="password"
-                error={true}
+                error={formError.password}
+                helperText={formError.password ? formError.password : ''}
+                onChange={(e:any) => onChangeHandler(e, dispatch)}
+                onBlur={() => onMouseLeaveEventHandler('password', form.password)}
               />
-              <Button variant="primary" text="Signin"></Button>
+              <Button variant="primary" text="Signin" onClick={() => onSubmitHandlerLocal()}></Button>
             </div>
           </div>
         </div>
