@@ -2,7 +2,7 @@ import React, { useReducer, useState } from "react";
 import Template from "../common/Template";
 import { Select, Button, Input, Checkbox, InputWithIcon, InputAdornments } from "@pasal/cio-component-library"
 import BackLeftIcon from "../assets/svg/back-left-icon.svg";
-import { FormState } from "../interfaces/user/inde";
+import { onChangeHandler } from "../../common/onChangeHandler";
 
 interface SigninForm {
   email: string | null;
@@ -116,13 +116,20 @@ export default function Signin() {
               <Input
                 label="Email address*"
                 id="email-address"
-                defaultValue=""
+                name="email"
+                value={form.email}
                 type="email"
                 error={true}
                 helperText="Incorrect entry."
+                onChageHalder={(e:any) => onChangeHandler(e, dispatch)}
               />
               <InputAdornments
                 label="Password"
+                id="password"
+                name="password"
+                value={form.password}
+                type="password"
+                error={true}
               />
               <Button variant="primary" text="Signin"></Button>
             </div>

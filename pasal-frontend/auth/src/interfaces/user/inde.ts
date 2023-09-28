@@ -1,27 +1,27 @@
-export interface FormInterface {
-  fullName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  agreement?:boolean;
+export interface SigninForm {
+  email: string | null;
+  password: string | null;
 }
 
-
+export interface FormInterface extends SigninForm {
+  fullName: string;
+  confirmPassword: string;
+  agreement?: boolean;
+}
 
 export interface FormError {
-    fullName: null | string,
-    email: null | string,
-    password: null | string,
-    confirmPassword: null | string, 
-    agreement: null | string
+  fullName: null | string;
+  email: null | string;
+  password: null | string;
+  confirmPassword: null | string;
+  agreement: null | string;
 }
 export interface FormState {
   submitting: boolean;
   form: FormInterface;
   submissionError: null | string;
   success: null | boolean;
-  formError: FormError
+  formError: FormError;
   formHasError: null | boolean;
-  formSubmitted: boolean
-  
+  formSubmitted: boolean;
 }

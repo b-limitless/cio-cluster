@@ -147,15 +147,6 @@ export default function Signup() {
 
   useEffect(() => {
     const submitFormToServer = async () => {
-      // const body = {
-      //   fullName: 'bharat shah',
-      //   email: 'bharatrose1@gmail.com',
-      //   password: 'thisismylife123',
-      //   confirmPassword: 'thisismylife123',
-      //   agreement: true,
-      //   role: 'admin',
-      //   permissions: ['all']
-      // }
       try {
         const response = await request({
           url: APIS.auth.signup,
@@ -187,7 +178,7 @@ export default function Signup() {
   }, [formHasError, formSubmitted]);
 
  
-  console.log("formError", formError)
+  
   return (
     <Template>
       <div className='right col'>
