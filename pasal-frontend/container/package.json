@@ -8,7 +8,7 @@
     "dependencies": {
         "@material-ui/core": "^4.11.0",
         "@material-ui/icons": "^4.9.1",
-        "@pasal/cio-component-library": "^73.0.0",
+        "@pasal/cio-component-library": "^74.0.0",
         "@reduxjs/toolkit": "^1.9.3",
         "@types/react-router-dom": "^5.3.3",
         "axios": "^1.5.1",

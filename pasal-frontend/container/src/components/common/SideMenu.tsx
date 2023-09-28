@@ -11,6 +11,9 @@ import SwitchPro from "../../assets/svg/switch-pro.svg";
 
 import { sideNavConfig } from '../../config/navMenu';
 import NavList from './NavList';
+import { request } from '../../utils/request';
+import { APIS } from '../../apis';
+import { useHistory } from 'react-router-dom';
 
 interface SideMenuInterface {
   setSelectedMenu: Function
@@ -27,7 +30,7 @@ enum sidebarNavClick  {
 type sidebarNavClicktype = `${sidebarNavClick}`
 
 export default function SideMenu({setShowSettingModel, showSettingModel, setSelectedMenu, setShowProfileSideModel }: SideMenuInterface) {
-  
+  const history = useHistory();
   const sideModelToggleHandler = (type:sidebarNavClicktype) => {
     if(type==sidebarNavClick.profile) {
       setShowSettingModel(false);
@@ -42,6 +45,19 @@ export default function SideMenu({setShowSettingModel, showSettingModel, setSele
     }
   }
 
+  const singOutHandler = async() => {
+     try {
+      await request({
+        url: APIS.auth.signout,
+        method: 'get'
+      });
+
+      history.push('/auth/signin');
+
+     } catch(err) {
+      console.error("Could not signout", err);
+     }
+  }
   
   return (
     <div className="left-menu">
@@ -124,7 +140,7 @@ export default function SideMenu({setShowSettingModel, showSettingModel, setSele
                 <div className="name">Bharat Shah</div>
                 <div className="role">Administrator</div>
               </div>
-              <div className="col logout">
+              <div className="col logout" onClick={() => singOutHandler()}>
                 <LogoutIcon/>
               </div>
             </div>
