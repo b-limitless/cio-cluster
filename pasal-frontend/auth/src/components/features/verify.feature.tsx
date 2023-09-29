@@ -5,12 +5,11 @@ import {
   Input,
   InputAdornments,
 } from "@pasal/cio-component-library"
-import { request } from '../../utils/request';
+// import { request } from '../../utils/request';
 import { APIS } from '../../config/apis';
 import { FormHelperText } from '@material-ui/core';
 import { colors } from '@pasal/cio-component-library';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
 
 type Props = {}
@@ -94,17 +93,17 @@ export default function VerifyFeature({ }: Props) {
     setVerifying(true)
     try {
 
-      const response = await request({
-        url: APIS.auth.verify,
-        body: { verificationCode },
-        method: 'post'
-      });
+      // const response = await request({
+      //   url: APIS.auth.verify,
+      //   body: { verificationCode },
+      //   method: 'post'
+      // });
 
-      if(response.verified) {
+      // if(response.verified) {
         
-        setUserVerified(true);
+      //   setUserVerified(true);
       
-      }
+      // }
     } catch (err: any) {
       const { response: { data: { errors: [index] } } } = err;
       setUserVerificationError(index.message);
