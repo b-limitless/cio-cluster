@@ -8,7 +8,6 @@ import UserApp from "./components/remotes/UserApp";
 import AuthApp from "./components/remotes/AuthApp";
 import OrderApp from "./components/remotes/OrderApp";
 import PaymentApp from "./components/remotes/PaymentApp";
-import isUserAuthenticated from "../hooks/isUserAuthenticated";
 import { menuEnum, menuIds } from "./config/navMenu";
 import { splitTitleToUrl } from "./pure-functions/splitTitleToUrl";
 import "./styles/main.scss";

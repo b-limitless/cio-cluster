@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react'
-import { request } from '../src/utils/request'; 
+import { request } from '@pasal/cio-component-library'; 
 import { useHistory } from 'react-router-dom';
 
 export default function isUserAuthenticated() {

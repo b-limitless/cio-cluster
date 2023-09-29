@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import ArrowRight from "../../assets/svg/arrow-right.svg";
 import { menuIds } from "../../config/navMenu";
 import SideMenu from "./SideMenu";
-import { request } from "../../utils/request";
+
 import isUserAuthenticated from "../../../hooks/isUserAuthenticated";
 interface ContainerInterface {
     setSelectedMenu: Function,

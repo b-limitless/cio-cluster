@@ -5,7 +5,6 @@ import {
   Input,
   InputAdornments,
 } from "@pasal/cio-component-library"
-// import { request } from '../../utils/request';
 import { APIS } from '../../config/apis';
 import { FormHelperText } from '@material-ui/core';
 import { colors } from '@pasal/cio-component-library';

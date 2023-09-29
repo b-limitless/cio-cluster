@@ -11,7 +11,7 @@ import SwitchPro from "../../assets/svg/switch-pro.svg";
 
 import { sideNavConfig } from '../../config/navMenu';
 import NavList from './NavList';
-import { request } from '../../utils/request';
+import { request } from '@pasal/cio-component-library';
 import { APIS } from '../../apis';
 import { useHistory } from 'react-router-dom';
 
