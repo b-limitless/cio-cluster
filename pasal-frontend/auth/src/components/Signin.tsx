@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Template from "../common/Template";
 import { Select, Button, Input, Checkbox, InputWithIcon, InputAdornments, camelCaseToNormal } from "@pasal/cio-component-library"
 import BackLeftIcon from "../assets/svg/back-left-icon.svg";
@@ -15,6 +15,7 @@ interface SigninProcess {
   submissionError: string | null;
   success: boolean;
   submitting: boolean;
+  formSubmitted: boolean
 }
 
 const formIntialState: SigninForm = {
@@ -32,6 +33,7 @@ const signinInitialState: SigninProcess = {
   submissionError: null,
   success: false,
   submitting: false,
+  formSubmitted:false
 }
 
 function signInProcessReducer(state: SigninProcess, action: any) {
@@ -71,6 +73,12 @@ function signInProcessReducer(state: SigninProcess, action: any) {
         submitting: action.payload
       }
     }
+    case 'FORM_SUBMITTED': {
+      return {
+        ...state,
+        formSubmitted: action.payload
+      }
+    }
     case 'SIGNIN_ERROR':
       return { ...state, submissionError: action.payload };
     default:
@@ -82,7 +90,7 @@ function signInProcessReducer(state: SigninProcess, action: any) {
 export default function Signin() {
 
 
-  const [{form, formError}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
+  const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
 
   const onMouseLeaveEventHandler = (name: keyof SigninForm, value: string) => {
     if (!signInModel[name].test(value)) {
@@ -96,6 +104,9 @@ export default function Signin() {
     onSubmitHandler(form, signInModel, dispatch, 'signin')
    }
 
+   useEffect(() => {
+
+   }, [formHasError, formSubmitted])
   
 
   return (

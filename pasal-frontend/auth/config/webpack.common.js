@@ -77,5 +77,22 @@ module.exports = {
       ".jpeg",
       ".gif",
     ],
+    fallback: {
+      // "fs": require.resolve('fs'),
+      // "tls": require.resolve('tls'),
+      // "net": require.resolve('net'),
+      // "path": require.resolve('path'),
+      // "zlib": require.resolve('zlib'),
+      // "http": require.resolve("stream-http"),
+      // "https": require.resolve("https-browserify"),
+      // "stream": require.resolve('stream'),
+      // "crypto": require.resolve('crypto'),
+      // "crypto-browserify": require.resolve('crypto-browserify'),
+      // "os": require.resolve('os'), 
+      // "tty": require.resolve("tty-browserify"),
+      // "url": require.resolve('url'), 
+      // "assert": require.resolve('assert'), 
+      // "util": require.resolve('util')
+    } 
   },
 };

@@ -12,11 +12,13 @@ import VerifyFeature from './features/verify.feature';
 import { FormInterface, FormState } from '../interfaces/user/inde';
 import { camelCaseToNormal } from '@pasal/cio-component-library'
 import { userModel } from '../model/user';
-import { request } from '../utils/request';
+
 import { APIS } from '../config/apis';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { onSubmitHandler } from '../../common/onSubmitHandler';
+
+import { request } from '../utils/request';
 
 const initialFormErrorState = {
   fullName: null,
@@ -126,62 +128,43 @@ export default function Signup() {
     }
   }
 
-  // const onSubmitHandler = () => {
-
-  //   Object.keys(form).forEach((key) => {
-  //     const formKey = key as keyof FormInterface;
-  //     const value = form[formKey] as string;
-
-  //     if (!userModel[formKey].test(value)) {
-  //       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: formKey, value: `${camelCaseToNormal(formKey, true)} is required` } })
-  //     }
-
-  //     if (userModel[formKey].test(value)) {
-  //       console.log(`${formKey} value ${value} is valid`)
-  //       dispatch({ type: 'FORM_ERROR', payload: { formHasError: false, name: formKey, value: null } })
-  //     }
-
-  //   });
-  //   dispatch({ type: 'FORM_SUBMITTED', payload: true });
-  // }
 
   const onSubmitHandlerLocal = () => {
     onSubmitHandler(form, userModel, dispatch, 'signup')
   }
 
-  useEffect(() => {
-    const submitFormToServer = async () => {
-      try {
-        const response = await request({
-          url: APIS.auth.signup,
-          method: 'post',
-          body: {...form, role:'admin', permissions: ['all']}
-        });
+  // useEffect(() => {
+  //   const submitFormToServer = async () => {
+  //     try {
+  //       const response = await request({
+  //         url: APIS.auth.signup,
+  //         method: 'post',
+  //         body: {...form, role:'admin', permissions: ['all']}
+  //       });
     
-        const { verificationCode, user } = response; 
-        dispatch({ type: 'USER_REGISTRATION_SUCCESS' });
-        history.push('/auth/verify');
+  //       const { verificationCode, user } = response; 
+  //       dispatch({ type: 'USER_REGISTRATION_SUCCESS' });
+  //       history.push('/auth/verify');
 
-      } catch (err: any) {
-        const { response: { data: { errors } } } = err;
-        errors.forEach((error: any, i: number) => {
-          dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: error.field, value: error.message } })
-          dispatch({ type: 'FORM_SUBMITTED', payload: false });
-          dispatch({ type: 'SUBMITTING', payload: false });
-        });
-        console.log('err', errors);
-      }
+  //     } catch (err: any) {
+  //       const { response: { data: { errors } } } = err;
+  //       errors.forEach((error: any, i: number) => {
+  //         dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: error.field, value: error.message } })
+  //         dispatch({ type: 'FORM_SUBMITTED', payload: false });
+  //         dispatch({ type: 'SUBMITTING', payload: false });
+  //       });
+  //       console.log('err', errors);
+  //     }
 
 
-    }
+  //   }
 
-    if(formSubmitted && !formHasError) {
-      submitFormToServer();
-    }
+  //   if(formSubmitted && !formHasError) {
+  //     submitFormToServer();
+  //   }
     
-  }, [formHasError, formSubmitted]);
+  // }, [formHasError, formSubmitted]);
 
- 
   
   return (
     <Template>

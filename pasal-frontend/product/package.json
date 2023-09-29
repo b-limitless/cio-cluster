@@ -12,7 +12,7 @@
         "@material-ui/icons": "^4.9.1",
         "@mui/material": "5.12",
         "@mui/styled-engine": "^5.13.2",
-        "@pasal/cio-component-library": "^67.0.0",
+        "@pasal/cio-component-library": "^72.0.0",
         "@pasal/common-functions": "^1.0.1",
         "@pasal/common-style": "^2.0.17",
         "@reduxjs/toolkit": "^1.9.3",

@@ -10,6 +10,7 @@ const PORT = 8083;
 const domain = process.env.PRODUCTION_DOMAIN;
 
 let devConfig = {
+  
   // optimization :{
   //   runtimeChunk: "single",
   // },
@@ -27,6 +28,7 @@ let devConfig = {
     
   },
   plugins: [ 
+    
     new ModuleFederationPlugin({
       name: 'auth',
       filename: 'remoteEntry.js',
