@@ -9,7 +9,7 @@ import { APIS } from '../../config/apis';
 import { FormHelperText } from '@material-ui/core';
 import { colors } from '@pasal/cio-component-library';
 import { Link } from 'react-router-dom';
-
+import { request } from '@pasal/cio-component-library';
 
 type Props = {}
 
@@ -92,17 +92,17 @@ export default function VerifyFeature({ }: Props) {
     setVerifying(true)
     try {
 
-      // const response = await request({
-      //   url: APIS.auth.verify,
-      //   body: { verificationCode },
-      //   method: 'post'
-      // });
+      const response = await request({
+        url: APIS.auth.verify,
+        body: { verificationCode },
+        method: 'post'
+      });
 
-      // if(response.verified) {
+      if(response.verified) {
         
-      //   setUserVerified(true);
+        setUserVerified(true);
       
-      // }
+      }
     } catch (err: any) {
       const { response: { data: { errors: [index] } } } = err;
       setUserVerificationError(index.message);
@@ -153,21 +153,6 @@ export default function VerifyFeature({ }: Props) {
 
     return null;
   }, [userVerified]);
-
-  // useEffect(() => {
-  //   const test = async() => {
-  //     try {
-  //       const response = await axios.get('http://localhost:4000/', {
-  //         withCredentials: true, // This is important!
-  //       });
-  //       console.log('response', response)
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-    
-  //   }
-  //   test()
-  // }, [])
 
   return (
     <div className="group-elements">

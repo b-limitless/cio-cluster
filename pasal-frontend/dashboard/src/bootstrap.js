@@ -28,7 +28,7 @@ const mount = (
     history.listen(onNavigate);
   }
 
-  console.log("d bootstrapjs", showSettingModel)
+ 
   ReactDOM.render(
     <App
       history={history}
@@ -45,7 +45,7 @@ const mount = (
   return {
     onParentNavigate({ pathname: nextPathname }) {
       const { pathname } = history.location;
-      console.log(nextPathname);
+      
       if (pathname !== nextPathname) {
         history.push(nextPathname);
       }

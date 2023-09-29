@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, useMemo } from "react";
 import Template from "../common/Template";
 import { Select, Button, Input, Checkbox, InputWithIcon, InputAdornments, camelCaseToNormal } from "@pasal/cio-component-library"
 import BackLeftIcon from "../assets/svg/back-left-icon.svg";
@@ -6,6 +6,10 @@ import { onChangeHandler } from "../../common/onChangeHandler";
 import { SigninForm } from "../interfaces/user/inde";
 import { signInModel } from "../model/user";
 import { onSubmitHandler } from "../../common/onSubmitHandler";
+import { request } from "@pasal/cio-component-library";
+import { APIS } from "../config/apis";
+import { useHistory } from "react-router-dom";
+import { FormHelperText } from "@material-ui/core";
 
 
 interface SigninProcess {
@@ -28,7 +32,8 @@ const signinInitialState: SigninProcess = {
   formHasError: false,
   formError: {
     email: '',
-    password: ''
+    password: '', 
+    message:''
   },
   submissionError: null,
   success: false,
@@ -89,7 +94,7 @@ function signInProcessReducer(state: SigninProcess, action: any) {
 
 export default function Signin() {
 
-
+  const history = useHistory();
   const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
 
   const onMouseLeaveEventHandler = (name: keyof SigninForm, value: string) => {
@@ -105,10 +110,35 @@ export default function Signin() {
    }
 
    useEffect(() => {
+    const submitFormToServer = async () => {
+      try {
+        const response = await request({
+          url: APIS.auth.signin,
+          method: 'post',
+          body: form
+        });
+    
+        history.push('/dashboard');
 
-   }, [formHasError, formSubmitted])
+      } catch (err: any) {
+        const { response: { data: { errors } } } = err;
+        errors.forEach((error: any, i: number) => {
+          dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: error.field, value: error.message } })
+          dispatch({ type: 'FORM_SUBMITTED', payload: false });
+          dispatch({ type: 'SUBMITTING', payload: false });
+        });
+        console.log('err', errors[0].message);
+      }
+
+
+    }
+    if(formSubmitted && !formHasError) {
+      submitFormToServer();
+    }
+   }, [formHasError, formSubmitted]);
+
+   console.log('formError', formError)
   
-
   return (
     <Template>
       <div className="right col">
@@ -135,7 +165,9 @@ export default function Signin() {
               Sigin
             </div>
             <div className="purpose">For the purpose of industry regulation, your details are required.</div>
-
+            <FormHelperText style={{color: '#d32f2f', minHeight: '19px'}}>
+              {formError.message}
+            </FormHelperText>
             <div className="form">
 
               <Input
