@@ -25,6 +25,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pasal/cio-component-library": "^74.0.0",
     "@pasal/common": "^1.0.41",
     "amqplib": "^0.8.0",
     "body-parser": "^1.20.1",

@@ -28,17 +28,17 @@ const isProd = () => {
 }
 
 
-// app.use(
-//   cors({
-//     origin: allowedOrigins,
-//   })
-// );
+app.use(
+  cors()
+);
 app.set("trust proxy", true);
 app.use(json());
 app.use(
   cookieSession({
-    signed: false,
-    secure: false,
+    signed: isProd(),
+    secure: isProd(),
+    domain: process.env.domain || 'pasal.dev'
+    
   })
 );
 

@@ -5,13 +5,11 @@ import {
   Input,
   InputAdornments,
 } from "@pasal/cio-component-library"
-import { request } from '../../utils/request';
 import { APIS } from '../../config/apis';
 import { FormHelperText } from '@material-ui/core';
 import { colors } from '@pasal/cio-component-library';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-
+import { request } from '@pasal/cio-component-library';
 
 type Props = {}
 
@@ -155,21 +153,6 @@ export default function VerifyFeature({ }: Props) {
 
     return null;
   }, [userVerified]);
-
-  // useEffect(() => {
-  //   const test = async() => {
-  //     try {
-  //       const response = await axios.get('http://localhost:4000/', {
-  //         withCredentials: true, // This is important!
-  //       });
-  //       console.log('response', response)
-  //     } catch(err) {
-  //       console.log(err)
-  //     }
-    
-  //   }
-  //   test()
-  // }, [])
 
   return (
     <div className="group-elements">

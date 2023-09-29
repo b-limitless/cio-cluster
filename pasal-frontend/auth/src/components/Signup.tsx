@@ -10,12 +10,14 @@ import Template from '../common/Template';
 import SignupFeature from './features/signup.feature';
 import VerifyFeature from './features/verify.feature';
 import { FormInterface, FormState } from '../interfaces/user/inde';
-import { camelCaseToNormal } from '@pasal/cio-component-library'
+import { camelCaseToNormal, request } from '@pasal/cio-component-library'
 import { userModel } from '../model/user';
-import { request } from '../utils/request';
+
 import { APIS } from '../config/apis';
-import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import { onSubmitHandler } from '../../common/onSubmitHandler';
+
+//import { request } from '../utils/request';
 
 const initialFormErrorState = {
   fullName: null,
@@ -125,37 +127,13 @@ export default function Signup() {
     }
   }
 
-  const onSubmitHandler = () => {
 
-    Object.keys(form).forEach((key) => {
-
-      const formKey = key as keyof FormInterface;
-      const value = form[formKey] as string;
-
-      if (!userModel[formKey].test(value)) {
-        dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name: formKey, value: `${camelCaseToNormal(formKey, true)} is required` } })
-      }
-
-      if (userModel[formKey].test(value)) {
-        console.log(`${formKey} value ${value} is valid`)
-        dispatch({ type: 'FORM_ERROR', payload: { formHasError: false, name: formKey, value: null } })
-      }
-
-    });
-    dispatch({ type: 'FORM_SUBMITTED', payload: true });
+  const onSubmitHandlerLocal = () => {
+    onSubmitHandler(form, userModel, dispatch, 'signup')
   }
 
   useEffect(() => {
     const submitFormToServer = async () => {
-      // const body = {
-      //   fullName: 'bharat shah',
-      //   email: 'bharatrose1@gmail.com',
-      //   password: 'thisismylife123',
-      //   confirmPassword: 'thisismylife123',
-      //   agreement: true,
-      //   role: 'admin',
-      //   permissions: ['all']
-      // }
       try {
         const response = await request({
           url: APIS.auth.signup,
@@ -186,8 +164,7 @@ export default function Signup() {
     
   }, [formHasError, formSubmitted]);
 
- 
-  console.log("formError", formError)
+  
   return (
     <Template>
       <div className='right col'>
@@ -211,12 +188,10 @@ export default function Signup() {
           onMouseLeaveEventHandler={onMouseLeaveEventHandler}
           form={form}
           formError={formError}
-          onSubmitHandler={onSubmitHandler}
+          onSubmitHandler={onSubmitHandlerLocal}
           submitting={submitting}
         />}
-        {/* {success && <VerifyFeature/>} */}
-
-        <VerifyFeature/>
+        
       </div>
     </Template>
   );

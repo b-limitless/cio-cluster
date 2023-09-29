@@ -19,3 +19,12 @@ kubectl exec -it pod_name -- /bin/sh
 docker tag bharatrose1:pasal-static-server bharatrose1/pasal-static-server
 
 docker push bharatrose1/pasal-static-server
+
+#Stop all running Containers
+docker stop $(docker ps -aq)
+
+# Prune all images 
+docker image prune
+
+#Remove all Containers
+docker rm $(docker ps -aq)
