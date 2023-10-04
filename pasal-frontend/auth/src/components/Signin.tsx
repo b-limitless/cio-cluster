@@ -136,8 +136,6 @@ export default function Signin() {
       submitFormToServer();
     }
    }, [formHasError, formSubmitted]);
-
-   console.log('formError', formError)
   
   return (
     <Template>
