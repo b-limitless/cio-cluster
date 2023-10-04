@@ -120,7 +120,7 @@ export default function Signup() {
   }
 
   const onMouseLeaveEventHandler = (name: keyof FormInterface, value: string) => {
-    if (!userModel[name].test(value)) {
+    if (!userModel[name]?.test(value)) {
       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name, value: `${camelCaseToNormal(name, true)} is required` } })
     } else {
       dispatch({ type: 'FORM_ERROR', payload: { name, value: null, formHasError: false } })

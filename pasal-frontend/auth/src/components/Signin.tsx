@@ -98,7 +98,7 @@ export default function Signin() {
   const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
 
   const onMouseLeaveEventHandler = (name: keyof SigninForm, value: string) => {
-    if (!signInModel[name].test(value)) {
+    if (!signInModel[name]?.test(value)) {
       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name, value: `${camelCaseToNormal(name, true)} is required` } })
     } else {
       dispatch({ type: 'FORM_ERROR', payload: { name, value: null, formHasError: false } })
@@ -112,7 +112,7 @@ export default function Signin() {
    useEffect(() => {
     const submitFormToServer = async () => {
       try {
-        const response = await request({
+         await request({
           url: APIS.auth.signin,
           method: 'post',
           body: form
