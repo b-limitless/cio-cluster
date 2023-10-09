@@ -104,7 +104,7 @@ export default function VerifyFeature({actions, globalDispatch}: Props) {
       });
 
       if(response.verified) {
-        // globalDispatch(actions.authSlices(response));
+        globalDispatch(actions.authenticatedUser(response))
         setUserVerified(true);
       
       }

@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ArrowRight from "../../assets/svg/arrow-right.svg";
 import { menuIds } from "../../config/navMenu";
 import SideMenu from "./SideMenu";
 
-import isUserAuthenticated from "../../../hooks/isUserAuthenticated";
 import useSetAuthenticatedUser from "../../../hooks/useSetAuthenticatedUser";
 interface ContainerInterface {
     setSelectedMenu: Function,
@@ -16,8 +15,6 @@ interface ContainerInterface {
 }
 export default function Container({setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel }: ContainerInterface) {
     
-    // isUserAuthenticated();
-
     useSetAuthenticatedUser();
 
     return (

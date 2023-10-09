@@ -98,9 +98,6 @@ interface SignInInterface {
 }
 
 export default function Signin({actions, globalDispatch}: SignInInterface) {
-
-
-
   const history = useHistory();
   const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
 
@@ -124,8 +121,8 @@ export default function Signin({actions, globalDispatch}: SignInInterface) {
           method: 'post',
           body: form
         });
-        // dispatch(authenticatedUser(verifyResponse));
-         globalDispatch(actions.authenticatedUser(response))
+  
+        globalDispatch(actions.authenticatedUser(response))
         history.push('/dashboard');
 
       } catch (err: any) {
