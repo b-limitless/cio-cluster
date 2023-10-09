@@ -53,6 +53,8 @@ export default function Dashboard({setShowSettingModel, showSettingModel, showPr
   
   return (
     <>
+  
+
      <Seetings showModel ={showSettingModel} setShowModel = {setShowSettingModel}/>
       <Profile showModel={showProfileSideModel} setShowModel={setShowProfileSideModel}/>
       { showProfileSideModel === true}

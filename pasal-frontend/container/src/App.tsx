@@ -12,6 +12,11 @@ import { menuEnum, menuIds } from "./config/navMenu";
 import { splitTitleToUrl } from "./pure-functions/splitTitleToUrl";
 import "./styles/main.scss";
 import { useForkRef } from "@material-ui/core";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "./store";
+import authSlice, { verifyResponse, authenticatedUser } from "../reducers/authSlice";
+import { Store } from "./store";
+import useSetAuthenticatedUser from "../hooks/useSetAuthenticatedUser";
 
 
 type Props = {}
@@ -22,10 +27,15 @@ const history = createBrowserHistory();
 
 export default function App({ }: Props) {
   const [selectedMenu, setSelectedMenu] = useState<menuIds>("Auth_Signin");
-  const [auth, setAuth] = useState<null | { token: string }>(null);
   const [showProfileSideModel, setShowProfileSideModel] = useState<boolean>(false);
   const [showSettingModel, setShowSettingModel] = useState<boolean>(false);
 
+  const dispatch = useDispatch()
+
+  const { auth } = useSelector((state: RootState) => state);
+
+
+  // useSetAuthenticatedUser();
 
   useEffect(() => {
     if (selectedMenu === menuEnum.Dashboard) {
@@ -46,7 +56,7 @@ export default function App({ }: Props) {
       history.push(splitTitleToUrl(menuEnum.Orders));
     }
 
-    if(selectedMenu === menuEnum.Payments) {
+    if (selectedMenu === menuEnum.Payments) {
       history.push(splitTitleToUrl(menuEnum.Payments));
     }
 
@@ -61,6 +71,10 @@ export default function App({ }: Props) {
   //     history.push(splitTitleToUrl(menuEnum.Auth_Signin));
   //   }
   // }, [auth]);
+
+  useEffect(() => {
+    // dispatch(authenticatedUser(verifyResponse));
+  }, [])
 
 
   return (
@@ -81,13 +95,20 @@ export default function App({ }: Props) {
                 onSingIn={() => { }}
                 isSignIn={false}
                 setShowProfileSideModel={setShowProfileSideModel}
-                showProfileSideModel={showProfileSideModel} />
+                showProfileSideModel={showProfileSideModel}
+
+              />
             </Container>
-            
+
           </Route>
 
           <Route path="/auth">
-            <AuthApp onSingIn={() => { }} isSignIn={false} />
+            <AuthApp
+              onSingIn={() => { }} isSignIn={false} 
+              actions={{authenticatedUser}}
+              globalDispatch={dispatch}
+              
+              />
           </Route>
 
           <Route path="/users">

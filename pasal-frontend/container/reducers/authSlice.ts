@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const verifyResponse = {
+export const verifyResponse = {
   permissions: ["all"],
   verified: true,
   firstName: null,

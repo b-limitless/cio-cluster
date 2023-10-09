@@ -96,6 +96,8 @@ export default function AddFebric({ }: Props) {
     const [errors, setErrors] = useState<any>({});
     const [febric, setFebric] = useState<any>({title: "", warmth:""});
     const [moveToNextStep, setMoveToNextStep] = useState(false);
+
+    const [counter, setCounter] = useState(0);
     
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
@@ -129,6 +131,8 @@ export default function AddFebric({ }: Props) {
 
     
     return (
+    
+       
         <FormTemplate step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.eight}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
@@ -140,5 +144,7 @@ export default function AddFebric({ }: Props) {
             {step === formStepEnum.eight && <Message title ={"Febric added sucessfully"} buttonText = {"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list"/>}
             
         </FormTemplate>
+        
+        
     )
 }

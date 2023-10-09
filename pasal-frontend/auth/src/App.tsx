@@ -11,20 +11,23 @@ import VerifyRegisteredAccount from "./components/VerifyRegisteredAccount";
 interface AppInterface {
   history: any;
   onSignin: Function,
-  isSignedIn: boolean
+  isSignedIn: boolean,
+  actions: any;
+  globalDispatch: any;
 }
 
-export default function App({ history }: AppInterface) {
+export default function App({ history, actions, globalDispatch }: AppInterface) {
 
+  console.log("auth actions", actions)
   return (
     <div className="app">
       <Router history={history}>
         <Switch>
-          <Route path="/auth/signin" component={Signin} />
+          <Route path="/auth/signin" render={(props) => <Signin {...props} actions={actions} globalDispatch={globalDispatch} />} />
           <Route path="/auth/signup" component={Signup} />
           <Route path="/auth/forgot-password" component={ForgotPassword} />
           <Route path="/auth/create-a-new-password" component={CreateANewPassword} />
-          <Route path="/auth/verify" component={VerifyRegisteredAccount} />
+          <Route path="/auth/verify" render={(props) => <VerifyRegisteredAccount {...props} actions={actions} globalDispatch={globalDispatch} />} />
         </Switch>
 
       </Router>

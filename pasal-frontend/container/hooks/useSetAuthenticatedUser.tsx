@@ -1,0 +1,35 @@
+import { request } from '@pasal/cio-component-library';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { authenticatedUser } from '../reducers/authSlice';
+import { RootState } from '../src/store';
+import { APIS } from '../src/apis';
+
+export default function useSetAuthenticatedUser() {
+    // Check first if redux already have the user information 
+    const { auth:{auth} } = useSelector((state: RootState) => state);
+    
+    console.log("auth", auth)
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            try {
+                const { currentUser } = await request({
+                    url: APIS.auth.currentUser,
+                    method: 'get'
+                });
+
+                console.log("current user", currentUser)
+                dispatch(authenticatedUser(currentUser));
+            } catch (err) {
+                console.error('Count not fetch current user', err);
+            }
+        }
+        if (!auth) {
+            fetchCurrentUser();
+        }
+    }, []);
+
+    return null;
+}

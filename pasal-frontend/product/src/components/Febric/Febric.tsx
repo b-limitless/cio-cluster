@@ -56,6 +56,7 @@ export default function Febric() {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
+ 
 
   const showModelHandler = (i:number) => {
     setShowFebricDetailsModel(i);
@@ -97,8 +98,6 @@ export default function Febric() {
       </div>
     </div>
     </div> */}
-
-
 
         <DataTable
           setShowModel={setShowFebricDetailsModel}

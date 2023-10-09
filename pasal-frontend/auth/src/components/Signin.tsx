@@ -12,6 +12,7 @@ import { useHistory } from "react-router-dom";
 import { FormHelperText } from "@material-ui/core";
 
 
+
 interface SigninProcess {
   form: SigninForm,
   formHasError: boolean,
@@ -91,8 +92,14 @@ function signInProcessReducer(state: SigninProcess, action: any) {
   }
 }
 
+interface SignInInterface {
+  actions:any;
+  globalDispatch:any;
+}
 
-export default function Signin() {
+export default function Signin({actions, globalDispatch}: SignInInterface) {
+
+
 
   const history = useHistory();
   const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
@@ -112,12 +119,13 @@ export default function Signin() {
    useEffect(() => {
     const submitFormToServer = async () => {
       try {
-         await request({
+         const response = await request({
           url: APIS.auth.signin,
           method: 'post',
           body: form
         });
-    
+        // dispatch(authenticatedUser(verifyResponse));
+         globalDispatch(actions.authenticatedUser(response))
         history.push('/dashboard');
 
       } catch (err: any) {
@@ -136,6 +144,10 @@ export default function Signin() {
       submitFormToServer();
     }
    }, [formHasError, formSubmitted]);
+
+
+   console.log("globalDispatch", globalDispatch);
+   console.log("slices", actions);
   
   return (
     <Template>

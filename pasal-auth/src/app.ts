@@ -37,7 +37,8 @@ app.use(
   cookieSession({
     signed: isProd(),
     secure: isProd(),
-    domain: process.env.domain || 'pasal.dev'
+    domain: process.env.domain || 'pasal.dev',
+    maxAge: 3600000 // 10000 * 60 minutes * 60 seconds
     
   })
 );

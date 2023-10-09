@@ -4,6 +4,7 @@ import { menuIds } from "../../config/navMenu";
 import SideMenu from "./SideMenu";
 
 import isUserAuthenticated from "../../../hooks/isUserAuthenticated";
+import useSetAuthenticatedUser from "../../../hooks/useSetAuthenticatedUser";
 interface ContainerInterface {
     setSelectedMenu: Function,
     selectedMenu: menuIds,
@@ -15,7 +16,9 @@ interface ContainerInterface {
 }
 export default function Container({setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel }: ContainerInterface) {
     
-    isUserAuthenticated();
+    // isUserAuthenticated();
+
+    useSetAuthenticatedUser();
 
     return (
         <>

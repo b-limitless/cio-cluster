@@ -1,20 +1,18 @@
-import React, { useLayoutEffect } from 'react'
-import { request } from '@pasal/cio-component-library'; 
-import { useHistory } from 'react-router-dom';
+import { request } from '@pasal/cio-component-library';
+import { useEffect } from 'react';
 
 export default function isUserAuthenticated() {
-  const history = useHistory();
- 
-  useLayoutEffect(() => {
-    const currentUser = async() => {
-        try {
-             await request({
-                url: '/api/users/currentuser', 
-                method: 'get'
-            });
-        } catch (err) {
-            
-        }
+
+  useEffect(() => {
+    const currentUser = async () => {
+      try {
+        const { currentUser } = await request({
+          url: '/api/users/currentuser',
+          method: 'get'
+        });
+      } catch (err) {
+        console.error('Count not fetch current user', err);
+      } 
     }
     currentUser();
   }, []);
