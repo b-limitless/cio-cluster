@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ArrowRight from "../../assets/svg/arrow-right.svg";
 import { menuIds } from "../../config/navMenu";
 import SideMenu from "./SideMenu";
@@ -7,18 +7,26 @@ import useSetAuthenticatedUser from "../../../hooks/useSetAuthenticatedUser";
 interface ContainerInterface {
     setSelectedMenu: Function,
     selectedMenu: menuIds,
-    setShowSettingModel:Function, 
-    showSettingModel:boolean;
+    setShowSettingModel: Function,
+    showSettingModel: boolean;
     children: any;
-    [x:string]:any;
-    
+    [x: string]: any;
+
 }
-export default function Container({setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel }: ContainerInterface) {
-    
+
+// actions={{authenticatedUser}}
+// globalDispatch={dispatch}
+export default function Container({ setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel, actions, globalDispatch }: ContainerInterface) {
+    // If user is not logged in then simply redirect user immediately out to 
+    // const [loading, setLoading] = useState(true);
+
+
     useSetAuthenticatedUser();
 
     return (
         <>
+            {/* {loading && <div>Please wait</div>} */}
+
             <input type="radio" id="toggle-menu-checkbox" className="toggle-menu-checbox" name="toggle-menu-checkbox" />
             <label htmlFor="toggle-menu-checkbox" >
                 <div className="toggal-menu">
@@ -33,13 +41,18 @@ export default function Container({setShowSettingModel, showSettingModel, childr
                         setShowProfileSideModel={setShowProfileSideModel}
                         setShowSettingModel={setShowSettingModel}
                         showSettingModel={showSettingModel}
+                        actions={actions}
+                        globalDispatch={globalDispatch}
                     />
                 </div>
                 <div className="right services">
-                   
+
                     {children}
                 </div>
             </div>
+
         </>
+
+
     )
 }

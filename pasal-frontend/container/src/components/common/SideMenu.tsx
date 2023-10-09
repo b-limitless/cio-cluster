@@ -20,6 +20,8 @@ interface SideMenuInterface {
   setShowProfileSideModel:Function, 
   setShowSettingModel:Function, 
   showSettingModel:boolean;
+  globalDispatch:Function;
+  actions:any;
 }
 
 enum sidebarNavClick  {
@@ -29,7 +31,9 @@ enum sidebarNavClick  {
 
 type sidebarNavClicktype = `${sidebarNavClick}`
 
-export default function SideMenu({setShowSettingModel, showSettingModel, setSelectedMenu, setShowProfileSideModel }: SideMenuInterface) {
+export default function SideMenu({setShowSettingModel, showSettingModel, setSelectedMenu, setShowProfileSideModel, globalDispatch, actions }: SideMenuInterface) {
+  
+  
   const history = useHistory();
   const sideModelToggleHandler = (type:sidebarNavClicktype) => {
     if(type==sidebarNavClick.profile) {
@@ -51,7 +55,7 @@ export default function SideMenu({setShowSettingModel, showSettingModel, setSele
         url: APIS.auth.signout,
         method: 'get'
       });
-
+      globalDispatch(actions.authenticatedUser(null));
       history.push('/auth/signin');
 
      } catch(err) {

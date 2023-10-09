@@ -88,6 +88,9 @@ export default function App({ }: Props) {
               setShowProfileSideModel={setShowProfileSideModel}
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
+              actions={{authenticatedUser}}
+              globalDispatch={dispatch}
+              
             >
               <DashboardApp
                 setShowSettingModel={setShowSettingModel}
@@ -104,11 +107,11 @@ export default function App({ }: Props) {
 
           <Route path="/auth">
             <AuthApp
-              onSingIn={() => { }} isSignIn={false} 
-              actions={{authenticatedUser}}
+              onSingIn={() => { }} isSignIn={false}
+              actions={{ authenticatedUser }}
               globalDispatch={dispatch}
-              
-              />
+
+            />
           </Route>
 
           <Route path="/users">
@@ -119,7 +122,10 @@ export default function App({ }: Props) {
 
           </Route>
           <Route path="/payments">
-            <Container selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setShowSettingModel={setShowSettingModel}
+            <Container 
+               selectedMenu={selectedMenu} 
+               setSelectedMenu={setSelectedMenu} 
+               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel} >
               <PaymentApp onSingIn={() => { }} isSignIn={false} />
             </Container>
