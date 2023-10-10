@@ -15,10 +15,7 @@ interface ContainerInterface {
 
 }
 
-// actions={{authenticatedUser}}
-// globalDispatch={dispatch}
 export default function Container({ setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel, actions, globalDispatch }: ContainerInterface) {
-    // If user is not logged in then simply redirect user immediately out to 
     const [loading, setLoading] = useState(true);
 
 

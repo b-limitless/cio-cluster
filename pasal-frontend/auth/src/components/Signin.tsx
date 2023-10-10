@@ -10,6 +10,7 @@ import { request } from "@pasal/cio-component-library";
 import { APIS } from "../config/apis";
 import { useHistory } from "react-router-dom";
 import { FormHelperText } from "@material-ui/core";
+import useUserIsAuthenticated from "../hooks/useUserIsAuthenticated";
 
 
 
@@ -113,6 +114,8 @@ export default function Signin({actions, globalDispatch}: SignInInterface) {
     onSubmitHandler(form, signInModel, dispatch, 'signin')
    }
 
+  
+   
    useEffect(() => {
     const submitFormToServer = async () => {
       try {
@@ -143,9 +146,11 @@ export default function Signin({actions, globalDispatch}: SignInInterface) {
    }, [formHasError, formSubmitted]);
 
 
-   console.log("globalDispatch", globalDispatch);
-   console.log("slices", actions);
+   
+
+  //  If user is already logged in then redirect them to dashboard
   
+
   return (
     <Template>
       <div className="right col">

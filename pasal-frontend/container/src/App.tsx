@@ -72,10 +72,6 @@ export default function App({ }: Props) {
   //   }
   // }, [auth]);
 
-  useEffect(() => {
-    // dispatch(authenticatedUser(verifyResponse));
-  }, [])
-
 
   return (
     <>
@@ -110,7 +106,6 @@ export default function App({ }: Props) {
               onSingIn={() => { }} isSignIn={false}
               actions={{ authenticatedUser }}
               globalDispatch={dispatch}
-
             />
           </Route>
 

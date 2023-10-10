@@ -7,6 +7,7 @@ import CreateANewPassword from "./components/CreateANewPassword";
 
 import "./styles";
 import VerifyRegisteredAccount from "./components/VerifyRegisteredAccount";
+import useUserIsAuthenticated from "./hooks/useUserIsAuthenticated";
 
 interface AppInterface {
   history: any;
@@ -18,7 +19,9 @@ interface AppInterface {
 
 export default function App({ history, actions, globalDispatch }: AppInterface) {
 
-  console.log("auth actions", actions)
+
+  useUserIsAuthenticated({history});
+
   return (
     <div className="app">
       <Router history={history}>

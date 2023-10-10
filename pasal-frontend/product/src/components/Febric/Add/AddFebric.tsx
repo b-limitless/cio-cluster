@@ -18,7 +18,7 @@ import { Message } from '@pasal/cio-component-library';
 
 type Props = {}
 
-const steps = {
+const steps: {[key in forStepType]: any} = {
     one: [
         {
             name: 'title',
@@ -54,41 +54,47 @@ const steps = {
     two: [
         {
             name: 'weight',
-            regrex: '',
+            regrex: validDigit,
             errorMessage: '',
             type: 'number '
         },
         {
             name: 'season',
-            regrex: '',
+            regrex: validString,
             errorMessage: '',
             type: 'text '
         }, 
         {
             name: 'type',
-            regrex: '',
+            regrex: validString,
             errorMessage: '',
             type: 'text '
         }, 
         {
             name: 'threadType',
-            regrex: '',
+            regrex: validString,
             errorMessage: '',
             type: 'text '
         }, 
         {
             name: 'brightness',
-            regrex: '',
+            regrex: validString,
             errorMessage: '',
             type: 'text '
         },
         {
             name: 'superShiny',
-            regrex: '',
+            regrex: validString,
             errorMessage: '',
             type: 'text '
         }
-    ]
+    ], 
+    three: [], 
+    four: [],
+    five: [],
+    six: [], 
+    seven: [], 
+    eight: []
 }
 
 export default function AddFebric({ }: Props) {
@@ -101,17 +107,20 @@ export default function AddFebric({ }: Props) {
     
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
-        if (step === formStepEnum.one) {
-            const validation = steps[formStepEnum.one];
+        // if (step === formStepEnum.one) {
+           
+            const validation = steps[step];
+
             const catchError:any = {};
-            validation.map((field, i) => {
-                if(!field.regrex.test(febric[field.name])) {
+            validation.map((field:any, i:number) => {
+                if(!febric[field.name] || !field.regrex.test(febric[field.name])) {
                     const {name} = field;
                     catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
+                } else {
+                    console.log(`${febric[field.name]} is passed with regrex ${field.regrex}`)
                 }
             });
             setErrors(catchError);
-        }
         setMoveToNextStep(true);
     }
 
@@ -128,6 +137,8 @@ export default function AddFebric({ }: Props) {
             setMoveToNextStep(false);
         }
     }, [moveToNextStep, step, errors]);
+
+    console.log("errors", errors);
 
     
     return (

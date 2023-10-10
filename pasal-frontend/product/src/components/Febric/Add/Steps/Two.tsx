@@ -18,7 +18,7 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     type="number"
                     name="weight"
                     onChange={onChangeHandler}
-                     error={errors.weight ? true : false}
+                    error={errors.weight ? true : false}
                     helperText={errors.weight ? errors.weight : null}
                 />
                 <Select options={febricSeasons}
@@ -26,6 +26,8 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     label={"Season"}
                     name="season"
                     onChange={onChangeHandler}
+                    error={errors.season ? true : false}
+                    helperText={errors.season ? errors.season : null}
                 />
 
                 <Select options={febricTypes}
@@ -33,6 +35,8 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     label={"Type"}
                     name="type"
                     onChange={onChangeHandler}
+                    error={errors.type ? true : false}
+                    helperText={errors.type ? errors.type : null}
                 />
             </div>
 
@@ -42,12 +46,16 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     label={"Thread Type"}
                     name="threadType"
                     onChange={onChangeHandler}
+                    error={errors.threadType ? true : false}
+                    helperText={errors.threadType ? errors.threadType : null}
                 />
                 <Select options={brightness}
                     value={febric.brightness ?? ""}
                     label={"Bringtness"}
                     name="brightness"
                     onChange={onChangeHandler}
+                    error={errors.brightness ? true : false}
+                    helperText={errors.brightness ? errors.brightness : null}
                 />
 
                 <Select options={superShiny}
@@ -55,6 +63,8 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     label={"Super Shiny"}
                     name="shperShiny"
                     onChange={onChangeHandler}
+                    error={errors.shperShiny ? true : false}
+                    helperText={errors.shperShiny ? errors.shperShiny : null}
                 />
             </div>
 
