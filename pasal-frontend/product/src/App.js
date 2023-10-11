@@ -3,6 +3,7 @@ import { Switch, Route, Router } from "react-router-dom";
 import Thread from "./components/Thread";
 import Febric from "./components/Febric/Febric";
 import AddFebric from "./components/Febric/Add";
+import './index.scss';
 
 
 export default ({ history, onSignIn, isSignedIn }) => {

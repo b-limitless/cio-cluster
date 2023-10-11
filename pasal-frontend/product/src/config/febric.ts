@@ -56,8 +56,8 @@ export const brightness = [
 
 export const superShiny = [
   { name: "", code: "" },
-  { name: "Yes", code: true },
-  { name: "No", code: false },
+  { name: "Yes", code: 'yes' },
+  { name: "No", code: 'no' },
 ];
 
 export const threadCounts = [

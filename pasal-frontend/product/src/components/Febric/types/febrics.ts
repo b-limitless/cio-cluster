@@ -1,3 +1,5 @@
+import { ChangeEvent, ChangeEventHandler } from "react";
+
 const febricModel = {
   title: "Hello World",
   price: 123,

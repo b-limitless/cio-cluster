@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { formStepEnum, forStepType } from "../../../types&Enums/febric";
-import {firstLetterUpperCase} from "@pasal/common-functions";
+import { firstLetterUpperCase } from "@pasal/common-functions";
 import FormTemplate from "./FormTemplate";
 import StepFive from "./Steps/Five";
 import StepFour from "./Steps/Four";
@@ -10,15 +10,16 @@ import StepSix from "./Steps/Six";
 import StepThree from "./Steps/Three";
 import StepTwo from "./Steps/Two";
 import StepEight from "./Steps/Eight";
-import { validDigit, validString } from "../../../config/regrex";
+import { validDigit, validString, alphanumericRegex, wordRegrex } from "../../../config/regrex";
 import SuccessMessage from "../../common/success/SuccessMessage";
 import { svgCDNAssets } from "../../../config/assets";
 import { Message } from '@pasal/cio-component-library';
+import { ChangeEvent } from "react";
 
 
 type Props = {}
 
-const steps: {[key in forStepType]: any} = {
+const steps: { [key in forStepType]: any } = {
     one: [
         {
             name: 'title',
@@ -40,17 +41,18 @@ const steps: {[key in forStepType]: any} = {
         },
         {
             name: 'excellence',
-            regrex:  validDigit,
+            regrex: validDigit,
             errorMessage: '',
             type: 'number'
         },
         {
             name: 'warmth',
-            regrex:  validString,
-            errorMessage:  "",
+            regrex: validString,
+            errorMessage: "",
             type: 'select'
-        }
-    ], 
+        },
+
+    ],
     two: [
         {
             name: 'weight',
@@ -63,19 +65,19 @@ const steps: {[key in forStepType]: any} = {
             regrex: validString,
             errorMessage: '',
             type: 'text '
-        }, 
+        },
         {
             name: 'type',
             regrex: validString,
             errorMessage: '',
             type: 'text '
-        }, 
+        },
         {
             name: 'threadType',
             regrex: validString,
             errorMessage: '',
             type: 'text '
-        }, 
+        },
         {
             name: 'brightness',
             regrex: validString,
@@ -83,48 +85,71 @@ const steps: {[key in forStepType]: any} = {
             type: 'text '
         },
         {
-            name: 'superShiny',
+            name: 'shperShiny',
             regrex: validString,
             errorMessage: '',
             type: 'text '
         }
-    ], 
-    three: [], 
+    ],
+    three: [
+        {
+            name: 'threadCount',
+            regrex: wordRegrex,
+            errorMessage: '',
+            type: 'select '
+        },
+        {
+            name: 'opacity',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        },
+        {
+            name: 'waterProof',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        },
+    ],
     four: [],
     five: [],
-    six: [], 
-    seven: [], 
+    six: [],
+    seven: [],
     eight: []
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.one);
+    const [step, setStep] = useState<forStepType>(formStepEnum.four);
     const [errors, setErrors] = useState<any>({});
-    const [febric, setFebric] = useState<any>({title: "", warmth:""});
+    const [febric, setFebric] = useState<any>({ title: "", warmth: "" });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
+    const [febricImage, setFebricImage] = useState<File | null>(null);
+    const [febricImageError, setFebricImageError] = useState<null | string>(null)
+
+    // Managing state for the media upload 
+
 
     const [counter, setCounter] = useState(0);
-    
+
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
-        // if (step === formStepEnum.one) {
-           
-            const validation = steps[step];
 
-            const catchError:any = {};
-            validation.map((field:any, i:number) => {
-                if(!febric[field.name] || !field.regrex.test(febric[field.name])) {
-                    const {name} = field;
-                    catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
-                } else {
-                    console.log(`${febric[field.name]} is passed with regrex ${field.regrex}`)
-                }
-            });
-            setErrors(catchError);
+        const validation = steps[step];
+
+        const catchError: any = {};
+        validation.map((field: any, i: number) => {
+            if (!febric[field.name] || !field.regrex.test(febric[field.name])) {
+                const { name } = field;
+                catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
+            } else {
+                console.log(`${febric[field.name]} is passed with regrex ${field.regrex}`)
+            }
+        });
+        setErrors(catchError);
         setMoveToNextStep(true);
     }
 
-    
+
     const onChangeHandler = (e: any) => {
         const { name, value } = e.target;
         setFebric({ ...febric, [name]: value });
@@ -138,24 +163,69 @@ export default function AddFebric({ }: Props) {
         }
     }, [moveToNextStep, step, errors]);
 
-    console.log("errors", errors);
+    const nextStepAfterMediaUpload = () => {
+        setFebricImageError(null);
+        // Lets validate that image has been set
+        // If image is not full and there is no error
+        if(!febricImage) {
+            setFebricImageError('Please select a febric image');
+        } 
+        if(!febricImageError && febricImage) {
+            // Process the requst
+            setStep(formStepEnum.five);
+        }
+        
+    }
 
-    
+    const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (
+        event: ChangeEvent<HTMLInputElement>
+    ) => {
+        setFebricImageError(null);
+        const file = event.target.files && event.target.files[0];
+
+        const allowedTypes = ['image/jpeg', 'image/png', , 'image/webp']; // Add more allowed types if needed
+        const maxFileSizeKB = 1024 * 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
+
+        if (!file) {
+            setFebricImageError('Please select a file');
+            return;
+        }
+
+        if (file.size > maxFileSizeKB) {
+            setFebricImageError(`File size exceeds, Only ${maxFileSizeKB / 1024} MB allowed`);
+            return;
+        }
+
+        if (!allowedTypes.includes(file.type)) {
+            setFebricImageError(`Invalid image type, only jpeg, png, gif, webp extension is allwoed`);
+            return;
+        }
+
+        // Validate before setting to state 
+
+        if (file) {
+            setFebricImage(file);
+        }
+    };
+
+
+    console.log("file", febricImage)
+
     return (
-    
-       
-        <FormTemplate step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.eight}>
+
+
+        <FormTemplate step={step} setStep={setStep} nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : nextStepHandler} lastStep={step === formStepEnum.eight}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
-            {step === formStepEnum.three && <StepThree />}
-            {step === formStepEnum.four && <StepFour />}
-            {step === formStepEnum.five && <StepFive />}
-            {step === formStepEnum.six && <StepSix />}
-            {step === formStepEnum.seven && <StepSeven />}
-            {step === formStepEnum.eight && <Message title ={"Febric added sucessfully"} buttonText = {"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list"/>}
-            
+            {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
+            {step === formStepEnum.four && <StepFive onChangeHandler={handleImageChange} errors={febricImageError}/>}
+            {step === formStepEnum.five && <StepSix />}
+            {step === formStepEnum.six && <StepSeven />}
+            {step === formStepEnum.seven && <Message title={"Febric added sucessfully"} buttonText={"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list" />}
+            {/* {step === formStepEnum.eight && <Message title={"Febric added sucessfully"} buttonText={"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list" />} */}
+
         </FormTemplate>
-        
-        
+
+
     )
 }
