@@ -1,20 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { formStepEnum, forStepType } from "../../../types&Enums/febric";
-import { firstLetterUpperCase } from "@pasal/common-functions";
-import FormTemplate from "./FormTemplate";
-import StepFive from "./Steps/Five";
-import StepFour from "./Steps/Four";
-import StepOne from "./Steps/One";
-import StepSeven from "./Steps/Seven";
-import StepSix from "./Steps/Six";
-import StepThree from "./Steps/Three";
-import StepTwo from "./Steps/Two";
-import StepEight from "./Steps/Eight";
-import { validDigit, validString, alphanumericRegex, wordRegrex } from "../../../config/regrex";
-import SuccessMessage from "../../common/success/SuccessMessage";
-import { svgCDNAssets } from "../../../config/assets";
+import React, { useEffect, useState } from 'react';
+import { formStepEnum, forStepType } from '../../../types&Enums/febric';
+import { firstLetterUpperCase } from '@pasal/common-functions';
+import FormTemplate from './FormTemplate';
+import StepFive from './Steps/Five';
+import StepFour from './Steps/Four';
+import StepOne from './Steps/One';
+import StepSeven from './Steps/Seven';
+import StepSix from './Steps/Six';
+import StepThree from './Steps/Three';
+import StepTwo from './Steps/Two';
+import StepEight from './Steps/Eight';
+import { validDigit, validString, alphanumericRegex, wordRegrex } from '../../../config/regrex';
+import SuccessMessage from '../../common/success/SuccessMessage';
+import { svgCDNAssets } from '../../../config/assets';
 import { Message } from '@pasal/cio-component-library';
-import { ChangeEvent } from "react";
+import { ChangeEvent } from 'react';
+import { request } from '@pasal/cio-component-library';
+import { APIS } from '../../../config/apis';
+import axios from 'axios';
 
 
 type Props = {}
@@ -48,7 +51,7 @@ const steps: { [key in forStepType]: any } = {
         {
             name: 'warmth',
             regrex: validString,
-            errorMessage: "",
+            errorMessage: '',
             type: 'select'
         },
 
@@ -121,10 +124,11 @@ const steps: { [key in forStepType]: any } = {
 export default function AddFebric({ }: Props) {
     const [step, setStep] = useState<forStepType>(formStepEnum.four);
     const [errors, setErrors] = useState<any>({});
-    const [febric, setFebric] = useState<any>({ title: "", warmth: "" });
+    const [febric, setFebric] = useState<any>({ title: '', warmth: '' });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
-    const [febricImageError, setFebricImageError] = useState<null | string>(null)
+    const [febricImageError, setFebricImageError] = useState<null | string>(null);
+    const [uploadingFebric, setUploadingFebric] = useState<boolean>(false);
 
     // Managing state for the media upload 
 
@@ -163,18 +167,44 @@ export default function AddFebric({ }: Props) {
         }
     }, [moveToNextStep, step, errors]);
 
-    const nextStepAfterMediaUpload = () => {
-        setFebricImageError(null);
+    const nextStepAfterMediaUpload = async () => {
+
         // Lets validate that image has been set
         // If image is not full and there is no error
-        if(!febricImage) {
+        if (!febricImage) {
             setFebricImageError('Please select a febric image');
-        } 
-        if(!febricImageError && febricImage) {
-            // Process the requst
-            setStep(formStepEnum.five);
         }
-        
+
+        if (!febricImageError && febricImage) {
+            // Process the requst
+            setFebricImageError(null);
+            setUploadingFebric(true)
+            // Send the requst to upload the file 
+            const formData = new FormData();
+            formData.append('image', febricImage);
+
+            try {
+                const uploadFebric = await axios.post(APIS.product.upload, formData, {
+                    headers: {
+
+                        'Content-Type': 'multipart/form-data',
+
+                    }
+                })
+
+                const { originalImageUrl, thumbnailImageUrl } = uploadFebric.data;
+                setFebric({ ...febric, originalImageUrl, thumbnailImageUrl });
+                setFebricImage(null);
+                setStep(formStepEnum.five);
+            } catch (err: any) {
+                const { errors } = err.response.data;
+                setFebricImageError(errors[0].message);
+                console.error('Could not upload febric image', err);
+            }
+            setUploadingFebric(false)
+
+        }
+
     }
 
     const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (
@@ -208,21 +238,23 @@ export default function AddFebric({ }: Props) {
         }
     };
 
-
-    console.log("file", febricImage)
-
     return (
 
 
-        <FormTemplate step={step} setStep={setStep} nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : nextStepHandler} lastStep={step === formStepEnum.eight}>
+        <FormTemplate 
+           step={step} 
+           setStep={setStep} 
+           nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : nextStepHandler} 
+           lastStep={step === formStepEnum.eight} 
+           loading={uploadingFebric}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
-            {step === formStepEnum.four && <StepFive onChangeHandler={handleImageChange} errors={febricImageError}/>}
+            {step === formStepEnum.four && <StepFive onChangeHandler={handleImageChange} errors={febricImageError} />}
             {step === formStepEnum.five && <StepSix />}
             {step === formStepEnum.six && <StepSeven />}
-            {step === formStepEnum.seven && <Message title={"Febric added sucessfully"} buttonText={"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list" />}
-            {/* {step === formStepEnum.eight && <Message title={"Febric added sucessfully"} buttonText={"List Febric"} buttonVariant={"primary"} icon={svgCDNAssets.successCheck} redirectLink="/products/list" />} */}
+            {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />}
+            {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}
 
         </FormTemplate>
 

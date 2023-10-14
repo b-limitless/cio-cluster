@@ -8,10 +8,11 @@ type Props = {
     setStep: Function;
     step: forStepType;
     nextStepHandler: Function;
-    lastStep: boolean
+    lastStep: boolean;
+    loading?: boolean;
 }
 
-export default function FormTemplate({ children, step, nextStepHandler, lastStep }: Props) {
+export default function FormTemplate({ children, step, nextStepHandler, lastStep, loading }: Props) {
 
     return (
         <div className={styles.addfebric__container}>
@@ -23,7 +24,7 @@ export default function FormTemplate({ children, step, nextStepHandler, lastStep
                     {children}
                     <div className={`${styles.row} ${styles.button__row}`}>
                         <div className={styles.actions}>
-                            {!lastStep && <Button variant="primary" text="Nexddt" onClick={() => nextStepHandler(step)} />}
+                            {!lastStep && <Button variant="primary" text={loading? "Please wait..." : "Next"} onClick={() => loading ? null : nextStepHandler(step)} />}
                         </div>
                     </div>
                 </div>
