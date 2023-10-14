@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { formStepEnum, forStepType } from '../../../types&Enums/febric';
 import { firstLetterUpperCase } from '@pasal/common-functions';
 import FormTemplate from './FormTemplate';
@@ -18,6 +18,8 @@ import { ChangeEvent } from 'react';
 import { request } from '@pasal/cio-component-library';
 import { APIS } from '../../../config/apis';
 import axios from 'axios';
+import { CompositionInterface } from './Steps/steps.interface';
+import { febricTypes } from '../../../config/febric';
 
 
 type Props = {}
@@ -122,13 +124,19 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.four);
+    const [step, setStep] = useState<forStepType>(formStepEnum.five);
     const [errors, setErrors] = useState<any>({});
     const [febric, setFebric] = useState<any>({ title: '', warmth: '' });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
     const [febricImageError, setFebricImageError] = useState<null | string>(null);
     const [uploadingFebric, setUploadingFebric] = useState<boolean>(false);
+
+    // Will store data for febric composition such as cotton, polyster etc 
+    const [compositions, setComposition] = useState<CompositionInterface[]>([]);
+    const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes);
+
+    
 
     // Managing state for the media upload 
 
@@ -238,20 +246,45 @@ export default function AddFebric({ }: Props) {
         }
     };
 
+    const compositionNextStepHandler = () => {
+        // Sum all selected combination 
+        if(compositions.length === 0) {
+            console.log("Please select febric composition");
+            return;
+        }
+        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
+        // Febric must have made with some combinations
+        if (sumCombinations < 100) {
+            console.log("Sum of all combination should be 100");
+            return;
+        }
+
+    }
+
+
+
     return (
 
 
         <FormTemplate 
            step={step} 
            setStep={setStep} 
-           nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : nextStepHandler} 
+           nextStepHandler={step === formStepEnum.four ? 
+                            nextStepAfterMediaUpload : step === formStepEnum.five ? 
+                            compositionNextStepHandler : nextStepHandler
+                          } 
            lastStep={step === formStepEnum.eight} 
            loading={uploadingFebric}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.four && <StepFive onChangeHandler={handleImageChange} errors={febricImageError} />}
-            {step === formStepEnum.five && <StepSix />}
+            {step === formStepEnum.five && <StepSix 
+                  compositions={compositions} 
+                  setComposition={setComposition} 
+                  availableComposition={availableComposition} 
+                  setAvailableComposition={setAvailableComposition} 
+                  />}
             {step === formStepEnum.six && <StepSeven />}
             {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />}
             {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}

@@ -4,17 +4,16 @@ import styles from "../add-febric.module.scss";
 import { febricTypes } from '../../../../config/febric';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { svgCDNAssets } from '../../../../config/assets';
-type Props = {}
-
-interface CompositionInterface {
-    name: string;
-    code: string;
-    persantage?: number;
+import { CompositionInterface } from './steps.interface';
+type Props = {
+    compositions: CompositionInterface[];
+    availableComposition: CompositionInterface[];
+    setComposition: Function;
+    setAvailableComposition: Function;
 }
 
-export default function StepSix({ }: Props) {
-    const [compositions, setComposition] = useState<CompositionInterface[]>([]);
-    const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes)
+
+export default function StepSix({ compositions, setComposition, availableComposition, setAvailableComposition }: Props) {
 
 
     const compositionOnChangeHandler = (event: SelectChangeEvent) => {
@@ -26,7 +25,7 @@ export default function StepSix({ }: Props) {
         }
 
         const getComposition: any = availableComposition.filter((composition) => composition.code === value);
-        
+
         // Its remember old values
         getComposition[0].persantage = 0;
 
@@ -70,31 +69,25 @@ export default function StepSix({ }: Props) {
         setComposition(removeWithCode)
     }
 
-    const nextStepHandler = () => {
-        // Sum all selected combination 
-        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
-        // Febric must have made with some combinations
-        if(sumCombinations < 100) {
-            throw new Error("Sum of all combination should be 100");
-        }
-
-    }
+   
 
 
     return (
-        <div className={`${styles.row} ${styles.childrens}` }>
+        <div className={`${styles.row} ${styles.childrens}`}>
             <div className={styles.form__row}>
                 <Select options={availableComposition}
                     value={""}
                     label={"Select composition"}
                     onChange={compositionOnChangeHandler}
+                    // error={true}
+                    // helperText="Incorrect entry."
                 />
 
             </div>
 
             <div className={styles.form__row}>
                 <div className={styles.compositions}>
-                    {compositions.map((composition, i) => <div key={`composition-${i}`}className={styles.item}>
+                    {compositions.map((composition, i) => <div key={`composition-${i}`} className={styles.item}>
                         <div className={styles.col}>
                             <span className={styles.title}>{composition.name}</span>
                         </div>
@@ -106,9 +99,8 @@ export default function StepSix({ }: Props) {
                                 type="number"
                                 InputProps={{ inputProps: { min: 0, max: 100 } }}
                                 onChange={(e: any) => persantageOnChangeHandler(e, i)}
-
-                            //  error={true}
-                            // helperText="Incorrect entry."
+                                // error={true}
+                                // helperText="Incorrect entry."
                             />
                         </div>
                         <div className={styles.remove__composition}>
