@@ -124,9 +124,9 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.five);
-    const [errors, setErrors] = useState<any>({compositions: null});
-    const [febric, setFebric] = useState<any>({ title: '', warmth: '' });
+    const [step, setStep] = useState<forStepType>(formStepEnum.six);
+    const [errors, setErrors] = useState<any>({ compositions: null });
+    const [febric, setFebric] = useState<any>({ title: '', warmth: '', characters: [] });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
     const [febricImageError, setFebricImageError] = useState<null | string>(null);
@@ -135,9 +135,10 @@ export default function AddFebric({ }: Props) {
     // Will store data for febric composition such as cotton, polyster etc 
     const [compositions, setComposition] = useState<CompositionInterface[]>([]);
     const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes);
+    // const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
     // const [compositionError, setCompositionError] = useState<null | string>(null)
 
-    
+
 
     // Managing state for the media upload 
 
@@ -249,51 +250,68 @@ export default function AddFebric({ }: Props) {
 
     const compositionNextStepHandler = useCallback(() => {
         setErrors({});
-        if(compositions.length < 1) {
-            setErrors({...errors, compositions: "Please select compositions"});
-            return;
-        } 
-
-        
-
-        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
-        if (sumCombinations < 100) {
-            setErrors({...errors, compositions: "Sum of all combination should be 100%"});
+        if (compositions.length < 1) {
+            setErrors({ ...errors, compositions: "Please select compositions" });
             return;
         }
 
-        setFebric({...febric, compositions});
+
+
+        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
+        if (sumCombinations < 100) {
+            setErrors({ ...errors, compositions: "Sum of all combination should be 100%" });
+            return;
+        }
+
+        setFebric({ ...febric, compositions });
         setErrors({});
         setStep(formStepEnum.six);
 
     }, [compositions, errors]);
 
 
+    const characterOnChangeHalder = (e: any) => {
+        const { name, checked } = e.target;
+        if (checked) {
+            const { characters } = febric;
+            characters.push(name)
+            setFebric({ ...febric, characters });
+        } else {
+            const characters = febric.characters.filter((item: string) => item !== name);
+            setFebric({ ...febric, characters });
+        }
+    }
+
+    console.log("febric", febric)
+
 
     return (
 
 
-        <FormTemplate 
-           step={step} 
-           setStep={setStep} 
-           nextStepHandler={step === formStepEnum.four ? 
-                            nextStepAfterMediaUpload : step === formStepEnum.five ? 
-                            compositionNextStepHandler : nextStepHandler
-                          } 
-           lastStep={step === formStepEnum.eight} 
-           loading={uploadingFebric}>
+        <FormTemplate
+            step={step}
+            setStep={setStep}
+            nextStepHandler={step === formStepEnum.four ?
+                nextStepAfterMediaUpload : step === formStepEnum.five ?
+                    compositionNextStepHandler : nextStepHandler
+            }
+            lastStep={step === formStepEnum.eight}
+            loading={uploadingFebric}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.four && <StepFive onChangeHandler={handleImageChange} errors={febricImageError} />}
-            {step === formStepEnum.five && <StepSix 
-                  compositions={compositions} 
-                  setComposition={setComposition} 
-                  availableComposition={availableComposition} 
-                  setAvailableComposition={setAvailableComposition} 
-                  errors={errors}
-                  />}
-            {step === formStepEnum.six && <StepSeven />}
+            {step === formStepEnum.five && <StepSix
+                compositions={compositions}
+                setComposition={setComposition}
+                availableComposition={availableComposition}
+                setAvailableComposition={setAvailableComposition}
+                errors={errors}
+            />}
+            {step === formStepEnum.six && <StepSeven
+                onChangeHandler={characterOnChangeHalder}
+                selectedCharacters={febric.characters}
+            />}
             {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />}
             {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}
 
