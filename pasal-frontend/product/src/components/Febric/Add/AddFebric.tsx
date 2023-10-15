@@ -125,7 +125,7 @@ const steps: { [key in forStepType]: any } = {
 
 export default function AddFebric({ }: Props) {
     const [step, setStep] = useState<forStepType>(formStepEnum.five);
-    const [errors, setErrors] = useState<any>({});
+    const [errors, setErrors] = useState<any>({compositions: null});
     const [febric, setFebric] = useState<any>({ title: '', warmth: '' });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
@@ -135,6 +135,7 @@ export default function AddFebric({ }: Props) {
     // Will store data for febric composition such as cotton, polyster etc 
     const [compositions, setComposition] = useState<CompositionInterface[]>([]);
     const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes);
+    // const [compositionError, setCompositionError] = useState<null | string>(null)
 
     
 
@@ -246,20 +247,26 @@ export default function AddFebric({ }: Props) {
         }
     };
 
-    const compositionNextStepHandler = () => {
-        // Sum all selected combination 
-        if(compositions.length === 0) {
-            console.log("Please select febric composition");
+    const compositionNextStepHandler = useCallback(() => {
+        setErrors({});
+        if(compositions.length < 1) {
+            setErrors({...errors, compositions: "Please select compositions"});
             return;
-        }
+        } 
+
+        
+
         const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
-        // Febric must have made with some combinations
         if (sumCombinations < 100) {
-            console.log("Sum of all combination should be 100");
+            setErrors({...errors, compositions: "Sum of all combination should be 100%"});
             return;
         }
 
-    }
+        setFebric({...febric, compositions});
+        setErrors({});
+        setStep(formStepEnum.six);
+
+    }, [compositions, errors]);
 
 
 
@@ -284,6 +291,7 @@ export default function AddFebric({ }: Props) {
                   setComposition={setComposition} 
                   availableComposition={availableComposition} 
                   setAvailableComposition={setAvailableComposition} 
+                  errors={errors}
                   />}
             {step === formStepEnum.six && <StepSeven />}
             {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />}

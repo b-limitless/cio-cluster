@@ -5,16 +5,17 @@ import { febricTypes } from '../../../../config/febric';
 import { SelectChangeEvent } from '@mui/material/Select';
 import { svgCDNAssets } from '../../../../config/assets';
 import { CompositionInterface } from './steps.interface';
+import FormErrorMessage from '../../../common/FormErrorMessage';
 type Props = {
     compositions: CompositionInterface[];
     availableComposition: CompositionInterface[];
     setComposition: Function;
     setAvailableComposition: Function;
+    errors: any;
 }
 
 
-export default function StepSix({ compositions, setComposition, availableComposition, setAvailableComposition }: Props) {
-
+export default function StepSix({ compositions, setComposition, availableComposition, setAvailableComposition, errors }: Props) {
 
     const compositionOnChangeHandler = (event: SelectChangeEvent) => {
         const { value } = event.target;
@@ -69,9 +70,6 @@ export default function StepSix({ compositions, setComposition, availableComposi
         setComposition(removeWithCode)
     }
 
-   
-
-
     return (
         <div className={`${styles.row} ${styles.childrens}`}>
             <div className={styles.form__row}>
@@ -79,8 +77,9 @@ export default function StepSix({ compositions, setComposition, availableComposi
                     value={""}
                     label={"Select composition"}
                     onChange={compositionOnChangeHandler}
-                    // error={true}
-                    // helperText="Incorrect entry."
+                    error={errors.compositions ? true : false}
+                    helpertext={errors.compositions ? errors.compositions : undefined} 
+                    name="compositions"
                 />
 
             </div>
@@ -109,8 +108,9 @@ export default function StepSix({ compositions, setComposition, availableComposi
                     </div>)}
 
                 </div>
-
+                
             </div>
+            
 
         </div>
     )
