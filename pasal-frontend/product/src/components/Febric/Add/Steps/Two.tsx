@@ -22,12 +22,12 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                     helperText={errors.weight ? errors.weight : null}
                 />
                 <Select options={febricSeasons}
-                    value={febric.season ?? ""}
+                    value={febric.febricSeasons ?? ""}
                     label={"Season"}
-                    name="season"
+                    name="febricSeasons"
                     onChange={onChangeHandler}
-                    error={errors.season ? true : false}
-                    helperText={errors.season ? errors.season : null}
+                    error={errors.febricSeasons ? true : false}
+                    helperText={errors.febricSeasons ? errors.febricSeasons : null}
                 />
 
                 <Select options={febricTypes}

@@ -23,7 +23,7 @@ const router = express.Router();
 router.post(
   "/api/products/v1",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest,
   async (req: Request, res: Response) => {

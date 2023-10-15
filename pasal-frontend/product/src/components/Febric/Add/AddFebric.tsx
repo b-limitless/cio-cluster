@@ -66,7 +66,7 @@ const steps: { [key in forStepType]: any } = {
             type: 'number '
         },
         {
-            name: 'season',
+            name: 'febricSeasons',
             regrex: validString,
             errorMessage: '',
             type: 'text '
@@ -124,7 +124,7 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.six);
+    const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>({ title: '', warmth: '', characters: [] });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
@@ -282,8 +282,22 @@ export default function AddFebric({ }: Props) {
         }
     }
 
-    console.log("febric", febric)
+    const submitFebricToServerHandler  = async() => {
+        // Submit the form to server
+        try {
+            await request({
+                url: APIS.product.new, 
+                body: febric, 
+                method: 'post'
+            });
+            setStep(formStepEnum.eight);
+        } catch(err) {
+            console.error('Could not submit the form', err);
+        }
+        
+    }
 
+    console.log("febric", JSON.stringify(febric));
 
     return (
 
@@ -291,9 +305,10 @@ export default function AddFebric({ }: Props) {
         <FormTemplate
             step={step}
             setStep={setStep}
-            nextStepHandler={step === formStepEnum.four ?
-                nextStepAfterMediaUpload : step === formStepEnum.five ?
-                    compositionNextStepHandler : nextStepHandler
+            nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : 
+                step === formStepEnum.five ? compositionNextStepHandler : 
+                step === formStepEnum.six ? submitFebricToServerHandler: 
+                nextStepHandler
             }
             lastStep={step === formStepEnum.eight}
             loading={uploadingFebric}>
