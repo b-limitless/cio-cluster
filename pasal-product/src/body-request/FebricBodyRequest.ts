@@ -19,7 +19,7 @@ export const febricBodyRequest: ValidationChain[] = [
   body("waterproof").isBoolean().withMessage("Waterproof must be a boolean value"),
   body("stretchyText").notEmpty().withMessage("Stretchy text must not be empty"),
   body("stretchy").isBoolean().withMessage("Stretchy must be a boolean value"),
-  body("mis").notEmpty().withMessage("MIS must not be empty"),
+  // body("mis").notEmpty().withMessage("MIS must not be empty"),
   body("type").notEmpty().withMessage("Type must not be empty"),
   body("febricTypes").notEmpty().withMessage("Fabric types must not be empty"),
   body("febricSeasons").notEmpty().withMessage("Fabric seasons must not be empty"),
