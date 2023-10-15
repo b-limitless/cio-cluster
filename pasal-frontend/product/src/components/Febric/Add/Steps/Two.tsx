@@ -31,12 +31,12 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                 />
 
                 <Select options={febricTypes}
-                    value={febric.type ?? ""}
-                    label={"Type"}
-                    name="type"
+                    value={febric.febricTypes ?? ""}
+                    label={"Febric Types"}
+                    name="febricTypes"
                     onChange={onChangeHandler}
-                    error={errors.type ? true : false}
-                    helperText={errors.type ? errors.type : null}
+                    error={errors.febricTypes ? true : false}
+                    helperText={errors.febricTypes ? errors.febricTypes : null}
                 />
             </div>
 

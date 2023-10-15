@@ -72,7 +72,7 @@ const steps: { [key in forStepType]: any } = {
             type: 'text '
         },
         {
-            name: 'type',
+            name: 'febricTypes',
             regrex: validString,
             errorMessage: '',
             type: 'text '
