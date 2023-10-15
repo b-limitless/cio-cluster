@@ -14,7 +14,7 @@ export const febricBodyRequest: ValidationChain[] = [
   body("superShiny").isBoolean().withMessage("Super shiny must be a boolean value"),
   body("material").notEmpty().withMessage("Material must not be empty"),
   body("tone").notEmpty().withMessage("Tone must not be empty"),
-  body("threadCount").isInt({ min: 0 }).withMessage("Thread count must be a non-negative integer"),
+  body("threadCount").notEmpty().withMessage("Thread count must be a non-negative integer"),
   body("opacity").notEmpty().withMessage("Opacity must not be empty"),
   body("waterproof").isBoolean().withMessage("Waterproof must be a boolean value"),
   body("stretchyText").notEmpty().withMessage("Stretchy text must not be empty"),

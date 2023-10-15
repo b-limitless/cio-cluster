@@ -15,7 +15,7 @@ interface FebricAttrs {
   superShiny: boolean;
   material: string;
   tone: string;
-  threadCount: number;
+  threadCount: string;
   opacity: string;
   waterproof: boolean;
   stretchyText: string;
