@@ -42,12 +42,12 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
 
             <div className={styles.form__row}>
             <Select options={threadTypes}
-                    value={febric.threadType ?? ""}
+                    value={febric.threadTypes ?? ""}
                     label={"Thread Type"}
-                    name="threadType"
+                    name="threadTypes"
                     onChange={onChangeHandler}
-                    error={errors.threadType ? true : false}
-                    helperText={errors.threadType ? errors.threadType : null}
+                    error={errors.threadTypes ? true : false}
+                    helperText={errors.threadTypes ? errors.threadTypes : null}
                 />
                 <Select options={brightness}
                     value={febric.brightness ?? ""}
@@ -59,12 +59,12 @@ export default function StepTwo({onChangeHandler, febric, errors }: commonFebric
                 />
 
                 <Select options={superShiny}
-                    value={febric.shperShiny ?? ""}
+                    value={febric.superShiny ?? ""}
                     label={"Super Shiny"}
-                    name="shperShiny"
+                    name="superShiny"
                     onChange={onChangeHandler}
-                    error={errors.shperShiny ? true : false}
-                    helperText={errors.shperShiny ? errors.shperShiny : null}
+                    error={errors.superShiny ? true : false}
+                    helperText={errors.superShiny ? errors.superShiny : null}
                 />
             </div>
 

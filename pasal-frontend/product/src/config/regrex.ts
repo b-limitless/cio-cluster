@@ -6,3 +6,4 @@ export const wordRegrex = /^[\w\d\+-]{1,}$/
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 export const validString = /^[\w ]{2,100}$/;
 export const validDigit = /^[0-9]{1,100}$/
+export const validBoolean = /^(true|false)$/i;

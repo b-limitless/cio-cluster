@@ -10,7 +10,7 @@ import StepSix from './Steps/Six';
 import StepThree from './Steps/Three';
 import StepTwo from './Steps/Two';
 import StepEight from './Steps/Eight';
-import { validDigit, validString, alphanumericRegex, wordRegrex } from '../../../config/regrex';
+import { validDigit, validString, alphanumericRegex, wordRegrex, validBoolean } from '../../../config/regrex';
 import SuccessMessage from '../../common/success/SuccessMessage';
 import { svgCDNAssets } from '../../../config/assets';
 import { Message } from '@pasal/cio-component-library';
@@ -78,7 +78,7 @@ const steps: { [key in forStepType]: any } = {
             type: 'text '
         },
         {
-            name: 'threadType',
+            name: 'threadTypes',
             regrex: validString,
             errorMessage: '',
             type: 'text '
@@ -90,8 +90,8 @@ const steps: { [key in forStepType]: any } = {
             type: 'text '
         },
         {
-            name: 'shperShiny',
-            regrex: validString,
+            name: 'superShiny',
+            regrex: validBoolean,
             errorMessage: '',
             type: 'text '
         }
@@ -152,7 +152,7 @@ export default function AddFebric({ }: Props) {
 
         const catchError: any = {};
         validation.map((field: any, i: number) => {
-            if (!febric[field.name] || !field.regrex.test(febric[field.name])) {
+            if ([undefined, ""].indexOf(febric[field.name]) !== -1 || !field.regrex.test(febric[field.name])) {
                 const { name } = field;
                 catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
             } else {
@@ -166,6 +166,7 @@ export default function AddFebric({ }: Props) {
 
     const onChangeHandler = (e: any) => {
         const { name, value } = e.target;
+        console.log("value", value)
         setFebric({ ...febric, [name]: value });
     }
 
