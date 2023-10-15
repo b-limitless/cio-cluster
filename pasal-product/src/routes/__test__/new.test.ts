@@ -38,7 +38,7 @@ it("will provided the required permission for the api create_febric", async () =
 
   const parseResponse = JSON.parse(response.text);
  
-  expect(parseResponse.errors.length).toEqual(25); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
  
 });
 
@@ -54,7 +54,7 @@ it("provideds title will throw remaining error ", async () => {
   const parseResponse = JSON.parse(response.text);
 
   
-  expect(parseResponse.errors.length).toEqual(26); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(25); // Could change in the future
 
 });
 
@@ -69,7 +69,7 @@ it("provideds price will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(25); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
 });
 
 it("provideds delivery_time will throw remaining error ", async () => {
@@ -84,7 +84,7 @@ it("provideds delivery_time will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
 });
 
 it("will provide all required data returns 201", async () => {
@@ -92,7 +92,7 @@ it("will provide all required data returns 201", async () => {
     title: "Sample Fabric",
     price: 100,
     deliveryTime: "2 days",
-    imageLink: "http://example.com/fabric-image.jpg",
+    // imageLink: "http://example.com/fabric-image.jpg",
     excellence: "4 rating stars",
     warmth: "3 rating stars",
     weight: "500 gr/m^2",
@@ -134,7 +134,7 @@ it("creates a febric and update it", async() => {
     title: "Sample Fabric",
     price: 100,
     deliveryTime: "2 days",
-    imageLink: "http://example.com/fabric-image.jpg",
+    // imageLink: "http://example.com/fabric-image.jpg",
     excellence: "4 rating stars",
     warmth: "3 rating stars",
     weight: "500 gr/m^2",
@@ -189,7 +189,7 @@ it("create and delete a febric", async() => {
     title: "Sample Fabric",
     price: 100,
     deliveryTime: "2 days",
-    imageLink: "http://example.com/fabric-image.jpg",
+    // imageLink: "http://example.com/fabric-image.jpg",
     excellence: "4 rating stars",
     warmth: "3 rating stars",
     weight: "500 gr/m^2",

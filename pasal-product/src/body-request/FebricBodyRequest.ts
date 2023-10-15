@@ -4,7 +4,7 @@ export const febricBodyRequest: ValidationChain[] = [
   body("title").notEmpty().withMessage("Title must not be empty"),
   body("price").isFloat({ min: 0 }).withMessage("Price must be a positive number"),
   body("deliveryTime").notEmpty().withMessage("Delivery time must not be empty"),
-  body("imageLink").notEmpty().withMessage("Image link must not be empty"),
+  // body("imageLink").notEmpty().withMessage("Image link must not be empty"),
   body("excellence").notEmpty().withMessage("Excellence must not be empty"),
   body("warmth").notEmpty().withMessage("Warmth must not be empty"),
   body("weight").notEmpty().withMessage("Weight must not be empty"),
