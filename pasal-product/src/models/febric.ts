@@ -139,7 +139,7 @@ const febricSchema = new mongoose.Schema(
       required: true,
     },
     stretchy: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     // mis: {
