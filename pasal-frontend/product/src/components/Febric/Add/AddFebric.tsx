@@ -310,9 +310,6 @@ export default function AddFebric({ }: Props) {
                 url: APIS.product.new,
                 body: { 
                         ...febric, 
-                        threadStyle: 'none', 
-                        tone: 'blue', 
-                        stretchy: true, 
                         stretchyText: 'Stretchy fabric',
                         type: 'shirt'
                     },
