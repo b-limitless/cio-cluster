@@ -224,3 +224,32 @@ export const threadStyles = [
       "Threads in contrasting color, enhancing the visibility of stitches.",
   },
 ];
+
+
+export const tones = [
+  {
+    code: "light",
+    name: "Light",
+    description: "Soft and subtle shades, perfect for creating a delicate look.",
+  },
+  {
+    code: "medium",
+    name: "Medium",
+    description: "Moderate tones, providing a balanced and versatile appearance.",
+  },
+  {
+    code: "dark",
+    name: "Dark",
+    description: "Rich and deep tones, adding a touch of elegance to the fabric.",
+  },
+  {
+    code: "vibrant",
+    name: "Vibrant",
+    description: "Bright and lively tones, ideal for making a bold statement.",
+  },
+  {
+    code: "neutral",
+    name: "Neutral",
+    description: "Natural and earthy tones, suitable for a classic and timeless look.",
+  }
+];
