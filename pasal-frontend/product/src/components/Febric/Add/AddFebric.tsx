@@ -24,6 +24,8 @@ import { febricTypes } from '../../../config/febric';
 
 type Props = {}
 
+const febricInitalState = { title: '', warmth: '', characters: [] };
+
 const steps: { [key in forStepType]: any } = {
     one: [
         {
@@ -126,7 +128,7 @@ const steps: { [key in forStepType]: any } = {
 export default function AddFebric({ }: Props) {
     const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({ compositions: null });
-    const [febric, setFebric] = useState<any>({ title: '', warmth: '', characters: [] });
+    const [febric, setFebric] = useState<any>(febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
     const [febricImageError, setFebricImageError] = useState<null | string>(null);
@@ -298,14 +300,13 @@ export default function AddFebric({ }: Props) {
                     },
                 method: 'post'
             });
-            setStep(formStepEnum.eight);
+            setStep(formStepEnum.seven);
+            setFebric(febricInitalState);
         } catch (err) {
             console.error('Could not submit the form', err);
         }
 
     }
-
-    console.log('febric', JSON.stringify(febric));
 
     return (
 

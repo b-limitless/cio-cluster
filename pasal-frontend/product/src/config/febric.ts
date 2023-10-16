@@ -158,7 +158,8 @@ export const warmth = [
   {
     name: "",
     code: "",
-    description:""  },
+    description: "",
+  },
   {
     name: "Thermal Conductivity",
     code: "Thermal_Conductivity",
@@ -185,5 +186,41 @@ export const warmth = [
   },
 ];
 
+export const excellence = [
+  { name: 0, code: 0 },
+  { name: 1, code: 1 },
+  { name: 2, code: 2 },
+];
 
-export const excellence = [{name: 0, code: 0},{name: 1, code: 1}, {name: 2, code: 2}]
+export const threadStyles = [
+  {
+    code: "plain",
+    name: "Plain",
+    description:
+      "A simple and classic thread style, suitable for various fabric types.",
+  },
+  {
+    code: "twisted",
+    name: "Twisted",
+    description:
+      "Threads are twisted together, creating a durable and textured look.",
+  },
+  {
+    code: "embroidered",
+    name: "Embroidered",
+    description:
+      "Decorative threads are used to create intricate patterns and designs.",
+  },
+  {
+    code: "metallic",
+    name: "Metallic",
+    description:
+      "Threads with metallic finish, adding a touch of shimmer to your fabric.",
+  },
+  {
+    code: "contrastStitch",
+    name: "Contrast Stitch",
+    description:
+      "Threads in contrasting color, enhancing the visibility of stitches.",
+  },
+];
