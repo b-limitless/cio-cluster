@@ -38,7 +38,7 @@ it("will provided the required permission for the api create_febric", async () =
 
   const parseResponse = JSON.parse(response.text);
  
-  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
  
 });
 
@@ -54,7 +54,7 @@ it("provideds title will throw remaining error ", async () => {
   const parseResponse = JSON.parse(response.text);
 
   
-  expect(parseResponse.errors.length).toEqual(24); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
 
 });
 
@@ -69,7 +69,7 @@ it("provideds price will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
 });
 
 it("provideds delivery_time will throw remaining error ", async () => {
@@ -84,7 +84,7 @@ it("provideds delivery_time will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(21); // Could change in the future
 });
 
 it("will provide all required data returns 201", async () => {
@@ -142,7 +142,7 @@ it("creates a febric and update it", async() => {
     threadStyle: "Plain",
     brightness: "High",
     superShiny: false,
-    material: "Cotton",
+    // material: "Cotton",
     tone: "Blue",
     threadCount: 300,
     opacity: "Opaque",
