@@ -142,10 +142,10 @@ const febricSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
     },
-    mis: {
-      type: String,
-      required: true,
-    },
+    // mis: {
+    //   type: String,
+    //   required: true,
+    // },
     type: {
       type: String,
       required: true,

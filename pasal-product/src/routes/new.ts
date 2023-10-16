@@ -108,8 +108,10 @@ router.post(
 
       return;
     } catch (err) {
-      logger.log("error", "Could not create febric");
-      throw new Error("Could not create febric");
+      logger.log("error", `Could not create febric ${err}`);
+      console.log(`Could not create febric ${err}`)
+
+      throw new Error(`Could not create febric ${err}`);
     }
   }
 );
