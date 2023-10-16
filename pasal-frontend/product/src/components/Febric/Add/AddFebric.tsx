@@ -117,6 +117,24 @@ const steps: { [key in forStepType]: any } = {
             errorMessage: '',
             type: 'text '
         },
+        {
+            name: 'threadStyle',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        },
+        {
+            name: 'tone',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        },
+        {
+            name: 'stretchy',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        }
     ],
     four: [],
     five: [],
@@ -126,7 +144,7 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.one);
+    const [step, setStep] = useState<forStepType>(formStepEnum.three);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
