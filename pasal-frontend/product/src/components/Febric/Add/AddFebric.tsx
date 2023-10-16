@@ -144,7 +144,7 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
-    const [step, setStep] = useState<forStepType>(formStepEnum.three);
+    const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
