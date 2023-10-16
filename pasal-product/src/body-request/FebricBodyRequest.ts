@@ -8,7 +8,7 @@ export const febricBodyRequest: ValidationChain[] = [
   body("excellence").notEmpty().withMessage("Excellence must not be empty"),
   body("warmth").notEmpty().withMessage("Warmth must not be empty"),
   body("weight").notEmpty().withMessage("Weight must not be empty"),
-  body("season").notEmpty().withMessage("Season must not be empty"),
+  // body("season").notEmpty().withMessage("Season must not be empty"),
   body("threadStyle").notEmpty().withMessage("Thread style must not be empty"),
   body("brightness").notEmpty().withMessage("Brightness must not be empty"),
   body("superShiny").isBoolean().withMessage("Super shiny must be a boolean value"),

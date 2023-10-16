@@ -98,10 +98,10 @@ const febricSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    season: {
-      type: String,
-      required: true,
-    },
+    // season: {
+    //   type: String,
+    //   required: true,
+    // },
     threadStyle: {
       type: String,
       required: true,

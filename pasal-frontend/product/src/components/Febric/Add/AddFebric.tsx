@@ -283,19 +283,25 @@ export default function AddFebric({ }: Props) {
         }
     }
 
-    const submitFebricToServerHandler  = async() => {
+    const submitFebricToServerHandler = async () => {
         // Submit the form to server
         try {
             await request({
-                url: APIS.product.new, 
-                body: febric, 
+                url: APIS.product.new,
+                body: { 
+                        ...febric, 
+                        threadStyle: 'none', 
+                        tone: 'blue', 
+                        stretchy: true, 
+                        stretchyText: "Stretchy fabric" 
+                    },
                 method: 'post'
             });
             setStep(formStepEnum.eight);
-        } catch(err) {
+        } catch (err) {
             console.error('Could not submit the form', err);
         }
-        
+
     }
 
     console.log("febric", JSON.stringify(febric));
@@ -306,10 +312,10 @@ export default function AddFebric({ }: Props) {
         <FormTemplate
             step={step}
             setStep={setStep}
-            nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload : 
-                step === formStepEnum.five ? compositionNextStepHandler : 
-                step === formStepEnum.six ? submitFebricToServerHandler: 
-                nextStepHandler
+            nextStepHandler={step === formStepEnum.four ? nextStepAfterMediaUpload :
+                step === formStepEnum.five ? compositionNextStepHandler :
+                    step === formStepEnum.six ? submitFebricToServerHandler :
+                        nextStepHandler
             }
             lastStep={step === formStepEnum.eight}
             loading={uploadingFebric}>

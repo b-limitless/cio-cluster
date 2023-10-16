@@ -6,6 +6,8 @@ import { Febric } from "../../models/febric";
 const  originalImageUrl ="https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056368/images/ABC/aqycbx1lgccrndirskjn.webp";
 const thumbnailImageUrl= "https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056371/thumbnails/ABC/nqaljl0gyhctkagxj1q7.webp";
 
+const subtract = 0;
+
 it("throw 401 un autorized error when there is no authentication", async () => {
   const response = await request(app)
     .post("/api/products/v1")
@@ -38,7 +40,7 @@ it("will provided the required permission for the api create_febric", async () =
 
   const parseResponse = JSON.parse(response.text);
  
-  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(21 - subtract); // Could change in the future
  
 });
 
@@ -54,7 +56,7 @@ it("provideds title will throw remaining error ", async () => {
   const parseResponse = JSON.parse(response.text);
 
   
-  expect(parseResponse.errors.length).toEqual(23); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(22 - subtract); // Could change in the future
 
 });
 
@@ -69,7 +71,7 @@ it("provideds price will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(22); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(21); // Could change in the future
 });
 
 it("provideds delivery_time will throw remaining error ", async () => {
@@ -84,7 +86,7 @@ it("provideds delivery_time will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(21); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(20 - subtract); // Could change in the future
 });
 
 it("will provide all required data returns 201", async () => {
@@ -138,7 +140,7 @@ it("creates a febric and update it", async() => {
     excellence: "4 rating stars",
     warmth: "3 rating stars",
     weight: "500 gr/m^2",
-    season: "Summer",
+    // season: "Summer",
     threadStyle: "Plain",
     brightness: "High",
     superShiny: false,
