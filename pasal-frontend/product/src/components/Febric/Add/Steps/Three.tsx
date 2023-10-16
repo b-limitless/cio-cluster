@@ -11,11 +11,11 @@ export default function StepThree({onChangeHandler, febric, errors }: commonFebr
             <div className={styles.form__row}>
                 <Select options={threadCounts}
                     label={"Thread Count"}
-                    value={febric.threadCount ?? ""}
-                    name="threadCount"
+                    value={febric.threadCounts ?? ""}
+                    name="threadCounts"
                     onChange={onChangeHandler}
-                    error={errors.threadCount ? true : false}
-                    helperText={errors.threadCount ? errors.threadCount : null}
+                    error={errors.threadCounts ? true : false}
+                    helperText={errors.threadCounts ? errors.threadCounts : null}
 
                 />
                 <Select options={opacity}
@@ -29,11 +29,11 @@ export default function StepThree({onChangeHandler, febric, errors }: commonFebr
 
                 <Select options={waterProof}
                     label={"Water Proof"}
-                    value={febric.waterProof ?? ""}
-                    name="waterProof"
+                    value={febric.waterproof ?? ""}
+                    name="waterproof"
                     onChange={onChangeHandler}
-                    error={errors.waterProof ? true : false}
-                    helperText={errors.waterProof ? errors.waterProof : null}
+                    error={errors.waterproof ? true : false}
+                    helperText={errors.v ? errors.waterproof : null}
                 />
 
             </div>

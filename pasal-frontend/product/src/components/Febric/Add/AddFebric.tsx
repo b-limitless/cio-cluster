@@ -98,7 +98,7 @@ const steps: { [key in forStepType]: any } = {
     ],
     three: [
         {
-            name: 'threadCount',
+            name: 'threadCounts',
             regrex: wordRegrex,
             errorMessage: '',
             type: 'select '
@@ -110,7 +110,7 @@ const steps: { [key in forStepType]: any } = {
             type: 'text '
         },
         {
-            name: 'waterProof',
+            name: 'waterproof',
             regrex: validString,
             errorMessage: '',
             type: 'text '
@@ -152,7 +152,7 @@ export default function AddFebric({ }: Props) {
 
         const catchError: any = {};
         validation.map((field: any, i: number) => {
-            if ([undefined, ""].indexOf(febric[field.name]) !== -1 || !field.regrex.test(febric[field.name])) {
+            if ([undefined, ''].indexOf(febric[field.name]) !== -1 || !field.regrex.test(febric[field.name])) {
                 const { name } = field;
                 catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
             } else {
@@ -166,7 +166,7 @@ export default function AddFebric({ }: Props) {
 
     const onChangeHandler = (e: any) => {
         const { name, value } = e.target;
-        console.log("value", value)
+        console.log('value', value)
         setFebric({ ...febric, [name]: value });
     }
 
@@ -252,7 +252,7 @@ export default function AddFebric({ }: Props) {
     const compositionNextStepHandler = useCallback(() => {
         setErrors({});
         if (compositions.length < 1) {
-            setErrors({ ...errors, compositions: "Please select compositions" });
+            setErrors({ ...errors, compositions: 'Please select compositions' });
             return;
         }
 
@@ -260,7 +260,7 @@ export default function AddFebric({ }: Props) {
 
         const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
         if (sumCombinations < 100) {
-            setErrors({ ...errors, compositions: "Sum of all combination should be 100%" });
+            setErrors({ ...errors, compositions: 'Sum of all combination should be 100%' });
             return;
         }
 
@@ -293,7 +293,8 @@ export default function AddFebric({ }: Props) {
                         threadStyle: 'none', 
                         tone: 'blue', 
                         stretchy: true, 
-                        stretchyText: "Stretchy fabric" 
+                        stretchyText: 'Stretchy fabric',
+                        type: 'shirt'
                     },
                 method: 'post'
             });
@@ -304,7 +305,7 @@ export default function AddFebric({ }: Props) {
 
     }
 
-    console.log("febric", JSON.stringify(febric));
+    console.log('febric', JSON.stringify(febric));
 
     return (
 

@@ -6,7 +6,7 @@ import { Febric } from "../../models/febric";
 const  originalImageUrl ="https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056368/images/ABC/aqycbx1lgccrndirskjn.webp";
 const thumbnailImageUrl= "https://res.cloudinary.com/dun5p8e5d/image/upload/v1691056371/thumbnails/ABC/nqaljl0gyhctkagxj1q7.webp";
 
-const subtract = 0;
+const subtract = 1;
 
 it("throw 401 un autorized error when there is no authentication", async () => {
   const response = await request(app)
@@ -71,7 +71,7 @@ it("provideds price will throw remaining error ", async () => {
     .expect(400);
 
   const parseResponse = JSON.parse(response.text);
-  expect(parseResponse.errors.length).toEqual(21); // Could change in the future
+  expect(parseResponse.errors.length).toEqual(21 -subtract); // Could change in the future
 });
 
 it("provideds delivery_time will throw remaining error ", async () => {

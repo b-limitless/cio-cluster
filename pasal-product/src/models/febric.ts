@@ -122,16 +122,16 @@ const febricSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    threadCount: {
-      type: Number,
-      required: true,
-    },
+    // threadCount: {
+    //   type: Number,
+    //   required: true,
+    // },
     opacity: {
       type: String,
       required: true,
     },
     waterproof: {
-      type: Boolean,
+      type: String,
       required: true,
     },
     stretchyText: {
