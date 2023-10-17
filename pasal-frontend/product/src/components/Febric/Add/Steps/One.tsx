@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Input, Select, Chip as MultipleSelectChip, TextArea, InputAdornments } from '@pasal/cio-component-library';
 import styles from "../add-febric.module.scss";
-import { excellence, warmth } from '../../../../config/febric';
+import { excellence, type, warmth } from '../../../../config/febric';
 import { commonFebricStepType } from '../../types/febrics';
 
 
@@ -30,19 +30,18 @@ export default function StepOne({ onChangeHandler, febric, errors, setErrors }: 
                     helperText={errors.title ? errors.title : false} 
                     onChange={onChangeHandler}
                 />
-                <Input
-                    label="Price"
-                    id="price"
-                    defaultValue=""
-                    type="number"
-                    name="price"
-                    onChange={onChangeHandler}
-                    error={errors.price ? true : false}
-                    helperText={errors.price ? errors.price : false} 
+                
 
-                // error={true}
-                // helperText="Incorrect entry."
+<Select options={warmth}
+                    value={febric.warmth ?? ""}
+                    label={"Warmth"}
+                    name="warmth"
+                    onChange={onChangeHandler}
+                    error={errors.warmth ? true : false}
+                    helpertext={errors.warmth ? errors.warmth: undefined}
                 />
+
+                
             </div>
 
             <div className={styles.form__row}>
@@ -66,15 +65,27 @@ export default function StepOne({ onChangeHandler, febric, errors, setErrors }: 
                     
                 />
                 
-
-                <Select options={warmth}
-                    value={febric.warmth ?? ""}
-                    label={"Warmth"}
-                    name="warmth"
+                <Input
+                    label="Price"
+                    id="price"
+                    defaultValue=""
+                    type="number"
+                    name="price"
                     onChange={onChangeHandler}
-                    error={errors.warmth ? true : false}
-                    helpertext={errors.warmth ? errors.warmth: undefined}
+                    error={errors.price ? true : false}
+                    helperText={errors.price ? errors.price : false} 
+
                 />
+
+                
+                <Select options={type}
+                    label={"Type"}
+                    value={febric.type ?? ""}
+                    name="type"
+                    onChange={onChangeHandler}
+                    error={errors.type ? true : false}
+                    helperText={errors.type ? errors.type : null}
+            />
             </div>
 
         </div>

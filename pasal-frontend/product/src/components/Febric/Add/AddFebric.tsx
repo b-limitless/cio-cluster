@@ -58,6 +58,12 @@ const steps: { [key in forStepType]: any } = {
             errorMessage: '',
             type: 'select'
         },
+        {
+            name: 'type',
+            regrex: validString,
+            errorMessage: '',
+            type: 'select'
+        }
 
     ],
     two: [
@@ -334,7 +340,7 @@ export default function AddFebric({ }: Props) {
                     step === formStepEnum.six ? submitFebricToServerHandler :
                         nextStepHandler
             }
-            lastStep={step === formStepEnum.eight}
+            lastStep={step === formStepEnum.seven}
             loading={uploadingFebric}>
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
