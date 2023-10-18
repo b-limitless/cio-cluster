@@ -78,17 +78,30 @@ export const productSlice = createSlice({
         error: action.payload,
       };
     },
-    paginateFebric: (state: ProductInterface, action: PayloadAction<number>) => {
-        return {
-            ...state, 
-            page: action.payload
-        }
+    paginateFebric: (
+      state: ProductInterface,
+      action: PayloadAction<number>
+    ) => {
+      return {
+        ...state,
+        page: action.payload,
+      };
     },
     addFebric: (state: ProductInterface, action: PayloadAction<febricType>) => {
-        return {
-            ...state, 
-            febrics:[...state.febrics, action.payload]
-        }
-    }
+      return {
+        ...state,
+        febrics: [...state.febrics, action.payload],
+      };
+    },
   },
 });
+
+export const {
+  fetchFebrics,
+  fetchingFebrics,
+  fetchedError,
+  paginateFebric,
+  addFebric,
+} = productSlice.actions;
+
+export default productSlice.reducer;

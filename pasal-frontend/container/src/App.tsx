@@ -84,9 +84,9 @@ export default function App({ }: Props) {
               setShowProfileSideModel={setShowProfileSideModel}
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
-              actions={{authenticatedUser}}
+              actions={{ authenticatedUser }}
               globalDispatch={dispatch}
-              
+
             >
               <DashboardApp
                 setShowSettingModel={setShowSettingModel}
@@ -110,17 +110,20 @@ export default function App({ }: Props) {
           </Route>
 
           <Route path="/users">
-            <Container selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel}>
+            <Container 
+            selectedMenu={selectedMenu} 
+            setSelectedMenu={setSelectedMenu} 
+            setShowSettingModel={setShowSettingModel}
+            showSettingModel={showSettingModel}>
               <UserApp onSingIn={() => { }} isSignIn={false} />
             </Container>
 
           </Route>
           <Route path="/payments">
-            <Container 
-               selectedMenu={selectedMenu} 
-               setSelectedMenu={setSelectedMenu} 
-               setShowSettingModel={setShowSettingModel}
+            <Container
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu}
+              setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel} >
               <PaymentApp onSingIn={() => { }} isSignIn={false} />
             </Container>
@@ -128,15 +131,21 @@ export default function App({ }: Props) {
           </Route>
 
           <Route path="/products">
-            <Container setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} >
+            <Container 
+            setShowSettingModel={setShowSettingModel}
+            showSettingModel={showSettingModel} 
+            selectedMenu={selectedMenu} 
+            setSelectedMenu={setSelectedMenu} >
               <ProductApp onSingIn={() => { }} isSignIn={false} />
             </Container>
           </Route>
 
           <Route path="/orders">
-            <Container setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel} selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} >
+            <Container 
+            setShowSettingModel={setShowSettingModel}
+            showSettingModel={showSettingModel} 
+            selectedMenu={selectedMenu} 
+            setSelectedMenu={setSelectedMenu} >
               <OrderApp onSingIn={() => { }} isSignIn={false} />
             </Container>
           </Route>
