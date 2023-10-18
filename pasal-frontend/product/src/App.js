@@ -6,17 +6,17 @@ import AddFebric from "./components/Febric/Add";
 import './index.scss';
 
 
-export default ({ history, onSignIn, isSignedIn }) => {
+export default ({ history, onSignIn, isSignedIn, globalDispatch, actions, product }) => {
 
   return (
     <div>
         <Router history={history}>
           <Switch>
           <Route path="/products/febric/add">
-              <AddFebric/>
+              <AddFebric />
             </Route>
             <Route path="/products/febric">
-              <Febric/>
+              <Febric globalDispatch = {globalDispatch} actions={actions} product={product} />
             </Route>
             
             <Route path="/products/thread">

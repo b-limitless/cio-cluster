@@ -13,7 +13,11 @@ const mount = (
     defaultHistory,
     initialPath,
     onSignIn,
-    isSignedIn
+    isSignedIn, 
+    actions,
+    globalDispatch, 
+    product
+    
   }
 ) => {
   
@@ -31,6 +35,9 @@ const mount = (
         history={history}
         onSignIn={onSignIn}
         isSignedIn={isSignedIn}
+        actions={actions}
+        globalDispatch={globalDispatch}
+        product={product}
       />
       ,
 

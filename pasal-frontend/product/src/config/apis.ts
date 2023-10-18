@@ -7,6 +7,6 @@ export const REQUEST_BASE_URI = `${BASE_URI}/${API_PRIFIX}`;
 export const APIS = { 
     product: {
         upload: `${REQUEST_BASE_URI}/products/v1/upload`,
-        new: `${REQUEST_BASE_URI}/products/v1`
+        new: `${REQUEST_BASE_URI}/products/v1`, 
     }
 }

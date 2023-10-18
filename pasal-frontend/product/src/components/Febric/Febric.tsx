@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { mockFebrics } from '../../mock-data/febric';
 import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, CheckboxWithLabel } from "@pasal/cio-component-library"
-
+import { request } from '@pasal/cio-component-library';
 import FebricDetails from './FebricDetails';
+import { APIS } from '../../config/apis';
+import { febricType } from './types/febrics';
+import { ProductInterface } from '../../interfaces/febric.interface';
 
 export enum OrderStatusEnum {
   pending="pending",
@@ -40,13 +43,19 @@ const filterData = [
   // },
 ];
 
-export default function Febric() {
+interface FebricInterface {
+  product: ProductInterface;
+  actions: any; 
+  globalDispatch: any
+}
+
+export default function Febric({product, actions, globalDispatch}: FebricInterface) {
   // Loading the febrics for the  users
   const customStyle = {
     cursor: 'pointer'
   }
 
-
+  console.log("product", product);
   
   const tableHeader = ['title', 'type', 'price', 'material', 'season', 'action'];
 
@@ -67,42 +76,37 @@ export default function Febric() {
     return row;
   });
 
+  // Lets fetch the febrics
+
+  useEffect(() => {
+
+    const fetchFebrics = async() => {
+      globalDispatch(actions.fetchingFebrics(true));
+      try {
+        const respones = await request({
+          url: APIS.product.new, 
+          method: 'get'
+        });
+        globalDispatch(actions.fetchFebrics(respones));
+      } catch(err) {
+        console.error('Could not fetch febric', err);
+      }
+      globalDispatch(actions.fetchingFebrics(false));
+    }
+    fetchFebrics();
+  }, [])
   
+  console.log()
   
   const count = 8;
   return (
     <>
     {showFebricDetailsModel !== -1 && <FebricDetails setShowFebricDetailsModel = {setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel}/>}
-   
-    {/* <div className={styles.febric__wrapper}>
-    <div className={styles.febric__container}>
-      <div className={styles.row}>
-        <div className={styles.title}>Product Febric - List</div>
-        <div className={styles.add__new}>
-          <a href="/product/febric/add"><Button variant="primary" text="Add Febric" /></a>
-        </div>
-      </div>
-
-      <div className={styles.row}>
-        <div className={styles.table__container}>
-          <div className={styles.filters}>
-            <div>Hack</div>
-          </div>
-          <div className={styles.table}>
-              <BasicTable tableHeader={tableHeader} tableData={tableData} tableRow={tableData[0]} showTableHead/>
-          </div>
-          <div className={styles.pagination}>
-            <div>Pagination</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    </div> */}
-
+  
         <DataTable
           setShowModel={setShowFebricDetailsModel}
           tableHeader={tableHeader}
-          tableData={mockFebrics.slice(page * count, count + (page * count))}
+          tableData={[]}
           showFebricModels={false}
           detailsComponents={null}
           showDetailReactNode={<img src ={svgCDNAssets.eye}/>}
@@ -116,7 +120,7 @@ export default function Febric() {
           page={page}
           setPage={setPage}
           count={count}
-          loading={false}
+          loading={product.loading}
           
         />
       

@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const febricModel = {
+export const febricModel = {
   title: "New Title",
   warmth: "Thermal_Conductivity",
   characters: ["Anti-Microbial", "Stain-Resistant"],
@@ -103,5 +103,7 @@ export const {
   paginateFebric,
   addFebric,
 } = productSlice.actions;
+
+export const productActions = productSlice.actions;
 
 export default productSlice.reducer;

@@ -12,7 +12,8 @@ function useRemoteApp(
     setShowProfileSideModel,
     actions, 
     store, 
-    globalDispatch
+    globalDispatch, 
+    product
   }
 ) {
   const ref = useRef(null);
@@ -35,7 +36,8 @@ function useRemoteApp(
       showSettingModel,
       actions, 
       store,
-      globalDispatch
+      globalDispatch, 
+      product
     });
     history.listen(onParentNavigate);
   }, [
@@ -46,7 +48,8 @@ function useRemoteApp(
     showSettingModel,
     actions, 
     store, 
-    globalDispatch
+    globalDispatch, 
+    product
   ]);
 
   return <div ref={ref}></div>;

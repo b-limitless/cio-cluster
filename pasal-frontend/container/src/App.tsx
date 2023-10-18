@@ -18,6 +18,15 @@ import authSlice, { verifyResponse, authenticatedUser } from "../reducers/authSl
 import { Store } from "./store";
 import useSetAuthenticatedUser from "../hooks/useSetAuthenticatedUser";
 
+import {
+  fetchingFebrics,
+  fetchFebrics,
+  fetchedError,
+  paginateFebric,
+  addFebric, 
+  febricModel
+} from "../reducers/productSlice";
+
 
 type Props = {}
 
@@ -32,7 +41,7 @@ export default function App({ }: Props) {
 
   const dispatch = useDispatch()
 
-  const { auth } = useSelector((state: RootState) => state);
+  const { auth, product } = useSelector((state: RootState) => state);
 
 
   // useSetAuthenticatedUser();
@@ -72,6 +81,11 @@ export default function App({ }: Props) {
   //   }
   // }, [auth]);
 
+  // Testing if febric could be dispatched
+  // useEffect(() => {
+  //   dispatch(addFebric(febricModel))
+  // }, [])
+
 
   return (
     <>
@@ -110,11 +124,11 @@ export default function App({ }: Props) {
           </Route>
 
           <Route path="/users">
-            <Container 
-            selectedMenu={selectedMenu} 
-            setSelectedMenu={setSelectedMenu} 
-            setShowSettingModel={setShowSettingModel}
-            showSettingModel={showSettingModel}>
+            <Container
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu}
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}>
               <UserApp onSingIn={() => { }} isSignIn={false} />
             </Container>
 
@@ -131,21 +145,33 @@ export default function App({ }: Props) {
           </Route>
 
           <Route path="/products">
-            <Container 
-            setShowSettingModel={setShowSettingModel}
-            showSettingModel={showSettingModel} 
-            selectedMenu={selectedMenu} 
-            setSelectedMenu={setSelectedMenu} >
-              <ProductApp onSingIn={() => { }} isSignIn={false} />
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <ProductApp
+                onSingIn={() => { }}
+                isSignIn={false}
+                actions={{
+                  fetchingFebrics,
+                  fetchFebrics,
+                  fetchedError,
+                  paginateFebric,
+                  addFebric
+                }}
+                globalDispatch={dispatch}
+                product={product}
+              />
             </Container>
           </Route>
 
           <Route path="/orders">
-            <Container 
-            setShowSettingModel={setShowSettingModel}
-            showSettingModel={showSettingModel} 
-            selectedMenu={selectedMenu} 
-            setSelectedMenu={setSelectedMenu} >
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
               <OrderApp onSingIn={() => { }} isSignIn={false} />
             </Container>
           </Route>
