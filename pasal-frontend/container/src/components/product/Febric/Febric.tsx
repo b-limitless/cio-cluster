@@ -53,7 +53,7 @@ interface FebricInterface {
   globalDispatch: any
 }
 //product, actions, globalDispatch
-export default function Febric({}: FebricInterface) {
+export default function Febric() {
   // Loading the febrics for the  users
   const customStyle = {
     cursor: 'pointer'

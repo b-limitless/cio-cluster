@@ -22,7 +22,8 @@ import { request } from "@pasal/cio-component-library";
 import { APIS } from "./apis";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 import AddFebric from "./components/product/Febric/Add";
-
+import Febric from "./components/product/Febric/Febric";
+import Thread from "./components/product/Thread/Thread";
 
 
 type Props = {}
@@ -68,27 +69,6 @@ export default function App({ }: Props) {
   //   }
 
   // }, [selectedMenu]);
-
-
-
-  // useEffect(() => {
-  //   const fetchFebricsOnComponentMount = async() => {
-
-  //     try {
-  //       const respones = await request({
-  //         url: '/api/products/v1', 
-  //         method: 'get'
-  //       });
-
-  //     } catch(err) {
-  //       console.error('Could not fetch febric', err);
-  //     }
-
-  //   }
-  //   fetchFebricsOnComponentMount();
-  // }, [])
-
-
 
 
   return (
@@ -146,29 +126,28 @@ export default function App({ }: Props) {
 
           </Route> */}
 
-          <Route path="/products/febric/add">
+          <Route path="/products/febric">
             <Container
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu} >
-              
-              <AddFebric/>
-              {/* <ProductApp
-              // setShowSettingModel={() => {}}
-              // actions={{
-              //   fetchingFebrics,
-              //   fetchFebrics,
-              //   fetchedError,
-              //   paginateFebric,
-              //   addFebric
-              // }}
-              // globalDispatch={dispatch}
-              // product={product}
-              /> */}
+              <Febric/>
             </Container>
 
             <ProductApp />
+          </Route>
+
+          <Route path="/products/thread">
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <Thread/>
+            </Container>
+
+            
           </Route>
 
           {/* <Route path="/orders">
