@@ -1,35 +1,37 @@
 import { createBrowserHistory } from "history";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { ReactNode, Suspense, lazy, useState } from "react";
+import { useDispatch } from "react-redux";
 import { Route, Router, Switch } from "react-router-dom";
+import { authenticatedUser } from "../reducers/authSlice";
 import Container from "./components/common/Container";
-import DashboardApp from "./components/remotes/DashboardApp";
-import ProductApp from "./components/remotes/ProductApp";
-import UserApp from "./components/remotes/UserApp";
-import AuthApp from "./components/remotes/AuthApp";
-import OrderApp from "./components/remotes/OrderApp";
-import PaymentApp from "./components/remotes/PaymentApp";
-import { menuEnum, menuIds } from "./config/navMenu";
-import { splitTitleToUrl } from "./pure-functions/splitTitleToUrl";
-import "./styles/main.scss";
-import { useForkRef } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./store";
-import authSlice, { verifyResponse, authenticatedUser } from "../reducers/authSlice";
-import { Store } from "./store";
-import useSetAuthenticatedUser from "../hooks/useSetAuthenticatedUser";
-import { Link } from "react-router-dom";
-import { request } from "@pasal/cio-component-library";
-import { APIS } from "./apis";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 import AddFebric from "./components/product/Febric/Add";
 import Febric from "./components/product/Febric/Febric";
 import Thread from "./components/product/Thread/Thread";
+import AuthApp from "./components/remotes/AuthApp";
+import ProductApp from "./components/remotes/ProductApp";
+import { menuIds } from "./config/navMenu";
+import "./styles/main.scss";
+
+// Lazy loading components
+const LazyFebric = lazy(() => import("./components/product/Febric/Febric"));
 
 
 type Props = {}
 
 // Use them based on the clicked menu we can load the required component
 // Need to track the state which will measure 
+
+interface TemplateWithContainer {
+  children: ReactNode;
+  selectedMenu: string;
+  setSelectedMenu: Function;
+  setShowProfileSideModel: Function;
+  setShowSettingModel: Function;
+  showSettingModel: boolean;
+
+}
+
 const history = createBrowserHistory();
 
 export default function App({ }: Props) {
@@ -41,35 +43,7 @@ export default function App({ }: Props) {
   const dispatch = useDispatch();
 
 
-  // useSetAuthenticatedUser();
-
-  // useEffect(() => {
-  //   if (selectedMenu === menuEnum.Dashboard) {
-  //     history.push(splitTitleToUrl(menuEnum.Dashboard));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Products_Febric) {
-  //     history.push(splitTitleToUrl(menuEnum.Products_Febric));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Products_Thread) {
-  //     history.push(splitTitleToUrl(menuEnum.Products_Thread));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Users) {
-  //     history.push(splitTitleToUrl(menuEnum.Users));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Orders) {
-  //     history.push(splitTitleToUrl(menuEnum.Orders));
-  //   }
-
-  //   if (selectedMenu === menuEnum.Payments) {
-  //     history.push(splitTitleToUrl(menuEnum.Payments));
-  //   }
-
-  // }, [selectedMenu]);
-
+  // useSetAuthenticatedUser()
 
   return (
     <>
@@ -83,8 +57,6 @@ export default function App({ }: Props) {
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
               actions={{ authenticatedUser }}
-            // globalDispatch={dispatch}
-
             >
 
               <Dashboard
@@ -92,7 +64,6 @@ export default function App({ }: Props) {
                 showSettingModel={showSettingModel}
                 setShowProfileSideModel={setShowProfileSideModel}
                 showProfileSideModel={showProfileSideModel} />
-
             </Container>
 
 
@@ -104,6 +75,53 @@ export default function App({ }: Props) {
               globalDispatch={dispatch}
             />
           </Route>
+
+          <Route exact path="/products/febric">
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <Suspense fallback={<div>Please wait....</div>}>
+
+                <LazyFebric />
+              </Suspense>
+            </Container>
+
+            <ProductApp />
+          </Route>
+
+          <Route path="/products/thread">
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <Thread />
+            </Container>
+
+
+          </Route>
+
+          <Route path="/products/febric/add">
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <AddFebric />
+            </Container>
+          </Route>
+
+          {/* <Route path="/orders">
+            <Container
+              setShowSettingModel={setShowSettingModel}
+              showSettingModel={showSettingModel}
+              selectedMenu={selectedMenu}
+              setSelectedMenu={setSelectedMenu} >
+              <OrderApp />
+            </Container>
+          </Route> */}
 
           {/* <Route path="/users">
             <Container
@@ -124,40 +142,6 @@ export default function App({ }: Props) {
               <PaymentApp  />
             </Container>
 
-          </Route> */}
-
-          <Route path="/products/febric">
-            <Container
-              setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel}
-              selectedMenu={selectedMenu}
-              setSelectedMenu={setSelectedMenu} >
-              <Febric/>
-            </Container>
-
-            <ProductApp />
-          </Route>
-
-          <Route path="/products/thread">
-            <Container
-              setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel}
-              selectedMenu={selectedMenu}
-              setSelectedMenu={setSelectedMenu} >
-              <Thread/>
-            </Container>
-
-            
-          </Route>
-
-          {/* <Route path="/orders">
-            <Container
-              setShowSettingModel={setShowSettingModel}
-              showSettingModel={showSettingModel}
-              selectedMenu={selectedMenu}
-              setSelectedMenu={setSelectedMenu} >
-              <OrderApp />
-            </Container>
           </Route> */}
         </Switch>
       </Router>
