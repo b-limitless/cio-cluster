@@ -21,6 +21,8 @@ import { Link } from "react-router-dom";
 import { request } from "@pasal/cio-component-library";
 import { APIS } from "./apis";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
+import AddFebric from "./components/product/Febric/Add";
+
 
 
 type Props = {}
@@ -144,14 +146,15 @@ export default function App({ }: Props) {
 
           </Route> */}
 
-          <Route path="/products">
+          <Route path="/products/febric/add">
             <Container
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu} >
-
-              <ProductApp
+              
+              <AddFebric/>
+              {/* <ProductApp
               // setShowSettingModel={() => {}}
               // actions={{
               //   fetchingFebrics,
@@ -162,7 +165,7 @@ export default function App({ }: Props) {
               // }}
               // globalDispatch={dispatch}
               // product={product}
-              />
+              /> */}
             </Container>
 
             <ProductApp />

@@ -1,0 +1,233 @@
+@import "@pasal/common-style/styles/base/functions.scss";
+@import "@pasal/common-style/styles/abstract/variables.scss";
+
+.fedInModel {
+    animation: fadeModelIn .2s ease-in;
+}
+
+.fadeOutModel {
+    animation: fadeModelOut .2s ease-out;
+}
+
+.model__container {
+  position: fixed;
+  // We are using this inside the container 
+  // Could not use 100vw ceause in container there is 
+  // Left side navbar with size 16.5rem;
+  // We need to subtract that from with 
+  width: calc(100vw - (16.25rem + 1rem)); // Left grid pluse grid gap
+  height: 100vh;
+  top: 0;
+  z-index: 1;
+  backdrop-filter: blur(1px);
+
+
+  .febric__container {
+    max-width: 1112px;
+    height: 773px;
+    width: 100%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    padding: 1rem 1rem 1rem pxToRem(44);
+    border-radius: 6px;
+
+    
+    .action {
+      display: flex;
+      justify-content: flex-end;
+      .close {
+        background: #ffffff;
+        border-radius: 6px;
+        padding: 8px 11px;
+        cursor: pointer;
+      }
+    }
+    .details {
+      margin-top: pxToRem(85);
+      padding: pxToRem(19);
+      background-color: #ffffff;
+      max-width: 619px;
+      position: relative;
+
+      .toggle__checkbox {
+        display: none;
+      }
+
+      .toggle__checkbox:checked ~ .hidden__details {
+        display: block;
+      }
+      .toggle__checkbox:checked + label img {
+        transform: rotate(180deg);
+      }
+      .toggle__label {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+
+        img {
+            transition:all .10s ease-out;
+        }
+      }
+
+      .d__row {
+        display: flex;
+        .name__cols {
+          margin-right: auto;
+        }
+        .col {
+          display: flex;
+          column-gap: 14px;
+          flex-direction: column;
+          row-gap: 12px;
+
+          .toggle__icon {
+            transform: rotate(180deg);
+
+          }
+          .intro__details {
+            display: flex;
+            align-items: center;
+            column-gap: 14px;
+            .features {
+              display: flex;
+              column-gap: 5px;
+              .item {
+                font-style: normal;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 15px;
+                color: #848484;
+                padding: 2px 6px 2px 7px;
+                border: 0.5px solid #848484;
+              }
+            }
+          }
+
+          .name__type {
+            * {
+              font-family: $secondary-font-family;
+            }
+            .name {
+              font-style: normal;
+              font-weight: 400;
+              font-size: 17px;
+              line-height: 22px;
+              /* identical to box height */
+
+              color: #000000;
+            }
+            .type {
+              font-style: normal;
+              font-weight: 400;
+              font-size: 17px;
+              line-height: 22px;
+              color: #848484;
+            }
+          }
+
+          .specification {
+            font-family: $secondary-font-family;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 15px;
+
+            /* Gray-Medium-2 */
+
+            color: #848484;
+          }
+        }
+      }
+      .hidden__details {
+        display: none;
+        margin-top: 27px;
+        .attribures {
+          display: flex;
+          flex-direction: column;
+          row-gap: 1rem;
+          .item {
+            * {
+                font-family: $secondary-font-family;
+            }
+            display: flex;
+            flex-direction: column;
+            row-gap: 11px;
+            .title__icon {
+              display: flex;
+              align-items: center;
+              column-gap: 11px;
+
+              .title {
+                font-style: normal;
+                font-weight: 400;
+                font-size: 14px;
+                line-height: 18px;
+               
+                text-transform: uppercase;
+
+                color: #000000;
+              }
+            }
+            .description {
+                font-style: normal;
+                font-weight: 400;
+                font-size: 12px;
+                line-height: 15px;
+
+                color: #000000;
+            }
+          }
+        }
+        .features__reviews {
+            margin-top: pxToRem(40);
+            display: flex;
+            flex-direction: column;
+            row-gap: 12px;
+            * {
+                font-family: $secondary-font-family;
+            }
+            
+            .row {
+                display: flex;
+
+                .col:first-child {
+                    margin-right: auto;
+                }
+            }
+            
+        }
+      }
+      .hide__info {
+        margin-top: 27px;
+        font-family: $secondary-font-family;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+
+@keyframes fadeModelIn {
+    from {
+        opacity: 0;
+        visibility:hidden;
+    }
+    to {
+        opacity: 1;
+        visibility:visible;
+    }
+}
+
+@keyframes fadeModelOut {
+    from {
+        opacity: 1;
+        visibility:visible;
+    }
+    to {
+        opacity: 0;
+        visibility:hidden;
+    }
+}
