@@ -10,8 +10,7 @@ function useRemoteApp(
     setShowProfileSideModel,
     actions, 
     store, 
-    globalDispatch, 
-    product
+    globalDispatch
   }
 ) {
   const ref = useRef(null);
@@ -45,7 +44,6 @@ function useRemoteApp(
     actions, 
     store, 
     globalDispatch, 
-    product
   ]);
 
   return <div ref={ref}></div>;

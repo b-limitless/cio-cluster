@@ -5,8 +5,9 @@ import Febric from "./components/Febric/Febric";
 import AddFebric from "./components/Febric/Add";
 import './index.scss';
 
-
-export default ({ history, globalDispatch, actions, product }) => {
+// globalDispatch, actions, product 
+//globalDispatch = {globalDispatch} actions={actions} product={product}
+export default ({ history}) => {
 
   return (
     <div>
@@ -16,7 +17,7 @@ export default ({ history, globalDispatch, actions, product }) => {
               <AddFebric />
             </Route>
             <Route path="/products/febric">
-              <Febric globalDispatch = {globalDispatch} actions={actions} product={product} />
+              <Febric  />
             </Route>
             
             <Route path="/products/thread">

@@ -153,16 +153,16 @@ export default function App({ }: Props) {
               setSelectedMenu={setSelectedMenu} >
               
               <ProductApp
-
-                actions={{
-                  fetchingFebrics,
-                  fetchFebrics,
-                  fetchedError,
-                  paginateFebric,
-                  addFebric
-                }}
-                globalDispatch={dispatch}
-                product={product}
+              setShowSettingModel={setShowSettingModel}
+                // actions={{
+                //   fetchingFebrics,
+                //   fetchFebrics,
+                //   fetchedError,
+                //   paginateFebric,
+                //   addFebric
+                // }}
+                // globalDispatch={dispatch}
+                // product={product}
               />
             </Container>
           </Route>

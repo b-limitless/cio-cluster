@@ -1,6 +1,6 @@
 import { mount } from "product/ProductApp";
 import useRemoteApp from "../../hooks/useRemoteApp";
-
-export default ({ actions, globalDispatch, product }) => {
-  return useRemoteApp(mount, {actions, globalDispatch, product });
+// actions, globalDispatch, product 
+export default ({setShowSettingModel }) => {
+  return useRemoteApp(mount, {setShowSettingModel});  //{actions, globalDispatch, product }
 };

@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { createMemoryHistory, createBrowserHistory } from "history";
 import App from "./App";
-
-
+import { Provider } from "react-redux";
+import { Store } from "./store";
 
 // Mount function to start up the app
 const mount = (
@@ -12,13 +12,11 @@ const mount = (
     onNavigate,
     defaultHistory,
     initialPath,
-    actions,
-    globalDispatch, 
-    product
-    
+    // actions,
+    // globalDispatch,
+    // product
   }
 ) => {
-  
   const history =
     defaultHistory ||
     createMemoryHistory({
@@ -29,13 +27,14 @@ const mount = (
     history.listen(onNavigate);
   }
   ReactDOM.render(
+    <Provider store={Store}>
       <App
         history={history}
-        actions={actions}
-        globalDispatch={globalDispatch}
-        product={product}
+        // actions={actions}
+        // globalDispatch={globalDispatch}
+        // product={product}
       />
-      ,
+    </Provider>,
 
     el
   );
@@ -43,7 +42,7 @@ const mount = (
   return {
     onParentNavigate({ pathname: nextPathname }) {
       const { pathname } = history.location;
-      
+
       if (pathname !== nextPathname) {
         history.push(nextPathname);
       }

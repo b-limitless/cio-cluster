@@ -7,6 +7,10 @@ import { APIS } from '../../config/apis';
 import { febricType } from './types/febrics';
 import { ProductInterface } from '../../interfaces/febric.interface';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useDispatch } from 'react-redux';
+import { fetchFebrics, fetchingFebrics } from '../../../reducers/productSlice';
 
 export enum OrderStatusEnum {
   pending="pending",
@@ -49,18 +53,21 @@ interface FebricInterface {
   actions: any; 
   globalDispatch: any
 }
-
-export default function Febric({product, actions, globalDispatch}: FebricInterface) {
+//product, actions, globalDispatch
+export default function Febric({}: FebricInterface) {
   // Loading the febrics for the  users
   const customStyle = {
     cursor: 'pointer'
   }
 
-  const {febrics, loading} = product;
+  // const {febrics, loading} = product;
   
   const tableHeader = ['title', 'type', 'price',  'febricSeasons'];
 
+  const {product: {loading, febrics}} = useSelector((state:RootState) => state);
+  const dispatch = useDispatch();
   
+  console.log("loading, febrics", loading, febrics)
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
   const [showModel, setShowModel] = useState<boolean>(false);
@@ -80,20 +87,20 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
   // Lets fetch the febrics
 
   useEffect(() => {
-    const fetchFebrics = async() => {
-      globalDispatch(actions.fetchingFebrics(true));
+    const fetchFebricsOnComponentMount = async() => {
+      dispatch(fetchingFebrics(true));
       try {
         const respones = await request({
           url: APIS.product.new, 
           method: 'get'
         });
-        globalDispatch(actions.fetchFebrics(respones));
+        dispatch(fetchFebrics(respones));
       } catch(err) {
         console.error('Could not fetch febric', err);
       }
-      globalDispatch(actions.fetchingFebrics(false));
+      dispatch(fetchingFebrics(false));
     }
-    fetchFebrics();
+    fetchFebricsOnComponentMount();
   }, [])
   
   const count = 8;
@@ -104,7 +111,7 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
           setShowModel={setShowFebricDetailsModel}
           tableHeader={tableHeader}
           // tableData={mockFebrics.slice(page * count, count + (page * count))}
-          tableData={febrics}
+          tableData={[]}
           showFebricModels={false}
           detailsComponents={null}
           showDetailReactNode={<img src ={svgCDNAssets.eye}/>}
@@ -118,7 +125,7 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
           page={page}
           setPage={setPage}
           count={count}
-          loading={product.loading}
+          loading={false}
           rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
         />
 
