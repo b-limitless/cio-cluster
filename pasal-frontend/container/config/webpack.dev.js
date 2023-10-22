@@ -5,10 +5,11 @@ const packageJson = require("../package.json");
 
 const port = 80;
 
+
 const devConfig = {
   mode: "development",
   output: {
-    publicPath: `http://pasal.dev:${port}/`
+    publicPath: `http://localhost:${port}/`
   },
   devServer: {
     host: '0.0.0.0',

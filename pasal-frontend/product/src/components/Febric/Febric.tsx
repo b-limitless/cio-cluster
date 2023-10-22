@@ -67,7 +67,7 @@ export default function Febric({}: FebricInterface) {
   const {product: {loading, febrics}} = useSelector((state:RootState) => state);
   const dispatch = useDispatch();
   
-  console.log("loading, febrics", loading, febrics)
+  
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
   const [showModel, setShowModel] = useState<boolean>(false);
@@ -111,7 +111,7 @@ export default function Febric({}: FebricInterface) {
           setShowModel={setShowFebricDetailsModel}
           tableHeader={tableHeader}
           // tableData={mockFebrics.slice(page * count, count + (page * count))}
-          tableData={[]}
+          tableData={febrics}
           showFebricModels={false}
           detailsComponents={null}
           showDetailReactNode={<img src ={svgCDNAssets.eye}/>}
@@ -129,7 +129,7 @@ export default function Febric({}: FebricInterface) {
           rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
         />
 
-        
+        <Link to="/dashboard">Dashboard</Link>
       
     
     </>

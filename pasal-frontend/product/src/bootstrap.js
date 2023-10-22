@@ -12,11 +12,11 @@ const mount = (
     onNavigate,
     defaultHistory,
     initialPath,
-    // actions,
-    // globalDispatch,
-    // product
+
   }
 ) => {
+
+  console.log("reloading")
   const history =
     defaultHistory ||
     createMemoryHistory({
@@ -30,9 +30,6 @@ const mount = (
     <Provider store={Store}>
       <App
         history={history}
-        // actions={actions}
-        // globalDispatch={globalDispatch}
-        // product={product}
       />
     </Provider>,
 

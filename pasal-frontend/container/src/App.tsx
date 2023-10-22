@@ -1,5 +1,5 @@
 import { createBrowserHistory } from "history";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Route, Router, Switch } from "react-router-dom";
 import Container from "./components/common/Container";
 import DashboardApp from "./components/remotes/DashboardApp";
@@ -17,15 +17,10 @@ import { RootState } from "./store";
 import authSlice, { verifyResponse, authenticatedUser } from "../reducers/authSlice";
 import { Store } from "./store";
 import useSetAuthenticatedUser from "../hooks/useSetAuthenticatedUser";
-
-import {
-  fetchingFebrics,
-  fetchFebrics,
-  fetchedError,
-  paginateFebric,
-  addFebric, 
-  febricModel
-} from "../reducers/productSlice";
+import { Link } from "react-router-dom";
+import { request } from "@pasal/cio-component-library";
+import { APIS } from "./apis";
+import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 
 
 type Props = {}
@@ -39,56 +34,59 @@ export default function App({ }: Props) {
   const [showProfileSideModel, setShowProfileSideModel] = useState<boolean>(false);
   const [showSettingModel, setShowSettingModel] = useState<boolean>(false);
 
-  const dispatch = useDispatch()
 
-  const { auth, product } = useSelector((state: RootState) => state);
+  const dispatch = useDispatch();
 
 
   // useSetAuthenticatedUser();
 
-  useEffect(() => {
-    if (selectedMenu === menuEnum.Dashboard) {
-      history.push(splitTitleToUrl(menuEnum.Dashboard));
-    }
-
-    if (selectedMenu === menuEnum.Products_Febric) {
-      history.push(splitTitleToUrl(menuEnum.Products_Febric));
-    }
-
-    if (selectedMenu === menuEnum.Products_Thread) {
-      history.push(splitTitleToUrl(menuEnum.Products_Thread));
-    }
-   
-    if (selectedMenu === menuEnum.Users) {
-      history.push(splitTitleToUrl(menuEnum.Users));
-    }
-
-    if (selectedMenu === menuEnum.Orders) {
-      history.push(splitTitleToUrl(menuEnum.Orders));
-    }
-
-    if (selectedMenu === menuEnum.Payments) {
-      history.push(splitTitleToUrl(menuEnum.Payments));
-    }
-
-  }, [selectedMenu]);
-
   // useEffect(() => {
-  //   if (auth) {
+  //   if (selectedMenu === menuEnum.Dashboard) {
   //     history.push(splitTitleToUrl(menuEnum.Dashboard));
   //   }
 
-  //   if (!auth) {
-  //     history.push(splitTitleToUrl(menuEnum.Auth_Signin));
+  //   if (selectedMenu === menuEnum.Products_Febric) {
+  //     history.push(splitTitleToUrl(menuEnum.Products_Febric));
   //   }
-  // }, [auth]);
 
-  // Testing if febric could be dispatched
+  //   if (selectedMenu === menuEnum.Products_Thread) {
+  //     history.push(splitTitleToUrl(menuEnum.Products_Thread));
+  //   }
+
+  //   if (selectedMenu === menuEnum.Users) {
+  //     history.push(splitTitleToUrl(menuEnum.Users));
+  //   }
+
+  //   if (selectedMenu === menuEnum.Orders) {
+  //     history.push(splitTitleToUrl(menuEnum.Orders));
+  //   }
+
+  //   if (selectedMenu === menuEnum.Payments) {
+  //     history.push(splitTitleToUrl(menuEnum.Payments));
+  //   }
+
+  // }, [selectedMenu]);
+
+
+
   // useEffect(() => {
-  //   dispatch(addFebric(febricModel))
+  //   const fetchFebricsOnComponentMount = async() => {
+
+  //     try {
+  //       const respones = await request({
+  //         url: '/api/products/v1', 
+  //         method: 'get'
+  //       });
+
+  //     } catch(err) {
+  //       console.error('Could not fetch febric', err);
+  //     }
+
+  //   }
+  //   fetchFebricsOnComponentMount();
   // }, [])
 
-  console.log('selected meneu', selectedMenu)
+
 
 
   return (
@@ -103,17 +101,18 @@ export default function App({ }: Props) {
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
               actions={{ authenticatedUser }}
-              globalDispatch={dispatch}
+            // globalDispatch={dispatch}
 
             >
-              <DashboardApp
+
+              <Dashboard
                 setShowSettingModel={setShowSettingModel}
                 showSettingModel={showSettingModel}
                 setShowProfileSideModel={setShowProfileSideModel}
-                showProfileSideModel={showProfileSideModel}
+                showProfileSideModel={showProfileSideModel} />
 
-              />
             </Container>
+
 
           </Route>
 
@@ -124,7 +123,7 @@ export default function App({ }: Props) {
             />
           </Route>
 
-          <Route path="/users">
+          {/* <Route path="/users">
             <Container
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu}
@@ -133,8 +132,8 @@ export default function App({ }: Props) {
               <UserApp />
             </Container>
 
-          </Route>
-          <Route path="/payments">
+          </Route> */}
+          {/* <Route path="/payments">
             <Container
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu}
@@ -143,7 +142,7 @@ export default function App({ }: Props) {
               <PaymentApp  />
             </Container>
 
-          </Route>
+          </Route> */}
 
           <Route path="/products">
             <Container
@@ -151,23 +150,25 @@ export default function App({ }: Props) {
               showSettingModel={showSettingModel}
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu} >
-              
+
               <ProductApp
-              setShowSettingModel={setShowSettingModel}
-                // actions={{
-                //   fetchingFebrics,
-                //   fetchFebrics,
-                //   fetchedError,
-                //   paginateFebric,
-                //   addFebric
-                // }}
-                // globalDispatch={dispatch}
-                // product={product}
+              // setShowSettingModel={() => {}}
+              // actions={{
+              //   fetchingFebrics,
+              //   fetchFebrics,
+              //   fetchedError,
+              //   paginateFebric,
+              //   addFebric
+              // }}
+              // globalDispatch={dispatch}
+              // product={product}
               />
             </Container>
+
+            <ProductApp />
           </Route>
 
-          <Route path="/orders">
+          {/* <Route path="/orders">
             <Container
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}
@@ -175,7 +176,7 @@ export default function App({ }: Props) {
               setSelectedMenu={setSelectedMenu} >
               <OrderApp />
             </Container>
-          </Route>
+          </Route> */}
         </Switch>
       </Router>
 

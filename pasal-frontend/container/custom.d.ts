@@ -6,4 +6,6 @@ declare module "*.svg" {
 declare module "*.jpg";
 declare module "*.png";
 declare module "*.jpeg";
-declare module "*.gif";s
+declare module "*.gif";
+declare module "*.module.scss";
+declare module "*.json"

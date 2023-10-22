@@ -16,10 +16,10 @@ interface ContainerInterface {
 }
 
 export default function Container({ setShowSettingModel, showSettingModel, children, setSelectedMenu, selectedMenu, setShowProfileSideModel, actions, globalDispatch }: ContainerInterface) {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
 
-    useSetAuthenticatedUser({setLoading});
+    // useSetAuthenticatedUser({setLoading});
 
     if(loading) {
         return <div className="loading">
