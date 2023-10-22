@@ -14,13 +14,13 @@ export const menuIcons = {
     payments: <Payments/>
 
 }
-
+// /products/thread
 export enum menuEnum {
     Dashboard = "Dashboard",
     Products_Febric = "Products_Febric",
     Product_Shirts = "Product_Shirts",
     Product_Pants = "Product_Pants",
-    Product_Thread = "Product_Thread",
+    Products_Thread = "Products_Thread",
     Auth_Signin = "Auth_Signin",
     Auth_Signup = "Auth_Signup", 
     Users = "Users", 

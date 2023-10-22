@@ -3,8 +3,6 @@ import useRemoteApp from "../../hooks/useRemoteApp";
 export default ({
   setShowSettingModel,
   showSettingModel,
-  onSingIn,
-  isSignIn,
   showProfileSideModel,
   setShowProfileSideModel,
   
@@ -12,8 +10,6 @@ export default ({
   return useRemoteApp(mount, {
     setShowSettingModel,
     showSettingModel,
-    onSingIn,
-    isSignIn,
     showProfileSideModel,
     setShowProfileSideModel,
     

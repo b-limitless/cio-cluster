@@ -5,11 +5,9 @@ const ListOrderLazyLoad = lazy(() => import("./components/order/List"));
 
 interface AppInterface {
   history?: any;
-  onSignIn?:Function;
-  isSignedIn?:boolean; 
 }
 
-export default ({ history, onSignIn, isSignedIn }: AppInterface) => {
+export default ({ history }: AppInterface) => {
   return (
     <div>
       <Router history={history}>

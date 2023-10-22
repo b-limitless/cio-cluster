@@ -6,8 +6,6 @@ function useRemoteApp(
   {
     setShowSettingModel,
     showSettingModel,
-    onSingIn,
-    isSignIn,
     showProfileSideModel,
     setShowProfileSideModel,
     actions, 
@@ -28,8 +26,6 @@ function useRemoteApp(
           history.push(nextPathname);
         }
       },
-      onSingIn,
-      isSignIn,
       showProfileSideModel,
       setShowProfileSideModel,
       setShowSettingModel,
@@ -41,7 +37,7 @@ function useRemoteApp(
     });
     history.listen(onParentNavigate);
   }, [
-    isSignIn,
+   
     showProfileSideModel,
     setShowProfileSideModel,
     setShowSettingModel,

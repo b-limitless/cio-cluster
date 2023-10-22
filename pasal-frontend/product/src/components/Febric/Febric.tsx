@@ -6,6 +6,7 @@ import FebricDetails from './FebricDetails';
 import { APIS } from '../../config/apis';
 import { febricType } from './types/febrics';
 import { ProductInterface } from '../../interfaces/febric.interface';
+import { Link } from 'react-router-dom';
 
 export enum OrderStatusEnum {
   pending="pending",
@@ -55,9 +56,9 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
     cursor: 'pointer'
   }
 
-  console.log("product", product);
+  const {febrics, loading} = product;
   
-  const tableHeader = ['title', 'type', 'price', 'material', 'season', 'action'];
+  const tableHeader = ['title', 'type', 'price',  'febricSeasons'];
 
   
 
@@ -71,15 +72,14 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
     setShowFebricDetailsModel(i);
   }
 
-  mockFebrics.map((row:any, i:number) => {
-    row.action = <><a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}<a>Edit</a></>;
-    return row;
-  });
+  // mockFebrics.map((row:any, i:number) => {
+  //   row.action = <><a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}<a>Edit</a></>;
+  //   return row;
+  // });
 
   // Lets fetch the febrics
 
   useEffect(() => {
-
     const fetchFebrics = async() => {
       globalDispatch(actions.fetchingFebrics(true));
       try {
@@ -96,23 +96,21 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
     fetchFebrics();
   }, [])
   
-  console.log()
-  
   const count = 8;
   return (
     <>
     {showFebricDetailsModel !== -1 && <FebricDetails setShowFebricDetailsModel = {setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel}/>}
-  
         <DataTable
           setShowModel={setShowFebricDetailsModel}
           tableHeader={tableHeader}
-          tableData={[]}
+          // tableData={mockFebrics.slice(page * count, count + (page * count))}
+          tableData={febrics}
           showFebricModels={false}
           detailsComponents={null}
           showDetailReactNode={<img src ={svgCDNAssets.eye}/>}
           tableTitle={"Febric"}
           showToLeftButton={{url: "/products/febric/add", label: "Add Febric"}}
-          setShowSelectRowId={() => { }}
+          setShowSelectRowId={undefined}
           filterData={filterData}
           filters={filters} 
           setFilters={setFilters}
@@ -121,8 +119,10 @@ export default function Febric({product, actions, globalDispatch}: FebricInterfa
           setPage={setPage}
           count={count}
           loading={product.loading}
-          
+          rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
         />
+
+        
       
     
     </>

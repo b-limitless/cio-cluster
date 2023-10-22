@@ -72,7 +72,7 @@ export async function uploadFileToCloudinary(userId:string, file:Express.Request
 
   } catch (error) {
     logger.log("error", `Error uploading image: ${error}`, )
-    throw new Error(`Error uploading image:${error}`, );
+    throw new Error(`Error uploading image:${JSON.stringify(error)}`, );
   }
 }
 

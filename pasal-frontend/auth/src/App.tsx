@@ -11,8 +11,6 @@ import useUserIsAuthenticated from "./hooks/useUserIsAuthenticated";
 
 interface AppInterface {
   history: any;
-  onSignin: Function,
-  isSignedIn: boolean,
   actions: any;
   globalDispatch: any;
 }

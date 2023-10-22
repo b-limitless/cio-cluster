@@ -357,7 +357,7 @@ export default function AddFebric({ }: Props) {
                 onChangeHandler={characterOnChangeHalder}
                 selectedCharacters={febric.characters}
             />}
-            {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />}
+            {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/febric' />}
             {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}
 
         </FormTemplate>

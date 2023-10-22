@@ -12,8 +12,6 @@ const mount = (
     onNavigate,
     defaultHistory,
     initialPath,
-    onSignIn,
-    isSignedIn, 
     actions,
     globalDispatch, 
     product
@@ -33,8 +31,6 @@ const mount = (
   ReactDOM.render(
       <App
         history={history}
-        onSignIn={onSignIn}
-        isSignedIn={isSignedIn}
         actions={actions}
         globalDispatch={globalDispatch}
         product={product}

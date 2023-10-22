@@ -15,14 +15,12 @@ import "./styles/main.scss";
 
 interface AppInterface {
     history: any;
-    onSignin: Function,
-    isSignedIn: boolean,
     setShowSettingModel: Function,
     showSettingModel: boolean,
     [x: string]: any
 }
 
-export default function App({ setShowSettingModel, showSettingModel, history, onSignin, isSignedIn, showProfileSideModel, setShowProfileSideModel }: AppInterface) {
+export default function App({ setShowSettingModel, showSettingModel, history, showProfileSideModel, setShowProfileSideModel }: AppInterface) {
     return (
         <>
             <StylesProvider generateClassName={gererateClassName}>

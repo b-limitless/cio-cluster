@@ -54,9 +54,11 @@ export default function App({ }: Props) {
     if (selectedMenu === menuEnum.Products_Febric) {
       history.push(splitTitleToUrl(menuEnum.Products_Febric));
     }
-    if (selectedMenu === menuEnum.Product_Thread) {
-      history.push(splitTitleToUrl(menuEnum.Product_Thread));
+
+    if (selectedMenu === menuEnum.Products_Thread) {
+      history.push(splitTitleToUrl(menuEnum.Products_Thread));
     }
+   
     if (selectedMenu === menuEnum.Users) {
       history.push(splitTitleToUrl(menuEnum.Users));
     }
@@ -86,6 +88,8 @@ export default function App({ }: Props) {
   //   dispatch(addFebric(febricModel))
   // }, [])
 
+  console.log('selected meneu', selectedMenu)
+
 
   return (
     <>
@@ -105,8 +109,6 @@ export default function App({ }: Props) {
               <DashboardApp
                 setShowSettingModel={setShowSettingModel}
                 showSettingModel={showSettingModel}
-                onSingIn={() => { }}
-                isSignIn={false}
                 setShowProfileSideModel={setShowProfileSideModel}
                 showProfileSideModel={showProfileSideModel}
 
@@ -117,7 +119,6 @@ export default function App({ }: Props) {
 
           <Route path="/auth">
             <AuthApp
-              onSingIn={() => { }} isSignIn={false}
               actions={{ authenticatedUser }}
               globalDispatch={dispatch}
             />
@@ -129,7 +130,7 @@ export default function App({ }: Props) {
               setSelectedMenu={setSelectedMenu}
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel}>
-              <UserApp onSingIn={() => { }} isSignIn={false} />
+              <UserApp />
             </Container>
 
           </Route>
@@ -139,7 +140,7 @@ export default function App({ }: Props) {
               setSelectedMenu={setSelectedMenu}
               setShowSettingModel={setShowSettingModel}
               showSettingModel={showSettingModel} >
-              <PaymentApp onSingIn={() => { }} isSignIn={false} />
+              <PaymentApp  />
             </Container>
 
           </Route>
@@ -150,9 +151,9 @@ export default function App({ }: Props) {
               showSettingModel={showSettingModel}
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu} >
+              
               <ProductApp
-                onSingIn={() => { }}
-                isSignIn={false}
+
                 actions={{
                   fetchingFebrics,
                   fetchFebrics,
@@ -172,7 +173,7 @@ export default function App({ }: Props) {
               showSettingModel={showSettingModel}
               selectedMenu={selectedMenu}
               setSelectedMenu={setSelectedMenu} >
-              <OrderApp onSingIn={() => { }} isSignIn={false} />
+              <OrderApp />
             </Container>
           </Route>
         </Switch>

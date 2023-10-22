@@ -6,7 +6,7 @@ import AddFebric from "./components/Febric/Add";
 import './index.scss';
 
 
-export default ({ history, onSignIn, isSignedIn, globalDispatch, actions, product }) => {
+export default ({ history, globalDispatch, actions, product }) => {
 
   return (
     <div>

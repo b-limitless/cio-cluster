@@ -10,8 +10,6 @@ const mount = (
     onNavigate,
     defaultHistory,
     initialPath,
-    onSignIn,
-    isSignedIn,
     showProfileSideModel,
     setShowProfileSideModel,
     setShowSettingModel, 
@@ -32,8 +30,6 @@ const mount = (
   ReactDOM.render(
     <App
       history={history}
-      onSignIn={onSignIn}
-      isSignedIn={isSignedIn}
       showProfileSideModel={showProfileSideModel}
       setShowProfileSideModel={setShowProfileSideModel}
       setShowSettingModel={setShowSettingModel}
