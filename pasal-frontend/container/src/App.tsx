@@ -10,6 +10,7 @@ import Febric from "./components/product/Febric/Febric";
 import Thread from "./components/product/Thread/Thread";
 import AuthApp from "./components/remotes/AuthApp";
 import { menuIds } from "./config/navMenu";
+
 import "./styles/main.scss";
 const LazyFebric = lazy(() => import("./components/product/Febric/Febric"));
 type Props = {}
@@ -31,9 +32,13 @@ export default function App({ }: Props) {
           </Route>
           <Container
             setShowSettingModel={setShowSettingModel}
+            setShowProfileSideModel={setShowProfileSideModel}
             showSettingModel={showSettingModel}
             selectedMenu={selectedMenu}
-            setSelectedMenu={setSelectedMenu} >
+            setSelectedMenu={setSelectedMenu} 
+            actions={{ authenticatedUser }}
+            globalDispatch={dispatch}
+            >
             <Route exact path="/dashboard">
               <Dashboard
                 setShowSettingModel={setShowSettingModel}

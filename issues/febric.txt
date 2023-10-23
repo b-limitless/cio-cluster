@@ -1,0 +1,9 @@
+1 When adding febric it should not re fetch the febric again from the server
+the way UI is presented made it complicated to deal with the this situation 
+
+in this case listing febric and adding febric should be in same route in this case I can simply 
+start adding the febric and when its done then push the added febric to refix store 
+rather then re fetching
+
+But as history.push automatially reload the component when the route is changes 
+therefore useEffect runs when component is mounted

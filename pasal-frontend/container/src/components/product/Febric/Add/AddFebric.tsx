@@ -20,6 +20,7 @@ import { APIS } from '../../../../config/apis';
 import axios from 'axios';
 import { CompositionInterface } from './Steps/steps.interface';
 import { febricTypes } from '../../../../config/febric';
+import { Link, useHistory } from 'react-router-dom';
 
 
 type Props = {}
@@ -164,12 +165,8 @@ export default function AddFebric({ }: Props) {
     // const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
     // const [compositionError, setCompositionError] = useState<null | string>(null)
 
-
-
-    // Managing state for the media upload 
-
-
     const [counter, setCounter] = useState(0);
+    const history = useHistory();
 
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
@@ -181,18 +178,14 @@ export default function AddFebric({ }: Props) {
             if ([undefined, ''].indexOf(febric[field.name]) !== -1 || !field.regrex.test(febric[field.name])) {
                 const { name } = field;
                 catchError[name] = ` ${firstLetterUpperCase(name)} is required `;
-            } else {
-                console.log(`${febric[field.name]} is passed with regrex ${field.regrex}`)
-            }
+            } 
         });
         setErrors(catchError);
         setMoveToNextStep(true);
     }
 
-
     const onChangeHandler = (e: any) => {
         const { name, value } = e.target;
-        console.log('value', value)
         setFebric({ ...febric, [name]: value });
     }
 
@@ -329,6 +322,10 @@ export default function AddFebric({ }: Props) {
 
     }
 
+    const redirectToFebric = () => {
+        history.push('/products/febric')
+    }
+
     return (
 
 
@@ -357,7 +354,16 @@ export default function AddFebric({ }: Props) {
                 onChangeHandler={characterOnChangeHalder}
                 selectedCharacters={febric.characters}
             />}
-            {step === formStepEnum.seven && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/febric' />}
+            {step === formStepEnum.seven && <><Message 
+                title={'Febric added sucessfully'} 
+                buttonText={'List Febric'} 
+                buttonVariant={'primary'} 
+                icon={svgCDNAssets.successCheck} 
+                btnOnClickEvent={redirectToFebric}
+                redirectLink={''}
+                />
+                <Link to='/products/febric'>Febric</Link>
+                </>}
             {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}
 
         </FormTemplate>

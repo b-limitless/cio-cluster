@@ -3,13 +3,15 @@ import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, Checkbo
 import { request } from '@pasal/cio-component-library';
 import FebricDetails from './FebricDetails';
 import { APIS } from '../../../config/apis';
-import { febricType } from './types/febrics';
+import { febricType } from '../../../../reducers/productSlice';
 import { ProductInterface } from '../../../interfaces/febric.interface';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useDispatch } from 'react-redux';
-import { fetchFebrics, fetchingFebrics } from '../../../../reducers/productSlice';
+import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
+import { useHistory } from 'react-router-dom';
+
 
 export enum OrderStatusEnum {
   pending = "pending",
@@ -61,7 +63,7 @@ export default function Febric() {
 
   // const {febrics, loading} = product;
 
-  const tableHeader = ['title', 'type', 'price', 'febricSeasons'];
+  const tableHeader = ['title', 'type', 'price', 'febricSeasons', 'action'];
 
   const { product: { loading, febrics } } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
@@ -72,16 +74,17 @@ export default function Febric() {
   const [showModel, setShowModel] = useState<boolean>(false);
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
+  const history = useHistory();
 
 
   const showModelHandler = (i: number) => {
     setShowFebricDetailsModel(i);
   }
 
-  // mockFebrics.map((row:any, i:number) => {
-  //   row.action = <><a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}<a>Edit</a></>;
-  //   return row;
-  // });
+  const editFebricHandler = (febric:string) => {
+    dispatch(updateFebric(febric));
+    // history.push('/products/febric/add');
+  }
 
   // Lets fetch the febrics
 
@@ -92,6 +95,10 @@ export default function Febric() {
         const respones = await request({
           url: APIS.product.new,
           method: 'get'
+        });
+        respones.map((row:any, i:number) => {
+          row.action = <><a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}<Link to='/products/febric/add' onClick={() => editFebricHandler(row.id)}>Edit</Link></>;
+          return row;
         });
         dispatch(fetchFebrics(respones));
       } catch (err) {
@@ -124,7 +131,7 @@ export default function Febric() {
         page={page}
         setPage={setPage}
         count={count}
-        loading={false}
+        loading={loading}
         rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'} /></Link>}
       />
     </>

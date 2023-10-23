@@ -29,7 +29,7 @@ export const febricModel = {
   withCredentials: true,
 };
 
-type febricType = typeof febricModel;
+export type febricType = typeof febricModel;
 
 export interface ProductInterface {
   febrics: febricType[];
@@ -37,6 +37,7 @@ export interface ProductInterface {
   error: string | null;
   page: number;
   limit: number;
+  update: string | null
 }
 
 export const initialState: ProductInterface = {
@@ -45,6 +46,7 @@ export const initialState: ProductInterface = {
   error: null,
   page: 0,
   limit: 20,
+  update: null
 };
 
 export const productSlice = createSlice({
@@ -93,6 +95,12 @@ export const productSlice = createSlice({
         febrics: [...state.febrics, action.payload],
       };
     },
+    updateFebric: (state: ProductInterface, action: PayloadAction<string | null>) => {
+      return {
+        ...state, 
+        update: action.payload
+      }
+    }
   },
 });
 
@@ -102,6 +110,7 @@ export const {
   fetchedError,
   paginateFebric,
   addFebric,
+  updateFebric
 } = productSlice.actions;
 
 export const productActions = productSlice.actions;
