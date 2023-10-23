@@ -6,7 +6,7 @@ import { authenticatedUser } from "../reducers/authSlice";
 import Container from "./components/common/Container";
 import Dashboard from "./components/dashboard/Dashboard/Dashboard";
 import AddFebric from "./components/product/Febric/Add";
-import Febric from "components/product/Febric/Febric";
+import Febric from "./components/product/Febric/Febric";
 import Thread from "./components/product/Thread/Thread";
 import AuthApp from "./components/remotes/AuthApp";
 import { menuIds } from "./config/navMenu";

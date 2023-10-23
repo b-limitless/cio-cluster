@@ -6,6 +6,7 @@ import ArrowDown from "../assets/svg/arrow-down.svg";
 import Users from "../assets/svg/users.svg";
 import Payments from "../assets/svg/users.svg";
 
+
 export const menuIcons = {
     product: <ProductIcon />,
     dashboard: <DashboardIcon />,
