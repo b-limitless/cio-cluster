@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, CheckboxWithLabel } from "@pasal/cio-component-library"
 import { request } from '@pasal/cio-component-library';
 import FebricDetails from './FebricDetails';
@@ -12,12 +12,12 @@ import { useDispatch } from 'react-redux';
 import { fetchFebrics, fetchingFebrics } from '../../../../reducers/productSlice';
 
 export enum OrderStatusEnum {
-  pending="pending",
-  inProgress="inProgress",
-  completed="completed",
-  canceled="canceled",
-  pendingVerification="pendingVerification",
-  onHold="onHold"
+  pending = "pending",
+  inProgress = "inProgress",
+  completed = "completed",
+  canceled = "canceled",
+  pendingVerification = "pendingVerification",
+  onHold = "onHold"
 }
 
 export const OrderTypes = `${OrderStatusEnum}`;
@@ -37,7 +37,7 @@ export const OrderStatus = Object.keys(OrderStatusEnum);
 const filterData = [
   {
     label: "Order Status",
-    data:  OrderStatus.map(item => camelCaseToNormal(item, true)),
+    data: OrderStatus.map(item => camelCaseToNormal(item, true)),
     id: "orderStatus"
   },
   // {
@@ -49,7 +49,7 @@ const filterData = [
 
 interface FebricInterface {
   product: ProductInterface;
-  actions: any; 
+  actions: any;
   globalDispatch: any
 }
 //product, actions, globalDispatch
@@ -60,21 +60,21 @@ export default function Febric() {
   }
 
   // const {febrics, loading} = product;
-  
-  const tableHeader = ['title', 'type', 'price',  'febricSeasons'];
 
-  const {product: {loading, febrics}} = useSelector((state:RootState) => state);
+  const tableHeader = ['title', 'type', 'price', 'febricSeasons'];
+
+  const { product: { loading, febrics } } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
-  
-  
+
+
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
   const [showModel, setShowModel] = useState<boolean>(false);
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
- 
 
-  const showModelHandler = (i:number) => {
+
+  const showModelHandler = (i: number) => {
     setShowFebricDetailsModel(i);
   }
 
@@ -86,48 +86,48 @@ export default function Febric() {
   // Lets fetch the febrics
 
   useEffect(() => {
-    const fetchFebricsOnComponentMount = async() => {
+    const fetchFebricsOnComponentMount = async () => {
       dispatch(fetchingFebrics(true));
       try {
         const respones = await request({
-          url: APIS.product.new, 
+          url: APIS.product.new,
           method: 'get'
         });
         dispatch(fetchFebrics(respones));
-      } catch(err) {
+      } catch (err) {
         console.error('Could not fetch febric', err);
       }
       dispatch(fetchingFebrics(false));
     }
     fetchFebricsOnComponentMount();
   }, [])
-  
+
   const count = 8;
   return (
     <>
-    {showFebricDetailsModel !== -1 && <FebricDetails setShowFebricDetailsModel = {setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel}/>}
-        <DataTable
-          setShowModel={setShowFebricDetailsModel}
-          tableHeader={tableHeader}
-          // tableData={mockFebrics.slice(page * count, count + (page * count))}
-          tableData={febrics}
-          showFebricModels={false}
-          detailsComponents={null}
-          showDetailReactNode={<img src ={svgCDNAssets.eye}/>}
-          tableTitle={"Febric"}
-          showToLeftButton={{url: "/products/febric/add", label: "Add Febric"}}
-          setShowSelectRowId={undefined}
-          filterData={filterData}
-          filters={filters} 
-          setFilters={setFilters}
-          paginate={true}
-          page={page}
-          setPage={setPage}
-          count={count}
-          loading={false}
-          rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
-        />    
+      {showFebricDetailsModel !== -1 && <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} />}
+      <DataTable
+        setShowModel={setShowFebricDetailsModel}
+        tableHeader={tableHeader}
+        // tableData={mockFebrics.slice(page * count, count + (page * count))}
+        tableData={febrics}
+        showFebricModels={false}
+        detailsComponents={null}
+        showDetailReactNode={<img src={svgCDNAssets.eye} />}
+        tableTitle={"Febric"}
+        showToLeftButton={{ url: "/products/febric/add", label: "Add Febric" }}
+        setShowSelectRowId={undefined}
+        filterData={filterData}
+        filters={filters}
+        setFilters={setFilters}
+        paginate={true}
+        page={page}
+        setPage={setPage}
+        count={count}
+        loading={false}
+        rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'} /></Link>}
+      />
     </>
-    
+
   )
 }

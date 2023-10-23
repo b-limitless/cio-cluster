@@ -11,5 +11,4 @@ declare module "*.module.scss";
 declare module "*.json"
 
 declare module "@pasal/common-functions";
-
-// declare module "components/common/Container"
+declare module "components/*"
