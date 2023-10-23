@@ -125,12 +125,8 @@ export default function Febric() {
           setPage={setPage}
           count={count}
           loading={false}
-          // rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
-        />
-
-        <Link to="/dashboard">Dashboard</Link>
-      
-    
+          rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'}/></Link>}
+        />    
     </>
     
   )

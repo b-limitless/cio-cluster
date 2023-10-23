@@ -40,21 +40,22 @@ export const sideNavConfig = [
     },
     {
         title: "Products", icon: menuIcons.product,
-        children: [{ title: "Febric", component: "" }, { title: "Thread", component: "" }, { title: "Shirts", component: "" }, { title: "Pants", component: "" }]
+        children: [{ title: "Febric", component: "" }, { title: "Thread", component: "" }]
+        // { title: "Shirts", component: "" }, { title: "Pants", component: "" }
     },
-    {
-        title: "Orders", icon: menuIcons.pricing,
-        children: []
-        // children: [{ title: "Pricing one" }, { title: "Pricing Two" }]
-    },
+    // {
+    //     title: "Orders", icon: menuIcons.pricing,
+    //     children: []
+    //     // children: [{ title: "Pricing one" }, { title: "Pricing Two" }]
+    // },
     {
         title: "Users", icon: menuIcons.users,
         children: []
     }, 
-    {
-        title: "Payments", icon: menuIcons.payments,
-        children: []
-    }
+    // {
+    //     title: "Payments", icon: menuIcons.payments,
+    //     children: []
+    // }
 ];
 
 
