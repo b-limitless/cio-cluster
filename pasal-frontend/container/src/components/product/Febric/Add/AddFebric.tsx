@@ -170,7 +170,7 @@ export default function AddFebric({ }: Props) {
     const [uploadingFebric, setUploadingFebric] = useState<boolean>(false);
 
     // Will store data for febric composition such as cotton, polyster etc 
-    const [compositions, setComposition] = useState<CompositionInterface[]>([]);
+    const [compositions, setComposition] = useState<CompositionInterface[]>(updateFebric.length > 0 ? updateFebric[0].compositions :[]);
     const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes);
     // const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
     // const [compositionError, setCompositionError] = useState<null | string>(null)

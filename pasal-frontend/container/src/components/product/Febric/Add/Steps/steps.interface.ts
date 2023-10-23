@@ -1,5 +1,5 @@
 export interface CompositionInterface {
     name: string;
     code: string;
-    persantage?: number;
+    persantage?: number | string;
 }
