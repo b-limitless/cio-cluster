@@ -29,6 +29,7 @@ interface FebricAttrs {
   characters: string[];
   thumbnailImageUrl:string;
   originalImageUrl:string;
+  compositions: any[]
 }
 
 interface FebricDoc extends mongoose.Document {
@@ -60,6 +61,7 @@ interface FebricDoc extends mongoose.Document {
   thumbnailImageUrl:string;
   originalImageUrl:string;
   version: number;
+  compositions: any[]
 
 }
 
@@ -178,6 +180,10 @@ const febricSchema = new mongoose.Schema(
     originalImageUrl:{
       type:String,
       required:true
+    }, 
+    compositions: {
+      type: Array, 
+      required: true
     }
   },
   {

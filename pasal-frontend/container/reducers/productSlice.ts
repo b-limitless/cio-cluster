@@ -29,7 +29,7 @@ export const febricModel = {
   withCredentials: true,
 };
 
-export type febricType = typeof febricModel;
+export type febricType = typeof febricModel & {id?: string};
 
 export interface ProductInterface {
   febrics: febricType[];

@@ -54,6 +54,7 @@ router.post(
       characters,
       thumbnailImageUrl,
       originalImageUrl,
+      compositions
     } = req.body;
 
     const userId = new mongoose.Types.ObjectId(req?.currentUser?.id);
@@ -86,6 +87,7 @@ router.post(
         characters,
         thumbnailImageUrl,
         originalImageUrl,
+        compositions
       });
       res.status(201).send(febric);
 

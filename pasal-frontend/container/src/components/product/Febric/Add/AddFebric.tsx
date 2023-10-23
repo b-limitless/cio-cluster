@@ -21,6 +21,8 @@ import axios from 'axios';
 import { CompositionInterface } from './Steps/steps.interface';
 import { febricTypes } from '../../../../config/febric';
 import { Link, useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../../store';
 
 
 type Props = {}
@@ -151,9 +153,17 @@ const steps: { [key in forStepType]: any } = {
 }
 
 export default function AddFebric({ }: Props) {
+    // Check in store in there is febric is to update
+    const  {product: {febrics, update}} = useSelector((state: RootState) => state);
+
+    // If update is not null then filter the febric from the store and get it
+    const updateFebric = febrics.filter((febric) => febric?.id === update);
+
+    
+
     const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({ compositions: null });
-    const [febric, setFebric] = useState<any>(febricInitalState);
+    const [febric, setFebric] = useState<any>(updateFebric.length > 0 ? updateFebric[0] :febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
     const [febricImage, setFebricImage] = useState<File | null>(null);
     const [febricImageError, setFebricImageError] = useState<null | string>(null);
@@ -325,6 +335,8 @@ export default function AddFebric({ }: Props) {
     const redirectToFebric = () => {
         history.push('/products/febric')
     }
+
+
 
     return (
 
