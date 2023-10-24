@@ -162,7 +162,7 @@ export default function AddFebric({ }: Props) {
 
     
 
-    const [step, setStep] = useState<forStepType>(formStepEnum.one);
+    const [step, setStep] = useState<forStepType>(formStepEnum.two);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(updateFebric.length > 0 ? updateFebric[0] :febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
@@ -215,7 +215,7 @@ export default function AddFebric({ }: Props) {
         
         // Lets validate that image has been set
         // If image is not full and there is no error
-        console.log(updateFebric.length > 0, !febricImage)
+     
         if(updateFebric.length > 0 && !febricImage && !febricImageError) {
             setStep(formStepEnum.five);
             return;
@@ -302,7 +302,7 @@ export default function AddFebric({ }: Props) {
 
 
 
-        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (current?.persantage ?? 0), 0);
+        const sumCombinations = compositions.reduce((accomulator, current) => accomulator + (Number(current?.persantage) ?? 0), 0);
         if (sumCombinations < 100) {
             setErrors({ ...errors, compositions: 'Sum of all combination should be 100%' });
             return;
@@ -364,6 +364,12 @@ export default function AddFebric({ }: Props) {
     }
 
 
+    const backStageHandler = () => {
+        const getTheIndexOfStep = Object.keys(formStepEnum).indexOf(step);
+            setStep(Object.values(formStepEnum)[getTheIndexOfStep - 1]);
+            setMoveToNextStep(false);
+    }
+
 
     return (
 
@@ -377,7 +383,11 @@ export default function AddFebric({ }: Props) {
                         nextStepHandler
             }
             lastStep={step === formStepEnum.seven}
-            loading={uploadingFebric}>
+            loading={uploadingFebric}
+            backButton={step !== formStepEnum.one}
+            backButtonEventHanlder={backStageHandler}
+            
+            >
             {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}
             {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} febric={febric} errors={errors} setErrors={setErrors} />}

@@ -9,10 +9,12 @@ type Props = {
     step: forStepType;
     nextStepHandler: Function;
     lastStep: boolean;
+    backButton?: boolean;
+    backButtonEventHanlder?: Function;
     loading?: boolean;
 }
 
-export default function FormTemplate({ children, step, nextStepHandler, lastStep, loading }: Props) {
+export default function FormTemplate({ children, step, nextStepHandler, lastStep, loading, backButton, backButtonEventHanlder }: Props) {
 
     return (
         <div className={styles.addfebric__container}>
@@ -24,6 +26,7 @@ export default function FormTemplate({ children, step, nextStepHandler, lastStep
                     {children}
                     <div className={`${styles.row} ${styles.button__row}`}>
                         <div className={styles.actions}>
+                            {backButton && <Button variant="light" text="Back" onClick={backButtonEventHanlder} />}
                             {!lastStep && <Button variant="primary" text={loading? "Please wait..." : "Next"} onClick={() => loading ? null : nextStepHandler(step)} />}
                         </div>
                     </div>

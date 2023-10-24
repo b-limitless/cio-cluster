@@ -13,7 +13,7 @@ import mongoose from "mongoose";
 
 const router = express.Router();
 
-// Delete the febric based on id
+//
 router.patch(
   "/api/products/v1/:id",
   requireAuth,

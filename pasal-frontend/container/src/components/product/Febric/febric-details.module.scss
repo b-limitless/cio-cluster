@@ -18,7 +18,7 @@
   width: calc(100vw - (16.25rem + 1rem)); // Left grid pluse grid gap
   height: 100vh;
   top: 0;
-  z-index: 1;
+  z-index: 10000;
   backdrop-filter: blur(1px);
 
 
