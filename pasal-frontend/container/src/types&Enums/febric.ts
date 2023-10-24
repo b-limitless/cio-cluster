@@ -9,6 +9,8 @@ export enum formStepEnum {
     eight="eight"
 }
 
+export type formStepType = formStepEnum;
+
 
 // export type forStepType = `${formStepEnum}`;
 export type forStepType = keyof typeof formStepEnum;

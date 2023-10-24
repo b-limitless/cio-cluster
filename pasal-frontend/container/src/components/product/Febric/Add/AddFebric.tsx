@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { formStepEnum, forStepType } from '../../../../types&Enums/febric';
+import { formStepEnum, formStepType, forStepType } from '../../../../types&Enums/febric';
 import { firstLetterUpperCase } from '@pasal/common-functions';
 import FormTemplate from './FormTemplate';
 import StepFive from './Steps/Five';
@@ -153,6 +153,8 @@ const steps: { [key in forStepType]: any } = {
     eight: []
 }
 
+
+
 export default function AddFebric({ }: Props) {
     // Check in store in there is febric is to update
     const  {product: {febrics, update}} = useSelector((state: RootState) => state);
@@ -162,7 +164,7 @@ export default function AddFebric({ }: Props) {
 
     
 
-    const [step, setStep] = useState<forStepType>(formStepEnum.two);
+    const [step, setStep] = useState<formStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(updateFebric.length > 0 ? updateFebric[0] :febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
@@ -366,8 +368,8 @@ export default function AddFebric({ }: Props) {
 
     const backStageHandler = () => {
         const getTheIndexOfStep = Object.keys(formStepEnum).indexOf(step);
-            setStep(Object.values(formStepEnum)[getTheIndexOfStep - 1]);
-            setMoveToNextStep(false);
+        setStep(Object.values(formStepEnum)[getTheIndexOfStep - 1]);
+        setMoveToNextStep(false);
     }
 
 
@@ -384,7 +386,7 @@ export default function AddFebric({ }: Props) {
             }
             lastStep={step === formStepEnum.seven}
             loading={uploadingFebric}
-            backButton={step !== formStepEnum.one}
+            backButton={[formStepEnum.one, formStepEnum.seven].indexOf(step) == -1}
             backButtonEventHanlder={backStageHandler}
             
             >
