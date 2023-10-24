@@ -332,33 +332,18 @@ export default function AddFebric({ }: Props) {
             // If update febric then send the patch request 
             // or send the below request 
 
-            if(updateFebric.length > 0) {
+           
                 // Send the update request
-                const {id} = updateFebric[0];
+                const {id} = updateFebric[0] || {};
                 await request({
-                    url: `${APIS.product.new}/${id}`,
+                    url: updateFebric.length > 0 ? `${APIS.product.new}/${id}` : APIS.product.new,
                     body: { 
                             ...febric, 
                             stretchyText: 'Stretchy fabric',
                             type: 'shirt'
                         },
-                    method: 'patch'
-                });
-
-            } else {
-                await request({
-                    url: APIS.product.new,
-                    body: { 
-                            ...febric, 
-                            stretchyText: 'Stretchy fabric',
-                            type: 'shirt'
-                        },
-                    method: 'post'
-                });
-            }
-
-
-            
+                    method: updateFebric.length > 0 ? 'patch' : 'post'
+                });    
             setStep(formStepEnum.seven);
             setFebric(febricInitalState);
         } catch (err) {
