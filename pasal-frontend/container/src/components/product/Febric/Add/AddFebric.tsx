@@ -21,8 +21,9 @@ import axios from 'axios';
 import { CompositionInterface } from './Steps/steps.interface';
 import { febricTypes } from '../../../../config/febric';
 import { Link, useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../../store';
+import { updateFebric as updateFebricAction } from '../../../../../reducers/productSlice';
 
 
 type Props = {}
@@ -179,6 +180,7 @@ export default function AddFebric({ }: Props) {
 
     const [counter, setCounter] = useState(0);
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
@@ -346,6 +348,11 @@ export default function AddFebric({ }: Props) {
                 });    
             setStep(formStepEnum.seven);
             setFebric(febricInitalState);
+
+            if(updateFebric.length > 0) {
+                dispatch(updateFebricAction(null));
+            }
+        
         } catch (err) {
             console.error('Could not submit the form', err);
         }
@@ -394,7 +401,6 @@ export default function AddFebric({ }: Props) {
                 btnOnClickEvent={redirectToFebric}
                 redirectLink={''}
                 />
-                <Link to='/products/febric'>Febric</Link>
                 </>}
             {/* {step === formStepEnum.eight && <Message title={'Febric added sucessfully'} buttonText={'List Febric'} buttonVariant={'primary'} icon={svgCDNAssets.successCheck} redirectLink='/products/list' />} */}
 
