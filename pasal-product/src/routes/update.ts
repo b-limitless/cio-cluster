@@ -9,6 +9,7 @@ import express, { Request, Response } from "express";
 import { febricBodyRequest } from "../body-request/FebricBodyRequest";
 import { FebricUpdatedPublisher } from "../events/publishers/febric-updated-publisher";
 import { FebricService } from "../services/FebricService";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ const router = express.Router();
 router.patch(
   "/api/products/v1/:id",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest,
   async (req: Request, res: Response) => {
@@ -27,13 +28,13 @@ router.patch(
       excellence,
       warmth,
       weight,
-      season,
+      // season,
       threadStyle,
       brightness,
       superShiny,
-      material,
+      // material,
       tone,
-      threadCount,
+      // threadCount,
       opacity,
       waterproof,
       stretchyText,
@@ -47,43 +48,48 @@ router.patch(
       characters,
       thumbnailImageUrl,
       originalImageUrl,
+      compositions
     } = req.body;
 
-    const { id } = req.params;
+    let { id } = req.params as any;
+   
+    id = new mongoose.Types.ObjectId(id);
+
     try {
       const febric = await FebricService.findByIdAndUpdate(
         id,
         {
-          title,
-          price,
-          deliveryTime,
-          excellence,
-          warmth,
-          weight,
-          season,
-          threadStyle,
-          brightness,
-          superShiny,
-          material,
-          tone,
-          threadCount,
-          opacity,
-          waterproof,
-          stretchyText,
-          stretchy,
-          mis,
-          type,
-          febricTypes,
-          febricSeasons,
-          threadTypes,
-          threadCounts,
-          characters,
-          thumbnailImageUrl,
-          originalImageUrl,
+        title,
+        price,
+        deliveryTime,
+        excellence,
+        warmth,
+        weight,
+        // season,
+        threadStyle,
+        brightness,
+        superShiny,
+        // material,
+        tone,
+        // threadCount,
+        opacity,
+        waterproof,
+        stretchyText,
+        stretchy,
+        mis,
+        type,
+        febricTypes,
+        febricSeasons,
+        threadTypes,
+        threadCounts,
+        characters,
+        thumbnailImageUrl,
+        originalImageUrl,
+        compositions
         },
         { new: true }
       );
-      res.status(201).send(febric);
+      res.status(200).send(febric);
       // Publish an event that febric is updated
 
       try {
@@ -97,8 +103,8 @@ router.patch(
       }
       return;
     } catch (err) {
-      logger.log("error", "Could not create febric");
-      throw new Error("Could not create febric");
+      logger.log("error", "Could not create febric", err);
+      throw new Error(`Could not create febric ${err}`);
     }
   }
 );

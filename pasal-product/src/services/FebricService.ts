@@ -34,8 +34,8 @@ export class FebricServiceLocal {
             const updated = await Febric.findByIdAndUpdate(id, update, options)
             return updated;
         } catch(err) {
-            logger.log("info", `Can not find and update`);
-            throw new Error(`Can not find and update`);
+            logger.log("info", `Can not find and update ${err}`);
+            throw new Error(`Can not find and update ${err}`);
         }
     }
 

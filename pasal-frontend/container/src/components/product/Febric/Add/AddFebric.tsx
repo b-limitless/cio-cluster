@@ -165,12 +165,14 @@ export default function AddFebric({ }: Props) {
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(updateFebric.length > 0 ? updateFebric[0] :febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
+   
     const [febricImage, setFebricImage] = useState<File | null>(null);
     const [febricImageError, setFebricImageError] = useState<null | string>(null);
     const [uploadingFebric, setUploadingFebric] = useState<boolean>(false);
 
     // Will store data for febric composition such as cotton, polyster etc 
     const [compositions, setComposition] = useState<CompositionInterface[]>(updateFebric.length > 0 ? updateFebric[0].compositions :[]);
+
     const [availableComposition, setAvailableComposition] = useState<CompositionInterface[]>(febricTypes);
     // const [selectedCharacters, setSelectedCharacters] = useState<string[]>([]);
     // const [compositionError, setCompositionError] = useState<null | string>(null)
@@ -208,11 +210,21 @@ export default function AddFebric({ }: Props) {
     }, [moveToNextStep, step, errors]);
 
     const nextStepAfterMediaUpload = async () => {
-
+        
         // Lets validate that image has been set
         // If image is not full and there is no error
+        console.log(updateFebric.length > 0, !febricImage)
+        if(updateFebric.length > 0 && !febricImage && !febricImageError) {
+            setStep(formStepEnum.five);
+            return;
+        }
+
+        if(updateFebric.length > 0 && !febricImage && febricImageError) {
+            return;
+        }
         if (!febricImage) {
             setFebricImageError('Please select a febric image');
+            
         }
 
         if (!febricImageError && febricImage) {
@@ -275,6 +287,7 @@ export default function AddFebric({ }: Props) {
 
         if (file) {
             setFebricImage(file);
+            setFebricImageError(null);
         }
     };
 
@@ -315,15 +328,37 @@ export default function AddFebric({ }: Props) {
     const submitFebricToServerHandler = async () => {
         // Submit the form to server
         try {
-            await request({
-                url: APIS.product.new,
-                body: { 
-                        ...febric, 
-                        stretchyText: 'Stretchy fabric',
-                        type: 'shirt'
-                    },
-                method: 'post'
-            });
+            // Need to perform different action 
+            // If update febric then send the patch request 
+            // or send the below request 
+
+            if(updateFebric.length > 0) {
+                // Send the update request
+                const {id} = updateFebric[0];
+                await request({
+                    url: `${APIS.product.new}/${id}`,
+                    body: { 
+                            ...febric, 
+                            stretchyText: 'Stretchy fabric',
+                            type: 'shirt'
+                        },
+                    method: 'patch'
+                });
+
+            } else {
+                await request({
+                    url: APIS.product.new,
+                    body: { 
+                            ...febric, 
+                            stretchyText: 'Stretchy fabric',
+                            type: 'shirt'
+                        },
+                    method: 'post'
+                });
+            }
+
+
+            
             setStep(formStepEnum.seven);
             setFebric(febricInitalState);
         } catch (err) {

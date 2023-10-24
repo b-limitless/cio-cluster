@@ -26,10 +26,11 @@ export const febricModel = {
   stretchy: true,
   stretchyText: "Stretchy fabric",
   type: "shirt",
-  withCredentials: true,
+  
+ 
 };
 
-export type febricType = typeof febricModel & {id?: string};
+export type febricType = typeof febricModel & {id?: string, action?:any};
 
 export interface ProductInterface {
   febrics: febricType[];
