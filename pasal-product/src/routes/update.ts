@@ -89,7 +89,7 @@ router.patch(
         },
         { new: true }
       );
-      res.status(200).send(febric);
+      res.status(201).send(febric);
       // Publish an event that febric is updated
 
       try {
