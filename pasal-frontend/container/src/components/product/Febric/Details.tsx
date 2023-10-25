@@ -173,9 +173,9 @@ export default function Details({ febric, showFebricImageModel, setShowFebricIma
                     
                 </div>
 
-                {/* <div className={styles.hide__info} onClick={() => showFebricImageModel(false)}>
+                <div className={styles.hide__info} onClick={() => setShowFebricImageModel(true)}>
                    View Febric Image
-                </div> */}
+                </div>
 
                 
             </div>

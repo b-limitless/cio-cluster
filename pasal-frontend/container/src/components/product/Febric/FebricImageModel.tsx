@@ -9,11 +9,11 @@ type febricModel = {febric: febricType | null} & FebricModelType;
 
 export default function FebricImageModel({febric, showFebricImageModel, setShowFebricImageModel}: febricModel) {
     const style = {
-        backgroundImage: `url(https://www.permanentstyle.com/wp-content/uploads/2018/08/Chambray-linen-pyjamas.jpg)`,
+        backgroundImage: `url(${febric?.originalImageUrl})`,
         backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover'
-      }
-
+        backgroundSize: 'cover', 
+        zIndex: 1000000
+    }
   return (
     <SideModel style={style} showModel={showFebricImageModel} setShowModel={setShowFebricImageModel}>
         {/* Show Details model */}

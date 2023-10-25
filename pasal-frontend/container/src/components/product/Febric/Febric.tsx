@@ -77,6 +77,7 @@ export default function Febric() {
   const [showModel, setShowModel] = useState<number>(-1);
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
+  const [showFebricImageModel, setShowFebricImageModel] = useState(false);
   
   const history = useHistory();
 
@@ -122,15 +123,15 @@ export default function Febric() {
       
       <FebricImageModel
         febric={showModel !== -1 ? febrics[showModel] : null}
-        showFebricImageModel={true} 
-        setShowFebricImageModel={() => {}}
+        showFebricImageModel={showFebricImageModel} 
+        setShowFebricImageModel={setShowFebricImageModel}
       />
       <FebricDetailsModel 
       showModel={showModel} 
       setShowModel={setShowModel} 
       febric={showModel !== -1 ? febrics[showModel] : null}
-      setShowFebricImageModel={() => {}}
-      showFebricImageModel={false}
+      setShowFebricImageModel={setShowFebricImageModel}
+      showFebricImageModel={showFebricImageModel}
       />
       <DataTable
         setShowModel={setShowModel}
