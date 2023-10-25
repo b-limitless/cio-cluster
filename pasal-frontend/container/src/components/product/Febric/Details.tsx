@@ -5,6 +5,7 @@ import styles from './details.module.scss';
 import { febricType } from '../../../../reducers/productSlice';
 import { characters } from '../../../config/febric';
 import { removeUnderScore } from '../../../functions/removeUnderScore';
+import { FebricModelType } from './types/febrics';
 
 // Exclude the file which do not required to show in the details
 // Because they exists in table and some of them already shown
@@ -12,7 +13,7 @@ const skipFields = ['version','action', 'id', 'price', 'title', 'userId', 'warmt
 
 type Details = {
     febric: febricType | null
-}
+} & FebricModelType
 
 const elementStyles = {
     backgroundImage: `url('${pngCDNAssetsURIs.febric1}')`,
@@ -42,7 +43,7 @@ export const ItemDetail = ({title, value}: ItemDetail) => {
     </div>;
 }
 
-export default function Details({ febric }: Details) {
+export default function Details({ febric, showFebricImageModel, setShowFebricImageModel }: Details) {
 
     const [toogleIconChecked, setToggleIconChecked] = useState(false);
 
@@ -169,7 +170,14 @@ export default function Details({ febric }: Details) {
                 </div> */}
                 <div className={styles.hide__info} onClick={() => setToggleIconChecked(false)}>
                     HIDE INFO
+                    
                 </div>
+
+                <div className={styles.hide__info} onClick={() => showFebricImageModel(false)}>
+                   View Febric Image
+                </div>
+
+                
             </div>
         </div>
 

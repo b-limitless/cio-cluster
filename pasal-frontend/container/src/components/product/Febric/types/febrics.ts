@@ -25,13 +25,16 @@ const febricModel = {
   type: ["shirt", "pants", "suits"],
 };
 
-
 export type febricType = typeof febricModel;
 
 export type commonFebricStepType = {
   onChangeHandler: Function;
   febric: any;
-  setErrors:Function;
+  setErrors: Function;
   errors: any;
+};
 
-}
+export type FebricModelType = {
+  showFebricImageModel: boolean;
+  setShowFebricImageModel: Function;
+};

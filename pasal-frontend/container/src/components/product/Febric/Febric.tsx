@@ -12,6 +12,8 @@ import { useDispatch } from 'react-redux';
 import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
 import { useHistory } from 'react-router-dom';
 import FebricDetailsModel from './FebricDetailsModel';
+import FebricImageModel from './FebricImageModel';
+
 
 
 export enum OrderStatusEnum {
@@ -117,7 +119,19 @@ export default function Febric() {
   return (
     <>
      {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
-      <FebricDetailsModel showModel={showModel} setShowModel={setShowModel} febric={showModel !== -1 ? febrics[showModel] : null}/>
+      
+      <FebricImageModel
+        febric={showModel !== -1 ? febrics[showModel] : null}
+        showFebricImageModel={true} 
+        setShowFebricImageModel={() => {}}
+      />
+      <FebricDetailsModel 
+      showModel={showModel} 
+      setShowModel={setShowModel} 
+      febric={showModel !== -1 ? febrics[showModel] : null}
+      setShowFebricImageModel={() => {}}
+      showFebricImageModel={false}
+      />
       <DataTable
         setShowModel={setShowModel}
         tableHeader={tableHeader}
