@@ -19,6 +19,7 @@ $model_width: 562px;
     transition: all 0.2s ease-out;
     top:0;
     // right: -562px;
+    z-index: 100000;
 
     @media only screen and (max-width: $bp-700) {
         width: 100%;

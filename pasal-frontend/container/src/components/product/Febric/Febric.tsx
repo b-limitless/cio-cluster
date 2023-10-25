@@ -11,6 +11,7 @@ import { RootState } from '../../../store';
 import { useDispatch } from 'react-redux';
 import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
 import { useHistory } from 'react-router-dom';
+import FebricDetailsModel from './FebricDetailsModel';
 
 
 export enum OrderStatusEnum {
@@ -71,14 +72,15 @@ export default function Febric() {
 
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
-  const [showModel, setShowModel] = useState<boolean>(false);
+  const [showModel, setShowModel] = useState<number>(-1);
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
+  
   const history = useHistory();
 
 
   const showModelHandler = (i: number) => {
-    setShowFebricDetailsModel(i);
+    setShowModel(i);
   }
 
   const editFebricHandler = (febric:string) => {
@@ -110,15 +112,18 @@ export default function Febric() {
   }, [])
 
   const count = 8;
+
+   console.log('showmodle', showModel)
   return (
     <>
-      {showFebricDetailsModel !== -1 && <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} />}
+     {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
+      <FebricDetailsModel showModel={showModel} setShowModel={setShowModel} febric={showModel !== -1 ? febrics[showModel] : null}/>
       <DataTable
-        setShowModel={setShowFebricDetailsModel}
+        setShowModel={setShowModel}
         tableHeader={tableHeader}
         // tableData={mockFebrics.slice(page * count, count + (page * count))}
         tableData={febrics}
-        showFebricModels={false}
+        // showFebricModels={showModel}
         detailsComponents={null}
         showDetailReactNode={<img src={svgCDNAssets.eye} />}
         tableTitle={"Febric"}
