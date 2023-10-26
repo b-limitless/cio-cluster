@@ -1,4 +1,3 @@
-import { ChangeEvent, ChangeEventHandler } from "react";
 
 const febricModel = {
   title: "Hello World",
@@ -38,3 +37,25 @@ export type FebricModelType = {
   showFebricImageModel: boolean;
   setShowFebricImageModel: Function;
 };
+
+export enum OrderStatusEnum {
+  pending = 'pending',
+  inProgress = 'inProgress',
+  completed = 'completed',
+  canceled = 'canceled',
+  pendingVerification = 'pendingVerification',
+  onHold = 'onHold'
+}
+
+export const OrderTypes = `${OrderStatusEnum}`;
+
+export const OrderStatus = Object.keys(OrderStatusEnum);
+
+// Febric Type
+
+export enum FebricEunm {
+  shirt='shirt',
+  pant='pand'
+}
+
+export type FebricType =  FebricEunm;

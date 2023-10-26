@@ -261,4 +261,9 @@ export const stretchy = [
   { code: "very-stretchy", name: "Very Stretchy", description: "Fabric has high elasticity." }
 ];
 
-export const type = [{code: 'shirt', name: 'Shirt'}, {code: 'pant', name: 'Pant'}]
+export const type = [{code: 'shirt', name: 'Shirt'}, {code: 'pant', name: 'Pant'}];
+
+
+export const getObjectToArray = (data:any) => {
+  return data.map((d:any)=> d.code);
+}

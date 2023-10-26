@@ -22,7 +22,7 @@ export class FebricServiceLocal {
     
     async findByIdAndDelete(id:string) {
         try {
-            await Febric.findByIdAndDelete(id);
+            return await Febric.findByIdAndDelete(id);
         } catch(err) {
             logger.log("info", `Can not find and remove document`);
             throw new Error(`Can not find and remove document`);

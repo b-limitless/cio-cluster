@@ -1,37 +1,22 @@
+import { Button, DataTable, camelCaseToNormal, request, svgCDNAssets } from '@pasal/cio-component-library';
 import React, { useEffect, useState } from 'react';
-import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, CheckboxWithLabel } from '@pasal/cio-component-library'
-import { request } from '@pasal/cio-component-library';
-import FebricDetails from './FebricDetails';
-import { APIS } from '../../../config/apis';
-import { febricType } from '../../../../reducers/productSlice';
-import { ProductInterface } from '../../../interfaces/febric.interface';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
-import { useHistory } from 'react-router-dom';
+import { APIS } from '../../../config/apis';
+import { ProductInterface } from '../../../interfaces/febric.interface';
+import { RootState } from '../../../store';
+import ConfirmationDialog from '../../common/Confimation/ConfirmationDialog';
 import FebricDetailsModel from './FebricDetailsModel';
 import FebricImageModel from './FebricImageModel';
 import styles from './styles.module.scss';
-import ConfirmationTemplate from '../../common/Confimation/Template';
-import BookingConfirmation from '../../common/Confimation/ConfirmationDialog';
-import ConfirmationDialog from '../../common/Confimation/ConfirmationDialog';
+import { OrderStatus } from './types/febrics';
+import { type } from '../../../config/febric';
+import { getObjectToArray } from '../../../config/febric';
 
 
 
-export enum OrderStatusEnum {
-  pending = 'pending',
-  inProgress = 'inProgress',
-  completed = 'completed',
-  canceled = 'canceled',
-  pendingVerification = 'pendingVerification',
-  onHold = 'onHold'
-}
 
-export const OrderTypes = `${OrderStatusEnum}`;
-
-export const OrderStatus = Object.keys(OrderStatusEnum);
 
 // type Props = {}
 //{}: Props
@@ -50,11 +35,13 @@ const filterData = [
     id: 'orderStatus'
   },
   // {
-  //   label: 'Payment Status',
-  //   data: paymentStatus,
-  //   id: 'paymentStatus'
+  //   label: 'Type',
+  //   data: ['shirt', 'pant'],
+  //   id: 'type'
   // },
 ];
+
+console.log("OrderStatus.map(item => camelCaseToNormal(item, true)),", OrderStatus.map(item => camelCaseToNormal(item, true)),)
 
 interface FebricInterface {
   product: ProductInterface;
