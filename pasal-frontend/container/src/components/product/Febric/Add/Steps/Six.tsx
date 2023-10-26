@@ -43,13 +43,15 @@ export default function StepSix({ compositions, setComposition, availableComposi
         if (value < 0 || value > 100) {
             return;
         }
+        const updateCompositions = [...compositions];
 
         // Lets updat the exactly index of compositions
-        const copyComposition = Object.assign(compositions[i]);
+        const copyComposition = {...updateCompositions[i]};
         copyComposition.persantage = value;
+        updateCompositions[i] = copyComposition;
 
 
-        setComposition([...compositions, ...copyComposition]);
+        setComposition(updateCompositions);
     }
 
     const deleteCompositionHandler = (code: string) => {
