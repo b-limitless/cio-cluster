@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, CheckboxWithLabel } from "@pasal/cio-component-library"
+import { Button, BasicTable, DataTable, camelCaseToNormal, svgCDNAssets, CheckboxWithLabel } from '@pasal/cio-component-library'
 import { request } from '@pasal/cio-component-library';
 import FebricDetails from './FebricDetails';
 import { APIS } from '../../../config/apis';
@@ -13,16 +13,19 @@ import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducer
 import { useHistory } from 'react-router-dom';
 import FebricDetailsModel from './FebricDetailsModel';
 import FebricImageModel from './FebricImageModel';
+import styles from './styles.module.scss';
+import ConfirmationTemplate from '../../common/Confimation/Template';
+import BookingConfirmation from '../../common/Confimation/Booking';
 
 
 
 export enum OrderStatusEnum {
-  pending = "pending",
-  inProgress = "inProgress",
-  completed = "completed",
-  canceled = "canceled",
-  pendingVerification = "pendingVerification",
-  onHold = "onHold"
+  pending = 'pending',
+  inProgress = 'inProgress',
+  completed = 'completed',
+  canceled = 'canceled',
+  pendingVerification = 'pendingVerification',
+  onHold = 'onHold'
 }
 
 export const OrderTypes = `${OrderStatusEnum}`;
@@ -41,14 +44,14 @@ export const OrderStatus = Object.keys(OrderStatusEnum);
 
 const filterData = [
   {
-    label: "Order Status",
+    label: 'Order Status',
     data: OrderStatus.map(item => camelCaseToNormal(item, true)),
-    id: "orderStatus"
+    id: 'orderStatus'
   },
   // {
-  //   label: "Payment Status",
+  //   label: 'Payment Status',
   //   data: paymentStatus,
-  //   id: "paymentStatus"
+  //   id: 'paymentStatus'
   // },
 ];
 
@@ -78,7 +81,7 @@ export default function Febric() {
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
   const [showFebricImageModel, setShowFebricImageModel] = useState(false);
-  
+
   const history = useHistory();
 
 
@@ -86,10 +89,14 @@ export default function Febric() {
     setShowModel(i);
   }
 
-  const editFebricHandler = (febric:string) => {
+  const editFebricHandler = (febric: string) => {
     dispatch(updateFebric(febric));
     // history.push('/products/febric/add');
   }
+
+  const deleteFebricHandler = (id:string) => {
+
+  } 
 
   // Lets fetch the febrics
 
@@ -101,8 +108,13 @@ export default function Febric() {
           url: APIS.product.new,
           method: 'get'
         });
-        respones.map((row:any, i:number) => {
-          row.action = <><a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}<Link to='/products/febric/add' onClick={() => editFebricHandler(row.id)}>Edit</Link></>;
+        respones.map((row: any, i: number) => {
+          row.action = <>
+            <a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}
+            <Link to='/products/febric/add' onClick={() => editFebricHandler(row.id)}>Edit</Link>
+            {' '}
+            <span className={styles.deleteSpan}onClick={() => deleteFebricHandler(row.id)}>Delete</span>
+            </>;
           return row;
         });
         dispatch(fetchFebrics(respones));
@@ -116,22 +128,24 @@ export default function Febric() {
 
   const count = 8;
 
-   console.log('showmodle', showModel)
+  console.log('showmodle', showModel)
   return (
     <>
-     {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
+      {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
+      <BookingConfirmation
       
+      />
       <FebricImageModel
         febric={showModel !== -1 ? febrics[showModel] : null}
-        showFebricImageModel={showFebricImageModel} 
+        showFebricImageModel={showFebricImageModel}
         setShowFebricImageModel={setShowFebricImageModel}
       />
-      <FebricDetailsModel 
-      showModel={showModel} 
-      setShowModel={setShowModel} 
-      febric={showModel !== -1 ? febrics[showModel] : null}
-      setShowFebricImageModel={setShowFebricImageModel}
-      showFebricImageModel={showFebricImageModel}
+      <FebricDetailsModel
+        showModel={showModel}
+        setShowModel={setShowModel}
+        febric={showModel !== -1 ? febrics[showModel] : null}
+        setShowFebricImageModel={setShowFebricImageModel}
+        showFebricImageModel={showFebricImageModel}
       />
       <DataTable
         setShowModel={setShowModel}
@@ -141,8 +155,8 @@ export default function Febric() {
         // showFebricModels={showModel}
         detailsComponents={null}
         showDetailReactNode={<img src={svgCDNAssets.eye} />}
-        tableTitle={"Febric"}
-        showToLeftButton={{ url: "/products/febric/add", label: "Add Febric" }}
+        tableTitle={'Febric'}
+        showToLeftButton={{ url: '/products/febric/add', label: 'Add Febric' }}
         setShowSelectRowId={undefined}
         filterData={filterData}
         filters={filters}
