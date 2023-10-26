@@ -15,7 +15,8 @@ import FebricDetailsModel from './FebricDetailsModel';
 import FebricImageModel from './FebricImageModel';
 import styles from './styles.module.scss';
 import ConfirmationTemplate from '../../common/Confimation/Template';
-import BookingConfirmation from '../../common/Confimation/Booking';
+import BookingConfirmation from '../../common/Confimation/ConfirmationDialog';
+import ConfirmationDialog from '../../common/Confimation/ConfirmationDialog';
 
 
 
@@ -94,9 +95,9 @@ export default function Febric() {
     // history.push('/products/febric/add');
   }
 
-  const deleteFebricHandler = (id:string) => {
+  const deleteFebricHandler = (id: string) => {
 
-  } 
+  }
 
   // Lets fetch the febrics
 
@@ -113,8 +114,8 @@ export default function Febric() {
             <a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}
             <Link to='/products/febric/add' onClick={() => editFebricHandler(row.id)}>Edit</Link>
             {' '}
-            <span className={styles.deleteSpan}onClick={() => deleteFebricHandler(row.id)}>Delete</span>
-            </>;
+            <span className={styles.deleteSpan} onClick={() => deleteFebricHandler(row.id)}>Delete</span>
+          </>;
           return row;
         });
         dispatch(fetchFebrics(respones));
@@ -124,17 +125,22 @@ export default function Febric() {
       dispatch(fetchingFebrics(false));
     }
     fetchFebricsOnComponentMount();
-  }, [])
+  }, []);
 
   const count = 8;
 
   console.log('showmodle', showModel)
+
   return (
     <>
       {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
-      <BookingConfirmation
-      
-      />
+      <ConfirmationDialog
+
+      >
+        <Button variant='light' text='Confirm' />
+        <Button variant='primary' text='Confirm' className={styles.dark__primary} size="small" />
+
+      </ConfirmationDialog>
       <FebricImageModel
         febric={showModel !== -1 ? febrics[showModel] : null}
         showFebricImageModel={showFebricImageModel}
