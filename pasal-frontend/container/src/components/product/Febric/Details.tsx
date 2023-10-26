@@ -50,13 +50,13 @@ export default function Details({ febric, showFebricImageModel, setShowFebricIma
     const getComposition = () => {
         return febric?.compositions.map((composition, i) =>
             <span key={`composition-${i}`}
-                className={styles.type}>- {composition.persantage}% {composition.name}
+                className={styles.type}>{i !== 0 ? ' -' : ''} {composition.persantage}% {composition.name}
             </span>)
     }
 
     const getCharacters = () => {
         return febric?.characters.map((character, i) =>
-            <span key={`character-${i}`} className={styles.item}>{character}</span>)
+            <span key={`character-${i}`} className={styles.item}>{ removeUnderScore(character)}</span>)
     }
 
     const getAttributes = () => {
@@ -79,7 +79,7 @@ export default function Details({ febric, showFebricImageModel, setShowFebricIma
                         <div className={styles.name__type}>
                             <span className={styles.name}>{febric?.title}</span>
 
-                            {getComposition()}
+                            {/* {getComposition()} */}
                         </div>
                         <div className={styles.features}>
                             {getCharacters()}
@@ -88,6 +88,9 @@ export default function Details({ febric, showFebricImageModel, setShowFebricIma
 
                     <div className={styles.specification}>
                         {removeUnderScore(febric?.warmth)} - {removeUnderScore(febric?.waterproof)} - {removeUnderScore(febric?.febricTypes)} - {febric?.weight} gr/m2 - Super 50s
+                    </div>
+                    <div className={styles.specification}>
+                        {getComposition()}
                     </div>
                 </div>
                 {/* <div className={styles.col}>
