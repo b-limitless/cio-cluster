@@ -37,9 +37,8 @@ export default function StepSix({ compositions, setComposition, availableComposi
     }
 
     const persantageOnChangeHandler = (e: any, i: number) => {
-        const { name, value } = e.target;
-        console.log(`${i} is changing with value ${value}`);
-
+        const {value } = e.target;
+        
         if (value < 0 || value > 100) {
             return;
         }
