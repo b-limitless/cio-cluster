@@ -17,6 +17,7 @@ import { febricBodyRequest } from "../body-request/FebricBodyRequest";
 import { FebricCreatedPublisher } from "../events/publishers/febric-created-publisher";
 import { FebricService } from "../services/FebricService";
 import { hasPermissions } from "@pasal/common";
+import { deleteMedia } from "../../src/common/uploadFileToCloudinary";
 
 const router = express.Router();
 
@@ -117,5 +118,6 @@ router.post(
     }
   }
 );
+
 
 export { router as createFebricRouter };
