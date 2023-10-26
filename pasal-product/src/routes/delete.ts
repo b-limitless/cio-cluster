@@ -14,12 +14,11 @@ const router = express.Router();
 router.delete(
   "/api/products/v1/:id",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
       const deleteFebric = await FebricService.findByIdAndDelete(id);
-      console.log("deleteFebric", deleteFebric);
       res.status(200).send(deleteFebric);
       // Publish the event that febric is deleted
       const febricId = new mongoose.Types.ObjectId(id);

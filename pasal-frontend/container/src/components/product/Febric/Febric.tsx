@@ -82,6 +82,8 @@ export default function Febric() {
   const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
   const [page, setPage] = useState<number>(1);
   const [showFebricImageModel, setShowFebricImageModel] = useState(false);
+  const [deleteFebric, setDeleteFebric] = useState<null | string>(null);
+  const [deletingFebric, setDeletingFebric] = useState<boolean>(false);
 
   const history = useHistory();
 
@@ -96,7 +98,7 @@ export default function Febric() {
   }
 
   const deleteFebricHandler = (id: string) => {
-
+    setDeleteFebric(id);
   }
 
   // Lets fetch the febrics
@@ -127,20 +129,39 @@ export default function Febric() {
     fetchFebricsOnComponentMount();
   }, []);
 
+  const deleteCancelHandler = () => {
+    setDeleteFebric(null);
+  }
+
+  const deleteHandler = async() => {
+    setDeletingFebric(true)
+    try {
+      await request({
+        method: 'delete', 
+        url: `${APIS.product.new}/${deleteFebric}`
+      });
+      dispatch(fetchFebrics(febrics.filter((febric) => febric.id !== deleteFebric)));
+      setDeleteFebric(null);
+    } catch(err:any) {
+      console.error(err);
+      throw new Error(err);
+    }
+    setDeletingFebric(false)
+  }
+
   const count = 8;
 
-  console.log('showmodle', showModel)
 
   return (
     <>
       {/* <FebricDetails setShowFebricDetailsModel={setShowFebricDetailsModel} showFebricDetailsModel={showFebricDetailsModel} /> */}
-      <ConfirmationDialog
+      {deleteFebric && <ConfirmationDialog
 
-      >
-        <Button variant='light' text='Confirm' />
-        <Button variant='primary' text='Confirm' className={styles.dark__primary} size="small" />
+>
+  <Button variant='light' text='Cancel' onClick={deleteCancelHandler} />
+  <Button variant='primary' text={deletingFebric ? 'Please wait...' : 'Confirm'} className={styles.dark__primary} size="small" onClick={deletingFebric ? null : deleteHandler}/>
 
-      </ConfirmationDialog>
+</ConfirmationDialog>}
       <FebricImageModel
         febric={showModel !== -1 ? febrics[showModel] : null}
         showFebricImageModel={showFebricImageModel}

@@ -8,5 +8,6 @@ export const APIS = {
     product: {
         upload: `${REQUEST_BASE_URI}/products/v1/upload`,
         new: `${REQUEST_BASE_URI}/products/v1`, 
+        
     }
 }
