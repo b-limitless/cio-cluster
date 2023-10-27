@@ -7,7 +7,12 @@ const limit = 20;
 // Need to implment api for filtering, pagination
 // ?type=[shirt,pants,etc]
 router.get("/api/products/v1", async(req: Request, res:Response) => {
-    const {page} = req.query || 0;
+    let page = Number(req.query.page) ?? 0 ;
+
+    if(page > 0) {
+        page = page - 1;
+    }
+    
     const filters = JSON.parse(req.query.filters as string);
 
     const filterQuery:any = {};
@@ -19,7 +24,7 @@ router.get("/api/products/v1", async(req: Request, res:Response) => {
         
     });
    
-    const affectedRows = await Febric.countDocuments({});
+    const affectedRows = await Febric.countDocuments(filterQuery);
     const febrics = await Febric.find(filterQuery, {}).skip(Number(page) * limit).limit(limit);
     res.send({febrics, affectedRows});
 });
