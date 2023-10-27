@@ -18,6 +18,9 @@ import { FebricCreatedPublisher } from "../events/publishers/febric-created-publ
 import { FebricService } from "../services/FebricService";
 import { hasPermissions } from "@pasal/common";
 import { deleteMedia } from "../../src/common/uploadFileToCloudinary";
+import { Febric } from "../../src/models/febric";
+import {febrics} from "./dummyFebric";
+
 
 const router = express.Router();
 
@@ -119,5 +122,16 @@ router.post(
   }
 );
 
+router.get('/api/products/insert', async(req: Request, res:Response) => {
+  try {
+    await Febric.insertMany(febrics);
+    res.send('data inserted sucessfully')
+  } catch(err:any) {
+    throw new Error(`Can not insert data ${err}`);
+  }
+  
+});
+
+// 
 
 export { router as createFebricRouter };
