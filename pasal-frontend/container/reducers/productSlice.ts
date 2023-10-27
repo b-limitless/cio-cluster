@@ -40,6 +40,7 @@ export interface ProductInterface {
   limit: number;
   update: string | null
   affectedRows: number;
+  filters: any //{[x:string]:string[]};
 }
 
 export const initialState: ProductInterface = {
@@ -49,7 +50,8 @@ export const initialState: ProductInterface = {
   page: 0,
   limit: 20,
   update: null, 
-  affectedRows: 0
+  affectedRows: 0, 
+  filters: { febricSeasons: [], brightness: [] }
 };
 
 export const productSlice = createSlice({
@@ -109,7 +111,14 @@ export const productSlice = createSlice({
         ...state, 
         affectedRows: action.payload
       }
+    }, 
+    filterFebric: (state: ProductInterface, action: PayloadAction<{[x:string]:string[]}>) => {
+      return {
+        ...state, 
+        filters:action.payload
+      }
     }
+
   },
 });
 
@@ -120,7 +129,8 @@ export const {
   paginateFebric,
   addFebric,
   updateFebric, 
-  affectedRowAction
+  affectedRowAction, 
+  filterFebric
 } = productSlice.actions;
 
 export const productActions = productSlice.actions;
