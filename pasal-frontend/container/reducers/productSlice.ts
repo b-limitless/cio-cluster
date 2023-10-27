@@ -39,6 +39,7 @@ export interface ProductInterface {
   page: number;
   limit: number;
   update: string | null
+  affectedRows: number;
 }
 
 export const initialState: ProductInterface = {
@@ -47,7 +48,8 @@ export const initialState: ProductInterface = {
   error: null,
   page: 0,
   limit: 20,
-  update: null
+  update: null, 
+  affectedRows: 0
 };
 
 export const productSlice = createSlice({
@@ -101,6 +103,12 @@ export const productSlice = createSlice({
         ...state, 
         update: action.payload
       }
+    }, 
+    affectedRowAction: (state: ProductInterface, action: PayloadAction<number>) => {
+      return {
+        ...state, 
+        affectedRows: action.payload
+      }
     }
   },
 });
@@ -111,7 +119,8 @@ export const {
   fetchedError,
   paginateFebric,
   addFebric,
-  updateFebric
+  updateFebric, 
+  affectedRowAction
 } = productSlice.actions;
 
 export const productActions = productSlice.actions;

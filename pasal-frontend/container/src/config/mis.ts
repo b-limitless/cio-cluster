@@ -1,0 +1,1 @@
+const perPage = 20;

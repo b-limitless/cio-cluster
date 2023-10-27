@@ -2,7 +2,7 @@ import { Button, DataTable, camelCaseToNormal, request, svgCDNAssets } from '@pa
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
-import { fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
+import { affectedRowAction, fetchFebrics, fetchingFebrics, updateFebric } from '../../../../reducers/productSlice';
 import { APIS } from '../../../config/apis';
 import { ProductInterface } from '../../../interfaces/febric.interface';
 import { RootState } from '../../../store';
@@ -11,10 +11,14 @@ import FebricDetailsModel from './FebricDetailsModel';
 import FebricImageModel from './FebricImageModel';
 import styles from './styles.module.scss';
 import { OrderStatus } from './types/febrics';
-import { type } from '../../../config/febric';
+import { brightness, type } from '../../../config/febric';
 import { getObjectToArray } from '../../../config/febric';
 import { febricSeasons } from '../../../config/febric';
 import { firstLetterUpperCase } from '../../../functions/firstLetterUpperCase';
+import { paginateFebric } from '../../../../reducers/productSlice';
+
+
+const perPage = 20;
 
 
 
@@ -33,14 +37,14 @@ import { firstLetterUpperCase } from '../../../functions/firstLetterUpperCase';
 const filterData = [
   {
     label: 'Febric Season',
-    data: febricSeasons.map(febricSeason => (firstLetterUpperCase(febricSeason.code))),
+    data: febricSeasons.map(febricSeason => (febricSeason.code)),
     id: 'febricSeasons'
   },
-  // {
-  //   label: 'Type',
-  //   data: ['shirt', 'pant'],
-  //   id: 'type'
-  // },
+  {
+    label: 'Brightness',
+    data: brightness.map(t => (t.code)),
+    id: 'brightness'
+  },
 ];
 
 
@@ -60,15 +64,15 @@ export default function Febric() {
 
   const tableHeader = ['title', 'type', 'price', 'febricSeasons', 'action'];
 
-  const { product: { loading, febrics } } = useSelector((state: RootState) => state);
+  const { product: { loading, febrics, affectedRows } } = useSelector((state: RootState) => state);
   const dispatch = useDispatch();
 
 
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
   const [showModel, setShowModel] = useState<number>(-1);
-  const [filters, setFilters] = React.useState<any>({ febricSeasons: [] });
-  const [page, setPage] = useState<number>(1);
+  const [filters, setFilters] = React.useState<any>({ febricSeasons: [], brightness: [] });
+  const [page, setPage] = useState<number>(0);
   const [showFebricImageModel, setShowFebricImageModel] = useState(false);
   const [deleteFebric, setDeleteFebric] = useState<null | string>(null);
   const [deletingFebric, setDeletingFebric] = useState<boolean>(false);
@@ -95,11 +99,11 @@ export default function Febric() {
     const fetchFebricsOnComponentMount = async () => {
       dispatch(fetchingFebrics(true));
       try {
-        const respones = await request({
-          url: APIS.product.new,
+        const {febrics, affectedRows} = await request({
+          url: `${APIS.product.new}?page=${page}&filters=${JSON.stringify(filters)}`,
           method: 'get'
         });
-        respones.map((row: any, i: number) => {
+        febrics.map((row: any, i: number) => {
           row.action = <>
             <a style={customStyle} onClick={() => showModelHandler(i)}>Details</a>{' '}
             <Link to='/products/febric/add' onClick={() => editFebricHandler(row.id)}>Edit</Link>
@@ -108,14 +112,15 @@ export default function Febric() {
           </>;
           return row;
         });
-        dispatch(fetchFebrics(respones));
+        dispatch(fetchFebrics(febrics));
+        dispatch(affectedRowAction(affectedRows));
       } catch (err) {
         console.error('Could not fetch febric', err);
       }
       dispatch(fetchingFebrics(false));
     }
     fetchFebricsOnComponentMount();
-  }, []);
+  }, [page, filters]);
 
   const deleteCancelHandler = () => {
     setDeleteFebric(null);
@@ -137,7 +142,7 @@ export default function Febric() {
     setDeletingFebric(false)
   }
 
-  const count = 8;
+  console.log("filter data", filters.toString())
 
 
   return (
@@ -179,7 +184,7 @@ export default function Febric() {
         paginate={true}
         page={page}
         setPage={setPage}
-        count={count}
+        count={Math.ceil(affectedRows/perPage)}
         loading={loading}
         rightButton={<Link to={'/products/febric/add'}><Button variant='primary' text={'Add'} /></Link>}
       />

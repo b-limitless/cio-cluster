@@ -262,6 +262,7 @@ export const stretchy = [
 
 export const type = [{code: 'shirt', name: 'Shirt'}, {code: 'pant', name: 'Pant'}];
 
+// export const productType = [{code: 'shirt', name: 'Shirt'}, {code: 'pant', name: 'Pant'}];
 
 export const getObjectToArray = (data:any) => {
   return data.map((d:any)=> d.code);
