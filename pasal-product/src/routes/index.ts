@@ -4,8 +4,7 @@ import { Febric } from "../models/febric";
 const router = express.Router();
 const limit = 20;
 
-// Need to implment api for filtering, pagination
-// ?type=[shirt,pants,etc]
+
 router.get("/api/products/v1", async(req: Request, res:Response) => {
     let page = Number(req.query.page) ?? 0 ;
 
