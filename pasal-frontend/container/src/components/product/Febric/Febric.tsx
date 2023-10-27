@@ -13,6 +13,8 @@ import styles from './styles.module.scss';
 import { OrderStatus } from './types/febrics';
 import { type } from '../../../config/febric';
 import { getObjectToArray } from '../../../config/febric';
+import { febricSeasons } from '../../../config/febric';
+import { firstLetterUpperCase } from '../../../functions/firstLetterUpperCase';
 
 
 
@@ -30,9 +32,9 @@ import { getObjectToArray } from '../../../config/febric';
 
 const filterData = [
   {
-    label: 'Order Status',
-    data: OrderStatus.map(item => camelCaseToNormal(item, true)),
-    id: 'orderStatus'
+    label: 'Febric Season',
+    data: febricSeasons.map(febricSeason => (firstLetterUpperCase(febricSeason.code))),
+    id: 'febricSeasons'
   },
   // {
   //   label: 'Type',
@@ -41,7 +43,6 @@ const filterData = [
   // },
 ];
 
-console.log("OrderStatus.map(item => camelCaseToNormal(item, true)),", OrderStatus.map(item => camelCaseToNormal(item, true)),)
 
 interface FebricInterface {
   product: ProductInterface;
@@ -66,7 +67,7 @@ export default function Febric() {
 
   const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
   const [showModel, setShowModel] = useState<number>(-1);
-  const [filters, setFilters] = React.useState<any>({ orderStatus: [], paymentStatus: [] });
+  const [filters, setFilters] = React.useState<any>({ febricSeasons: [] });
   const [page, setPage] = useState<number>(1);
   const [showFebricImageModel, setShowFebricImageModel] = useState(false);
   const [deleteFebric, setDeleteFebric] = useState<null | string>(null);

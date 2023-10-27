@@ -18,7 +18,6 @@ export const febricSeasons = [
   { name: "Spring", code: "spring" },
   { name: "Summer", code: "summer" },
   { name: "Fall", code: "fall" },
-  { name: "Winter", code: "winter" },
 ];
 
 export const threadTypes = [

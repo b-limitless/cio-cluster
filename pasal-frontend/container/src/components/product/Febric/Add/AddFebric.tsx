@@ -386,7 +386,8 @@ export default function AddFebric({ }: Props) {
             }
             lastStep={step === formStepEnum.seven}
             loading={uploadingFebric}
-            backButton={[formStepEnum.one, formStepEnum.seven].indexOf(step) == -1}
+            // formStepEnum.one, 
+            backButton={[formStepEnum.seven].indexOf(step) == -1}
             backButtonEventHanlder={backStageHandler}
             
             >
