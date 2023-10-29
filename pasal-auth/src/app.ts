@@ -60,6 +60,6 @@ app.all("*", async (req, res) => {
 });
 
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 export { app };

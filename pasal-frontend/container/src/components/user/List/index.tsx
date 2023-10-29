@@ -75,8 +75,6 @@ export default function List({ }: Props) {
   }
 
   return (
-
-    
             <div className={styles.table}>
                 <DataTable
                   setShowModel={setShowModel}
