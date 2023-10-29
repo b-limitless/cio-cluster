@@ -11,6 +11,7 @@ export interface UserAttrs {
   spokenLanguage: string[];
   about: string | null;
   profileImageLink: string | null; 
+  adminId?: mongoose.Types.ObjectId
 }
 interface UserDoc extends mongoose.Document {
   email: string;
@@ -23,7 +24,8 @@ interface UserDoc extends mongoose.Document {
   country: string | null;
   spokenLanguage: string[];
   about: string | null;
-  profileImageLink: string | null; 
+  profileImageLink: string | null;
+  adminId?: mongoose.Types.ObjectId 
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -74,6 +76,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    adminId: {
+      type: mongoose.Types.ObjectId, 
+      required: false
+    }
+    
   },
   {
     toJSON: {

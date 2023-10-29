@@ -29,6 +29,8 @@ router.post(
     // verified
     const existingUser = await UserService.findOne(email);
 
+    const {id: adminId} = req.currentUser || {};
+
     if (existingUser) {
       throw new BadRequestError(messages.emailExists);
     }
@@ -48,7 +50,8 @@ router.post(
       password,
       permissions,
       role,
-      verified:true
+      verified:true, 
+      adminId
 
     });
 

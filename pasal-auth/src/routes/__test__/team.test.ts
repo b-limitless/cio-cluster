@@ -1,5 +1,11 @@
 import request from "supertest";
 import { app } from "../../app";
+import jwt from "jsonwebtoken";
+interface UserPayload {
+  id: string;
+  email: string;
+  permissions: string[];
+}
 
 const permission = {
   name: "list_leads",
@@ -113,10 +119,13 @@ it("disallowed duplicate email registration", async () => {
 
 
 it("It will create team with first name, lastname, email, role, permission, enabled", async () => {
+  const signinUser = global.signin(["create_team"]);
+  
+  
   try {
     const res = await request(app)
       .post("/api/users/team")
-      .set("Cookie", global.signin(["create_team"]))
+      .set("Cookie", signinUser)
       .send({
         firstName: "Bharat", 
         lastName: "Shah",
@@ -126,6 +135,44 @@ it("It will create team with first name, lastname, email, role, permission, enab
         role: "developer",
       })
       .expect(201);
+
+      const parseRes = JSON.parse(res.text);
+
+      // expect(parseRes.adminId).toEqual(signinUser.id);
+  } catch (err: any) {
+    console.log("err", err.message);
+  }
+});
+
+
+it("it will create team and verify is that team is belongs to created admin", async () => {
+  const signinUser = global.signin(["create_team"]);
+  // Decoding the string
+  const jwtString = signinUser[0].split('express:sess=')[1];
+  const token = JSON.parse(atob(jwtString) as any).jwt;
+  const payload = jwt.verify(
+    token,
+    'asdf'
+  ) as UserPayload;
+
+  console.log('signinUser', payload)
+  try {
+    const res = await request(app)
+      .post("/api/users/team")
+      .set("Cookie", signinUser)
+      .send({
+        firstName: "Bharat", 
+        lastName: "Shah",
+        email: "abcdefgh86@gmail.com",
+        password: "test",
+        permissions: ["list_leads"],
+        role: "developer",
+      })
+      .expect(201);
+
+      const parseRes = JSON.parse(res.text);
+
+      expect(parseRes.adminId).toEqual(payload.id);
   } catch (err: any) {
     console.log("err", err.message);
   }
