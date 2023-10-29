@@ -1,10 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import { Button, BasicTable } from "@pasal/cio-component-library"
 import styles from "@pasal/common-style/styles/components/_table.module.scss";
 import tableStyle from "./list.module.scss";
 import avatar from "../../../assets/img/avatar.png";
 import { assetsCDN } from '../../../config/assetsCDN';
+import { DataTable } from '@pasal/cio-component-library';
+import { mockUsers } from '../../../mock/users';
+import { Link } from 'react-router-dom';
 type Props = {}
+
+
 let tableData: any = [
   {
     name: <div className={tableStyle.row}>
@@ -53,34 +58,48 @@ let tableData: any = [
 
 ]
 
-const tableHeader = ['name', 'role', 'phoneNumber', 'status', , 'action'];
+const filterData:any = [];
+
+
 
 export default function List({ }: Props) {
+  const [showFebricDetailsModel, setShowFebricDetailsModel] = useState<number>(-1);
+  const [showModel, setShowModel] = useState<number>(-1);
+  const [page, setPage] = useState<number>(0);
+  const filters:string[] = [];
+
+  const tableHeader = ['fullName', 'role', 'phoneNumber', 'status','action'];
+
+  const handleChange = () => {
+
+  }
+
   return (
 
-    <div className={styles.febric__wrapper + " " + tableStyle.container__height}>
-      <div className={styles.febric__container + ' ' + tableStyle.tabelMaxWitdth}>
-        <div className={styles.row}>
-          <div className={styles.title}>Users - List</div>
-          <div className={styles.add__new}>
-            <a href="/users/add"><Button variant="primary" text="Create a user" /></a>
-          </div>
-        </div>
-
-        <div className={styles.row}>
-          <div className={styles.table__container + ' ' + tableStyle.tabelMaxWitdth}>
-            <div className={styles.filters}>
-              <div>Filter Will be shown</div>
-            </div>
+    
             <div className={styles.table}>
-                <BasicTable loading={false} tableHeader={tableHeader} tableData={tableData} tableRow={tableData[0]} showTableHead={false} />
-            </div>
-            <div className={styles.pagination}>
-              <div>Pagination</div>
-            </div>
-          </div>
-        </div>
+                <DataTable
+                  setShowModel={setShowModel}
+                  tableHeader={tableHeader}
+                  tableData={mockUsers}
+                  // showFebricModels={showModel}
+                  detailsComponents={null}
+                  showDetailReactNode={<span>Hello</span>}
+                  tableTitle={'Users'}
+                  showToLeftButton={{ url: '/users/add', label: 'Add' }}
+                  setShowSelectRowId={undefined}
+                  filterData={filterData}
+                  filters={filters}
+                  // setFilters={setFilters}
+                  paginate={true}
+                  page={page}
+                  setPage={setPage}
+                  count={2} //Math.ceil(affectedRows/perPage)}
+                  loading={false}
+                  rightButton={<Link to={'/users/add'}><Button variant='primary' text={'Add'} /></Link>}
+                  handleFiltersOnChange={handleChange}
+      />
       </div>
-    </div>
+           
   )
 }

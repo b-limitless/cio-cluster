@@ -19,7 +19,7 @@ export default function Container({ setShowSettingModel, showSettingModel, child
     const [loading, setLoading] = useState(false);
 
 
-    useSetAuthenticatedUser({setLoading});
+    // useSetAuthenticatedUser({setLoading});
 
     if(loading) {
         return <div className="loading">

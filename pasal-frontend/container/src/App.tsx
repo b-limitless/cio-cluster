@@ -9,6 +9,10 @@ import AddFebric from "./components/product/Febric/Add";
 import Febric from "./components/product/Febric/Febric";
 import Thread from "./components/product/Thread/Thread";
 import AuthApp from "./components/remotes/AuthApp";
+
+const ListUserLazy = lazy(() => import("./components/user/List"));
+const AddUserLazy = lazy(() => import("./components/user/Add"));
+
 import { menuIds } from "./config/navMenu";
 
 import "./styles/main.scss";
@@ -58,6 +62,19 @@ export default function App({ }: Props) {
             <Route exact path="/products/febric/add">
               <AddFebric />
             </Route>
+
+            <Route exact path="/users/add">
+              <Suspense fallback={"Please wait...."}>
+                <AddUserLazy />
+              </Suspense>
+            </Route>
+
+            <Route path="/users">
+              <Suspense fallback={"Please wait...."}>
+                <ListUserLazy />
+              </Suspense>
+            </Route>
+
           </Container>
         </Switch>
       </Router>
