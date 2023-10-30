@@ -5,7 +5,7 @@ import { CommonFormInterfaceStep } from '../../user.common.interface';
 import { roles } from '../../../../config/role';
 import { BasicSwitch } from '@pasal/cio-component-library';
 
-export default function OneStep({ formData, errors, onChangeHandler }: CommonFormInterfaceStep) {
+export default function OneStep({ formData, errors, onChangeHandler, onBlur }: CommonFormInterfaceStep) {
     return (
         <div className={`${styles.row} ${styles.childrens}`}>
             <div className={styles.form__row}>
@@ -28,6 +28,7 @@ export default function OneStep({ formData, errors, onChangeHandler }: CommonFor
                     onChange={onChangeHandler}
                     error={errors.email ? true : false}
                     helperText={errors.email ? errors.email : false}
+                    onBlur={onBlur}
 
                 // error={true}
                 // helperText="Incorrect entry."

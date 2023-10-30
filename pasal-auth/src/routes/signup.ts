@@ -27,8 +27,6 @@ router.post(
       role,
     } = req.body;
 
-    console.log("req.body", req.body)
-
     const existingUser = await UserService.findOne(email);
 
     if (existingUser) {

@@ -1339,6 +1339,21 @@ router.get("/api/users/team/v1", async (req: Request, res: Response) => {
   res.send({ users, affectedRows });
 });
 
+router.post(
+  "/api/users/team/check-email",
+  async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    const existingUser = await UserService.findOne(email);
+
+    if (existingUser) {
+      throw new BadRequestError(messages.emailExists, "email");
+    }
+
+    return res.status(200).send(null);
+  }
+);
+
 router.get("/api/users/team/mock", async (req: Request, res: Response) => {
   try {
     await User.insertMany(mockUsers);

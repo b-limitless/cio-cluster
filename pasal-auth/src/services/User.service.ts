@@ -4,7 +4,6 @@ import { User } from "../models/user";
 export class UserServiceLocal {
     async findOne(email:string ) {
         const existingUser = await User.findOne({ email });
-
         return existingUser;
     }
 

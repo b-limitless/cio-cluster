@@ -91,12 +91,24 @@ export default function index({ }: Props) {
         }
     }, [moveToNextStep, step, errors]);
 
+    const onMouseLeaveEventHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
+        // We need to check if this email is already exists
+        
+    }
+
 
     return (
         // <div><Button/></div>
         <div className={styles.root}>
             <FormTemplate title="Add user" step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
-                {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
+                {step === formStepEnum.one && <StepOne 
+                  onChangeHandler={onChangeHandler} 
+                  setFormData={setFormData} 
+                  formData={formData} 
+                  errors={errors} 
+                  setErrors={setErrors} 
+                  onBlur={onMouseLeaveEventHandler}
+                  />}
                 {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
                 {step === formStepEnum.three && <StepThree  />}
             </FormTemplate>
