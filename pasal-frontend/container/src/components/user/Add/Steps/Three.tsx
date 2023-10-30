@@ -2,7 +2,9 @@ import React from 'react';
 import { Message } from '@pasal/cio-component-library';
 import { svgCDNAssets } from '@pasal/common-functions';
 
-type Props = {}
+type Props = {
+    
+}
 
 export default function StepThree({ }: Props) {
     return (

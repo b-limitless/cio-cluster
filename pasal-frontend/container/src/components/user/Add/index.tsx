@@ -1,11 +1,11 @@
-// @ts-nocheck
 import React, { useEffect, useState } from 'react';
-import { Button, forStepType, formStepEnum, FormTemplate } from '@pasal/cio-component-library';
+import { Button, forStepType, formStepEnum } from '@pasal/cio-component-library';
 import { firstLetterUpperCase, validString, validDigit } from '@pasal/common-functions';
 import StepOne from './Steps/One';
 import StepTwo from './Steps/Two';
-import {emailRegex} from "@pasal/common-functions";
-import { authorizations } from '../../../../mock/authorization';
+import { emailRegex } from "@pasal/common-functions";
+import { authorizations } from '../../../mock/authorization';
+import FormTemplate from '../../common/FormTemplate/FormTemplate';
 
 import styles from './add.module.scss';
 import StepThree from './Steps/Three';
@@ -38,7 +38,7 @@ const steps = {
             regrex: validString,
             errorMessage: '',
             type: 'text'
-        }, 
+        },
         {
             name: 'role',
             regrex: validString,
@@ -68,7 +68,7 @@ export default function index({ }: Props) {
                 }
             });
 
-            if(formData.password !== formData.confirmPassword) {
+            if (formData.password !== formData.confirmPassword) {
                 catchError.confirmPassword = "both password did not matched";
             }
 
@@ -95,10 +95,10 @@ export default function index({ }: Props) {
     return (
         // <div><Button/></div>
         <div className={styles.root}>
-            <FormTemplate title= "Add user step"step={step === formStepEnum.two ? "Select Permission" : step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
+            <FormTemplate title="Add user" step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
                 {step === formStepEnum.one && <StepOne onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
                 {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
-                {step === formStepEnum.three && <StepThree onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
+                {step === formStepEnum.three && <StepThree  />}
             </FormTemplate>
         </div>
     )

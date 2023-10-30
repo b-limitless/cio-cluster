@@ -14,6 +14,7 @@ import { UserService } from "../services/User.service";
 import { readFile } from "../utils/readFile";
 import { checkPermissionAllSet } from "./utils";
 import { User } from "../models/user";
+import { limit } from "../config/email";
 
 export const mockUsers = [
   {
@@ -1228,17 +1229,16 @@ interface filterInput extends BaseFilter {
   filters: string | object;
 }
 
-interface filtersReturn  {
-  filterQuery: filterQuery
+interface filtersReturn {
+  filterQuery: filterQuery;
   pageNumber: number;
 }
 
-export const getFilterQueryNPage = (
-  {page, filters}: filterInput
-): filtersReturn => {
- 
+export const getFilterQueryNPage = ({
+  page,
+  filters,
+}: filterInput): filtersReturn => {
   let pageNumber = Number(page) ?? 0;
-
 
   if (pageNumber > 0) {
     pageNumber = pageNumber - 1;
@@ -1246,7 +1246,7 @@ export const getFilterQueryNPage = (
 
   try {
     filters = JSON.parse(filters as string);
-  } catch(err) {
+  } catch (err) {
     filters = {};
   }
 
@@ -1323,16 +1323,20 @@ router.post(
   }
 );
 
-// Fetching team
-router.get("/api/users/team/v1", (req: Request, res: Response) => {
-  const page = (req.query.page ?? 0) as string ;
-  const filters = req.query.filters as string;
-  
-  
-  const {pageNumber, filterQuery} = getFilterQueryNPage({page, filters});
+router.get("/api/users/team/v1", async (req: Request, res: Response) => {
+  const page = (req.query.page ?? 0) as string;
 
-  res.send({pageNumber, filterQuery});
-  // res.send("hello world")
+  const filters = req.query.filters as string;
+
+  const { pageNumber, filterQuery } = getFilterQueryNPage({ page, filters });
+
+  const affectedRows = await User.countDocuments(filterQuery);
+
+  const users = await User.find(filterQuery, {})
+    .skip(Number(pageNumber) * limit)
+    .limit(limit);
+
+  res.send({ users, affectedRows });
 });
 
 router.get("/api/users/team/mock", async (req: Request, res: Response) => {

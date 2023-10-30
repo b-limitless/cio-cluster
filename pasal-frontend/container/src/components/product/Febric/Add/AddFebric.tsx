@@ -365,7 +365,6 @@ export default function AddFebric({ }: Props) {
         history.push('/products/febric')
     }
 
-
     const backStageHandler = () => {
         const getTheIndexOfStep = Object.keys(formStepEnum).indexOf(step);
         setStep(Object.values(formStepEnum)[getTheIndexOfStep - 1]);
