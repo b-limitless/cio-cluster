@@ -2,7 +2,8 @@ import { Input, Select } from '@pasal/cio-component-library';
 import React from 'react';
 import { excellence, type, warmth } from '../../../../../config/febric';
 import { commonFebricStepType } from '../../types/febrics';
-import styles from '../add-febric.module.scss';
+import FormTemplate from '../../../../common/FormTemplate/FormTemplate';
+import styles from '../../../../common/FormTemplate/form-steps.module.scss';
 
 
 

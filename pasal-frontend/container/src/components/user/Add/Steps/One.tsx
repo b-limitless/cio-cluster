@@ -1,7 +1,7 @@
 import { BasicSwitch, Input, InputAdornments, Select } from '@pasal/cio-component-library';
 import React from 'react';
 import { roles } from '../../../../config/role';
-import styles from "../../form-steps.module.scss";
+import styles from '../../../common/FormTemplate/form-steps.module.scss';
 import { CommonFormInterfaceStep } from '../../user.common.interface';
 
 export default function OneStep({ formData, errors, onChangeHandler, onBlur }: CommonFormInterfaceStep) {
