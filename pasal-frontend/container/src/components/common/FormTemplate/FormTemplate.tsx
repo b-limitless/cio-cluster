@@ -1,7 +1,7 @@
 import { Button } from '@pasal/cio-component-library';
 import React, { ReactNode } from "react";
 import { forStepType } from "../../../types&Enums/febric";
-import styles from "./add-febric.module.scss";
+import styles from "./form-template.module.scss";
 
 type Props = {
     children: ReactNode
@@ -12,16 +12,15 @@ type Props = {
     backButton?: boolean;
     backButtonEventHanlder?: Function;
     loading?: boolean;
-    title:string;
 }
 
-export default function FormTemplate({title, children, step, nextStepHandler, lastStep, loading, backButton, backButtonEventHanlder }: Props) {
+export default function FormTemplate({ children, step, nextStepHandler, lastStep, loading, backButton, backButtonEventHanlder }: Props) {
 
     return (
         <div className={styles.addfebric__container}>
             <div className={styles.form__container}>
                 <div className={styles.row}>
-                    <div className={styles.title}>{title}</div>
+                    <div className={styles.title}>Proudct - Febric - Add {step}</div>
                 </div>
                 <div className={styles.form__section}>
                     {children}

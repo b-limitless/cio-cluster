@@ -9,5 +9,8 @@ export const APIS = {
         upload: `${REQUEST_BASE_URI}/products/v1/upload`,
         new: `${REQUEST_BASE_URI}/products/v1`, 
         
+    }, 
+    user: {
+        checkEmail: `${REQUEST_BASE_URI}/users/team/check-email`
     }
 }

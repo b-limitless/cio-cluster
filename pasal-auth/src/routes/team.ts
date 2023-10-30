@@ -1338,9 +1338,10 @@ router.get("/api/users/team/v1", async (req: Request, res: Response) => {
 
   res.send({ users, affectedRows });
 });
-
+// 
 router.post(
   "/api/users/team/check-email",
+  requireAuth,
   async (req: Request, res: Response) => {
     const { email } = req.body;
 

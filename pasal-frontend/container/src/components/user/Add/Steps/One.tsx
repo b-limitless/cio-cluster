@@ -1,9 +1,8 @@
-import React from 'react'
-import { Input, Select, Chip as MultipleSelectChip, TextArea, InputAdornments } from '@pasal/cio-component-library';
+import { BasicSwitch, Input, InputAdornments, Select } from '@pasal/cio-component-library';
+import React from 'react';
+import { roles } from '../../../../config/role';
 import styles from "../../form-steps.module.scss";
 import { CommonFormInterfaceStep } from '../../user.common.interface';
-import { roles } from '../../../../config/role';
-import { BasicSwitch } from '@pasal/cio-component-library';
 
 export default function OneStep({ formData, errors, onChangeHandler, onBlur }: CommonFormInterfaceStep) {
     return (

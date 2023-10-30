@@ -1,29 +1,24 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { formStepEnum, formStepType, forStepType } from '../../../../types&Enums/febric';
+import { Message, request } from '@pasal/cio-component-library';
 import { firstLetterUpperCase } from '@pasal/common-functions';
-import FormTemplate from './FormTemplate';
+import axios from 'axios';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { updateFebric as updateFebricAction } from '../../../../../reducers/productSlice';
+import { APIS } from '../../../../config/apis';
+import { svgCDNAssets } from '../../../../config/assets';
+import { febricTypes } from '../../../../config/febric';
+import { validBoolean, validDigit, validString, wordRegrex } from '../../../../config/regrex';
+import { RootState } from '../../../../store';
+import { forStepType, formStepEnum, formStepType } from '../../../../types&Enums/febric';
+import FormTemplate from '../../../common/FormTemplate/FormTemplate';
 import StepFive from './Steps/Five';
-import StepFour from './Steps/Four';
 import StepOne from './Steps/One';
 import StepSeven from './Steps/Seven';
 import StepSix from './Steps/Six';
 import StepThree from './Steps/Three';
 import StepTwo from './Steps/Two';
-import StepEight from './Steps/Eight';
-import { validDigit, validString, alphanumericRegex, wordRegrex, validBoolean } from '../../../../config/regrex';
-import SuccessMessage from '../../../common/success/SuccessMessage';
-import { svgCDNAssets } from '../../../../config/assets';
-import { Message } from '@pasal/cio-component-library';
-import { ChangeEvent } from 'react';
-import { request } from '@pasal/cio-component-library';
-import { APIS } from '../../../../config/apis';
-import axios from 'axios';
 import { CompositionInterface } from './Steps/steps.interface';
-import { febricTypes } from '../../../../config/febric';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../../store';
-import { updateFebric as updateFebricAction } from '../../../../../reducers/productSlice';
 
 
 type Props = {}
@@ -332,12 +327,6 @@ export default function AddFebric({ }: Props) {
     const submitFebricToServerHandler = async () => {
         // Submit the form to server
         try {
-            // Need to perform different action 
-            // If update febric then send the patch request 
-            // or send the below request 
-
-           
-                // Send the update request
                 const {id} = updateFebric[0] || {};
                 await request({
                     url: updateFebric.length > 0 ? `${APIS.product.new}/${id}` : APIS.product.new,
@@ -373,8 +362,6 @@ export default function AddFebric({ }: Props) {
 
 
     return (
-
-
         <FormTemplate
             step={step}
             setStep={setStep}

@@ -1,8 +1,9 @@
-import React from 'react'
-import { Button, Input, Select, Chip as MultipleSelectChip, TextArea, InputAdornments } from '@pasal/cio-component-library';
-import styles from "../add-febric.module.scss";
+import { Input, Select } from '@pasal/cio-component-library';
+import React from 'react';
 import { excellence, type, warmth } from '../../../../../config/febric';
 import { commonFebricStepType } from '../../types/febrics';
+import styles from '../add-febric.module.scss';
+
 
 
 
@@ -29,6 +30,7 @@ export default function StepOne({ onChangeHandler, febric, errors, setErrors }: 
                     error={errors.title ? true : false}
                     helperText={errors.title ? errors.title : false} 
                     onChange={onChangeHandler}
+                    
                 />
                 
 

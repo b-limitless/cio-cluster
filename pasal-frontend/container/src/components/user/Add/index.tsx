@@ -1,14 +1,14 @@
+import { forStepType, formStepEnum, request } from '@pasal/cio-component-library';
+import { emailRegex, firstLetterUpperCase, validString } from '@pasal/common-functions';
 import React, { useEffect, useState } from 'react';
-import { Button, forStepType, formStepEnum } from '@pasal/cio-component-library';
-import { firstLetterUpperCase, validString, validDigit } from '@pasal/common-functions';
+import FormTemplate from '../../common/FormTemplate/FormTemplate';
 import StepOne from './Steps/One';
 import StepTwo from './Steps/Two';
-import { emailRegex } from "@pasal/common-functions";
-import { authorizations } from '../../../mock/authorization';
-import FormTemplate from '../../common/FormTemplate/FormTemplate';
 
-import styles from './add.module.scss';
+import { APIS } from '../../../config/apis';
 import StepThree from './Steps/Three';
+import styles from './add.module.scss';
+import './style.scss';
 
 type Props = {}
 
@@ -91,16 +91,28 @@ export default function index({ }: Props) {
         }
     }, [moveToNextStep, step, errors]);
 
-    const onMouseLeaveEventHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const onMouseLeaveEventHandler = async(e:React.ChangeEvent<HTMLInputElement>) => {
         // We need to check if this email is already exists
-        
+        const {email} = formData;
+        setErrors({...errors, email: null})
+        try {
+            await request({
+                url: APIS.user.checkEmail, 
+                method: 'post', 
+                body: {email}
+            });
+        } catch(err:any) {
+            console.log(err.response.data.errors[0].message);
+            setErrors({...errors, email: err.response.data.errors[0].message})
+        }
+
     }
 
 
     return (
         // <div><Button/></div>
         <div className={styles.root}>
-            <FormTemplate title="Add user" step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
+            <FormTemplate step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
                 {step === formStepEnum.one && <StepOne 
                   onChangeHandler={onChangeHandler} 
                   setFormData={setFormData} 
