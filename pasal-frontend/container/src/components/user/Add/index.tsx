@@ -51,7 +51,7 @@ const steps = {
 
 export default function index({ }: Props) {
 
-    const [step, setStep] = useState<forStepType>(formStepEnum.one);
+    const [step, setStep] = useState<forStepType>(formStepEnum.two);
     const [errors, setErrors] = useState<any>({});
     const [formData, setFormData] = useState<any>({ fullName: "", password: "", confirmPassword: "", role: "", enabled: false });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
@@ -108,9 +108,16 @@ export default function index({ }: Props) {
 
     }
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        console.log("event.target.checked", event.target.name, event.target.checked)
+        // setChecked(event.target.checked);
+    };
+
+    console.log("formData", formData);
+
 
     return (
-        // <div><Button/></div>
+      
         <div className={styles.root}>
             <FormTemplate step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
                 {step === formStepEnum.one && <StepOne 
@@ -121,7 +128,12 @@ export default function index({ }: Props) {
                   setErrors={setErrors} 
                   onBlur={onMouseLeaveEventHandler}
                   />}
-                {step === formStepEnum.two && <StepTwo onChangeHandler={onChangeHandler} setFormData={setFormData} formData={formData} errors={errors} setErrors={setErrors} />}
+                {step === formStepEnum.two && <StepTwo 
+                  onChangeHandler={handleChange} 
+                  setFormData={setFormData} 
+                  formData={formData} 
+                  errors={errors} 
+                  setErrors={setErrors} />}
                 {step === formStepEnum.three && <StepThree  />}
             </FormTemplate>
         </div>
