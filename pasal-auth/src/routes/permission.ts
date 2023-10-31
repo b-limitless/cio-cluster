@@ -7,7 +7,7 @@ const router = express.Router();
 
 
 router.get(
-  "/api/users/permissions",
+  "/api/users/authorizations",
   requireAuth,
   async (req: Request, res: Response) => {
     try {
@@ -83,7 +83,7 @@ router.post(
 
 // Creating mock permission for the testing
 router.get(
-  "/api/users/permission/mock",
+  "/api/users/authorizations/mock",
   requireAuth,
   async (req: Request, res: Response) => {
     try {

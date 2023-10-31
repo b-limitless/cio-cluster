@@ -11,6 +11,7 @@ type Props = {
 
 
 export default function StepTwo({ onChangeHandler}: CommonFormInterfaceStep) {
+
     return (
         <div className={styles.permission__container + ' ' + stylesFrom.childrens}>
             {authorizations.map((authorization:any, i:number) => <div key={i} className={styles.permission__col}>
