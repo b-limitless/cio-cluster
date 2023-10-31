@@ -17,11 +17,11 @@ router.get(
             _id: "$role",
             permissions: {
               $push: {
-                id: "$id",
+                id: "$_id",
                 name: "$name",
                 cat: "$cat",
                 guard_name: "$guard_name",
-                created_at: "$created_at"
+                created_at: "$created_at",
               }
             }
           }
