@@ -12,13 +12,20 @@ import './style.scss';
 import { PermissionInterface } from '../types';
 
 
+
 type Props = {}
 
 
 const steps = {
     one: [
         {
-            name: 'fullName',
+            name: 'firstName',
+            regrex: validString,
+            errorMessage: '',
+            type: 'text '
+        },
+        {
+            name: 'lastName',
             regrex: validString,
             errorMessage: '',
             type: 'text '
@@ -56,19 +63,19 @@ const steps = {
 // type permissionType = row[]
 
 export const permissionIntialstate: PermissionInterface = {
-    authorizations: [], 
-    loading : false, 
+    authorizations: [],
+    loading: false,
     error: null
 }
 
-function permissionsReducer(state:PermissionInterface, action:any) {
-    switch(action.type) {
+function permissionsReducer(state: PermissionInterface, action: any) {
+    switch (action.type) {
         case 'FETCH_PERMISSIONS':
-            return {...state, authorizations: action.payload}
+            return { ...state, authorizations: action.payload }
         case 'FETCHING_PERMISSIONS':
-            return {...state, loading: action.payload};
+            return { ...state, loading: action.payload };
         case 'FETCHED_ERROR':
-            return {...state, error: action.payload}; 
+            return { ...state, error: action.payload };
         default:
             return state;
     }
@@ -76,12 +83,39 @@ function permissionsReducer(state:PermissionInterface, action:any) {
 
 export default function index({ }: Props) {
 
-    const [step, setStep] = useState<forStepType>(formStepEnum.two);
+    const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({});
-    const [formData, setFormData] = useState<any>({ fullName: '', password: '', confirmPassword: '', role: '', enabled: false });
+    const [formData, setFormData] = useState<any>({ firstName: '', lastName: '',  password: '', confirmPassword: '', role: '', enabled: false, permissions: [] });
     const [moveToNextStep, setMoveToNextStep] = useState(false);
 
-    const [{authorizations, loading, error}, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
+    const [{ authorizations, loading, error }, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
+
+    const finalStepHandler = async() => {
+        setErrors({...errors, permissions: null})
+        
+        // Set next step to three 
+        console.log("submitting form to server");
+        // Make sure alt least one permission is set
+        const {permissions} = formData;
+
+        if(permissions.length === 0) {
+            setErrors({...errors, permissions: 'Please select at least one permission'}); 
+            return;
+        }
+
+        // Submit the form to server
+        try {
+            await request({
+                url: APIS.user.createTeam, 
+                method: 'post',
+                body: formData
+            }); 
+            setStep(formStepEnum.three);
+        } catch(err:any) {
+            console.error(`Could not create team ${err.response.data}`);
+        }
+        
+    }
 
     const nextStepHandler = (step: formStepEnum) => {
         setErrors({});
@@ -106,6 +140,8 @@ export default function index({ }: Props) {
 
 
     const onChangeHandler = (e: any) => {
+        // If the event type is checkbox then perform different operation
+
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     }
@@ -118,73 +154,83 @@ export default function index({ }: Props) {
         }
     }, [moveToNextStep, step, errors]);
 
-    const onMouseLeaveEventHandler = async(e:React.ChangeEvent<HTMLInputElement>) => {
+    const onMouseLeaveEventHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         // We need to check if this email is already exists
-        const {email} = formData;
-        setErrors({...errors, email: null})
+        const { email } = formData;
+        setErrors({ ...errors, email: null })
         try {
             await request({
-                url: APIS.user.checkEmail, 
-                method: 'post', 
-                body: {email}
+                url: APIS.user.checkEmail,
+                method: 'post',
+                body: { email }
             });
-        } catch(err:any) {
+        } catch (err: any) {
             console.log(err.response.data.errors[0].message);
-            setErrors({...errors, email: err.response.data.errors[0].message})
+            setErrors({ ...errors, email: err.response.data.errors[0].message })
         }
 
     }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log('event.target.checked', event.target.name, event.target.checked)
-        // setChecked(event.target.checked);
+        const { name, checked } = event.target;
+        const { permissions } = formData;
+
+        if (checked) {
+            permissions.push(name);
+            setFormData({ ...formData, permissions });
+            return;
+        } else {
+            setFormData({ ...formData, permissions: permissions.filter((permission: string) => permission !== name) });
+        }
     };
 
-    // Fetching authorizations
     useEffect(() => {
-        const fetchPermissions = async() => {
-            dispatch({type: 'FETCHING_PERMISSIONS', payload: true});
+        const fetchPermissions = async () => {
+            dispatch({ type: 'FETCHING_PERMISSIONS', payload: true });
             try {
                 const response = await request({
-                    url: `/api/users/authorizations`, 
+                    url: `/api/users/authorizations`,
                     method: 'get'
                 });
-                dispatch({type: 'FETCH_PERMISSIONS', payload: response});
+                dispatch({ type: 'FETCH_PERMISSIONS', payload: response });
 
-            } catch(err:any) {
+            } catch (err: any) {
                 console.error(`Error while fetching authorizations ${err}`)
-                dispatch({type: 'FETCHED_ERROR', payload: err});
+                dispatch({ type: 'FETCHED_ERROR', payload: err });
             }
-            dispatch({type: 'FETCHING_PERMISSIONS', payload: false});
+            dispatch({ type: 'FETCHING_PERMISSIONS', payload: false });
         }
         fetchPermissions();
     }, [])
 
-    console.log('formData', authorizations, loading);
-
+    
 
     return (
-      
+
         <div className={styles.root}>
-            <FormTemplate step={step} setStep={setStep} nextStepHandler={nextStepHandler} lastStep={step === formStepEnum.three}>
-                {step === formStepEnum.one && <StepOne 
-                  onChangeHandler={onChangeHandler} 
-                  setFormData={setFormData} 
-                  formData={formData} 
-                  errors={errors} 
-                  setErrors={setErrors} 
-                  onBlur={onMouseLeaveEventHandler}
-                  />}
-                {step === formStepEnum.two && <StepTwo 
-                  onChangeHandler={handleChange} 
-                  authorizations={authorizations}
+            <FormTemplate step={step} setStep={setStep} nextStepHandler={
+                 step === formStepEnum.two ? finalStepHandler :
+                 nextStepHandler
+                 
+                 } lastStep={step === formStepEnum.three}>
+                {step === formStepEnum.one && <StepOne
+                    onChangeHandler={onChangeHandler}
+                    setFormData={setFormData}
+                    formData={formData}
+                    errors={errors}
+                    setErrors={setErrors}
+                    onBlur={onMouseLeaveEventHandler}
+                />}
+                {step === formStepEnum.two && <StepTwo
+                    onChangeHandler={handleChange}
+                    authorizations={authorizations}
                 //   setFormData={setFormData} 
                 //   formData={formData} 
-                //   errors={errors} 
+                  errors={errors} 
                 //   setErrors={setErrors} 
-                  
-                  />}
-                {step === formStepEnum.three && <StepThree  />}
+
+                />}
+                {step === formStepEnum.three && <StepThree />}
             </FormTemplate>
         </div>
     )

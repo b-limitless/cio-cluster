@@ -11,6 +11,8 @@ export const APIS = {
         
     }, 
     user: {
-        checkEmail: `${REQUEST_BASE_URI}/users/team/check-email`
-    }
+        checkEmail: `${REQUEST_BASE_URI}/users/team/check-email`,
+        createTeam: `${REQUEST_BASE_URI}/users/team`
+    }, 
+    
 }

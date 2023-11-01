@@ -5,17 +5,20 @@ import styles from "../permissions.module.scss";
 import stylesFrom from "../../form-steps.module.scss";
 import { authorizations } from '../../../../mock/authorization';
 import { AuthorizationType } from '../../types';
-
+import { FormHelperText } from '@material-ui/core';
+import FormErrorMessage from '../../../common/FormErrorMessage';
 type Props = {
     onChangeHandler: Function;
     authorizations: AuthorizationType
+    errors: {[x:string]: string}
 }
 
 
-export default function StepTwo({authorizations, onChangeHandler}: Props) {
+export default function StepTwo({authorizations, onChangeHandler, errors}: Props) {
 
     return (
         <>
+        
         {/* <div className="loading">Please wait, loading....</div>*/}
         {authorizations.length === 0 && <div className="notfound">No authorizations found</div> }
         
@@ -36,6 +39,7 @@ export default function StepTwo({authorizations, onChangeHandler}: Props) {
                 </BasicAccordion>
             </div>)}
         </div>} 
+        {errors.permissions && <FormErrorMessage message={errors.permissions}/>}
         </>
         
 
