@@ -21,14 +21,9 @@ beforeEach(async () => {
     .post("/api/users/permission/create")
     .send(permission)
     .expect(200);
-  const {permission: {id}} = JSON.parse(res.text);
 
-  console.log("parse", id)
+  const {permission: {id}} = JSON.parse(res.text);
   globalId = id;
-  // const {
-  //   permissions: { id },
-  // } = parse;
-  // globalId = id;
 });
 
 it("throw 401 error, if username and the password is not provided", async () => {
@@ -159,7 +154,7 @@ it("it will create team and verify is that team is belongs to created admin", as
   const token = JSON.parse(atob(jwtString) as any).jwt;
   const payload = jwt.verify(token, "asdf") as UserPayload;
 
-  console.log("signinUser", payload);
+  
   try {
     const res = await request(app)
       .post("/api/users/team")

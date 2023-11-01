@@ -12,6 +12,7 @@ import { UserService } from "../services/User.service";
 import { VerficationService } from "../services/Verification.service";
 import { readFile } from "../utils/readFile";
 import { checkPermissionAllSet } from "./utils";
+import { Permission } from "../models/permissions";
 
 const router = express.Router();
 
@@ -40,6 +41,14 @@ router.post(
         `Error ${selectedPermissionExists.permissions}`
       );
     }
+    // const permissionObject = permissions.map((permission:string) => new mongoose.Types.ObjectId(permission));
+
+    // // Checking if permission is exists in collection
+    // const isAllPermissionExits = await Permission.find({_id: {$in: permissionObject}});
+    
+    // if(isAllPermissionExits.length !== permissions.length) {
+    //   throw new BadRequestError("All provided permissions was unable to find");
+    // }
 
     // Build a password
     

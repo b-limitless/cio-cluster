@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Password } from "../utils/password";
+import { Schema } from "mongoose";
 export interface UserAttrs {
   email: string;
   password: string;
@@ -44,10 +45,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    permissions: {
-      type: [String],
-      default: [],
-    },
+    permissions: [{
+      type: Schema.Types.ObjectId,
+      ref: "Permission", // Reference to the Permission model
+    }],
     verified: {
       type: Boolean, 
       default: false
