@@ -15,6 +15,8 @@ import { readFile } from "../utils/readFile";
 import { checkPermissionAllSet } from "./utils";
 import { User } from "../models/user";
 import { limit } from "../config/email";
+import { Permission } from "../models/permissions";
+import mongoose from "mongoose";
 
 export const mockUsers = [
   {
@@ -1268,7 +1270,7 @@ router.post(
   TeamBodyRequest,
   validateRequest,
   requireAuth,
-  hasPermissions(["create_team"]),
+  // hasPermissions(["create_team"]),
   async (req: Request, res: Response) => {
     const { firstName, lastName, email, password, permissions, role } =
       req.body;
@@ -1281,13 +1283,22 @@ router.post(
       throw new BadRequestError(messages.emailExists);
     }
 
-    let selectedPermissionExists = await checkPermissionAllSet(permissions);
+    const permissionObject = permissions.map((permission:string) => new mongoose.Types.ObjectId(permission));
 
-    if (!selectedPermissionExists.status) {
-      throw new BadRequestError(
-        `Error ${selectedPermissionExists.permissions}`
-      );
+    // Checking if permission is exists in collection
+    const isAllPermissionExits = await Permission.find({_id: {$in: permissionObject}});
+    
+    if(isAllPermissionExits.length !== permissions.length) {
+      throw new BadRequestError("All provided permissions was unable to find");
     }
+
+    // let selectedPermissionExists = await checkPermissionAllSet(permissions);
+
+    // if (!selectedPermissionExists.status) {
+    //   throw new BadRequestError(
+    //     `Error ${selectedPermissionExists.permissions}`
+    //   );
+    // }
 
     const user = await UserService.build({
       firstName,

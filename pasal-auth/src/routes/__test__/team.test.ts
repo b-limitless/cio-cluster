@@ -14,11 +14,21 @@ const permission = {
   role: "sales executive",
 };
 
+var globalId = null;
+
 beforeEach(async () => {
-  await request(app)
+  const res = await request(app)
     .post("/api/users/permission/create")
     .send(permission)
     .expect(200);
+  const {permission: {id}} = JSON.parse(res.text);
+
+  console.log("parse", id)
+  globalId = id;
+  // const {
+  //   permissions: { id },
+  // } = parse;
+  // globalId = id;
 });
 
 it("throw 401 error, if username and the password is not provided", async () => {
@@ -57,7 +67,7 @@ it("throws 400 error if no permission is provided", async () => {
     .post("/api/users/team")
     .send({
       email: "bharatrose1@gmail.com",
-      password: "thisismylife"
+      password: "thisismylife",
     })
     .expect(400);
 });
@@ -68,7 +78,7 @@ it("throw 401 unauthroize error if user does not have create team permission", a
       .post("/api/users/team")
       .set("Cookie", global.signin([]))
       .send({
-        firstName: "Bharat", 
+        firstName: "Bharat",
         lastName: "Shah",
         email: "abcdefgh86@gmail.com",
         password: "test",
@@ -89,27 +99,27 @@ it("disallowed duplicate email registration", async () => {
       .send({
         email: "bharatrose1@gmail.com",
         password: "thisismylife",
-        permissions: ["list_leads"],
+        permissions: [globalId],
         role: "developer",
-        firstName: "Bharat", 
-        lastName: "Shah"
+        firstName: "Bharat",
+        lastName: "Shah",
       })
       .expect(201);
 
-    const res =  await request(app)
+    const res = await request(app)
       .post("/api/users/team")
       .set("Cookie", global.signin(["create_team"]))
       .send({
         email: "bharatrose1@gmail.com",
         password: "thisismylife",
-        permissions: ["list_leads"],
+        permissions: [globalId],
         role: "admin",
-        firstName: "Bharat", 
-        lastName: "Shah"
+        firstName: "Bharat",
+        lastName: "Shah",
       })
       .expect(400);
 
-    const {errors} = JSON.parse(res.text);
+    const { errors } = JSON.parse(res.text);
     expect(errors[0]["message"]).toEqual("Email address already exists");
   } catch (err: any) {
     console.log(err);
@@ -117,17 +127,15 @@ it("disallowed duplicate email registration", async () => {
   }
 });
 
-
 it("It will create team with first name, lastname, email, role, permission, enabled", async () => {
   const signinUser = global.signin(["create_team"]);
-  
-  
+
   try {
     const res = await request(app)
       .post("/api/users/team")
       .set("Cookie", signinUser)
       .send({
-        firstName: "Bharat", 
+        firstName: "Bharat",
         lastName: "Shah",
         email: "abcdefgh86@gmail.com",
         password: "test",
@@ -136,32 +144,28 @@ it("It will create team with first name, lastname, email, role, permission, enab
       })
       .expect(201);
 
-      const parseRes = JSON.parse(res.text);
+    const parseRes = JSON.parse(res.text);
 
-      // expect(parseRes.adminId).toEqual(signinUser.id);
+    // expect(parseRes.adminId).toEqual(signinUser.id);
   } catch (err: any) {
     console.log("err", err.message);
   }
 });
-
 
 it("it will create team and verify is that team is belongs to created admin", async () => {
   const signinUser = global.signin(["create_team"]);
   // Decoding the string
-  const jwtString = signinUser[0].split('express:sess=')[1];
+  const jwtString = signinUser[0].split("express:sess=")[1];
   const token = JSON.parse(atob(jwtString) as any).jwt;
-  const payload = jwt.verify(
-    token,
-    'asdf'
-  ) as UserPayload;
+  const payload = jwt.verify(token, "asdf") as UserPayload;
 
-  console.log('signinUser', payload)
+  console.log("signinUser", payload);
   try {
     const res = await request(app)
       .post("/api/users/team")
       .set("Cookie", signinUser)
       .send({
-        firstName: "Bharat", 
+        firstName: "Bharat",
         lastName: "Shah",
         email: "abcdefgh86@gmail.com",
         password: "test",
@@ -170,16 +174,10 @@ it("it will create team and verify is that team is belongs to created admin", as
       })
       .expect(201);
 
-      const parseRes = JSON.parse(res.text);
+    const parseRes = JSON.parse(res.text);
 
-      expect(parseRes.adminId).toEqual(payload.id);
+    expect(parseRes.adminId).toEqual(payload.id);
   } catch (err: any) {
     console.log("err", err.message);
   }
 });
-
-
-
-
-
-
