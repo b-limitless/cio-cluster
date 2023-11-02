@@ -14,22 +14,6 @@ router.get('/api/users/currentuser',  requireAuth, currentUser, (req, res) => {
   res.send({currentUser: req.currentUser || null});
 });
 
-// Get user by it
-router.get('/api/users/:id', requireAuth, async(req: Request, res:Response) => {
-  let id:string|mongoose.Types.ObjectId = '';
 
-   const userId = req.params.id;
-   id = new mongoose.Types.ObjectId(userId);
-   
-   
-
-  try {
-    const user = await User.findOne({_id: id}).populate('permissions');
-    res.send(user);
-  } catch (err:any) {
-    logger.log('error', `Can not find user ${err}`);
-    throw new Error(err);
-  }
-})
 
 export { router as currentUserRouter };

@@ -59,7 +59,7 @@ app.all("*", async (req, res) => {
   throw new NotFoundError("Route did not find");
 });
 
-
-app.use(errorHandler);
+// Working not 
+// app.use(errorHandler);
 
 export { app };

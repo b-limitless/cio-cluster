@@ -5,11 +5,49 @@ import { validateRequest, BadRequestError, requireAuth } from "@pasal/common";
 
 const router = express.Router();
 
+router.get(
+  "/api/users/get-authorizations",
+  // requireAuth,
+  async (req: Request, res: Response) => {
+    res.send("fuck you")
+    // try {
+    //   const permissions = await Permission.aggregate([
+    //     {
+    //       $group: {
+    //         _id: "$role",
+    //         permissions: {
+    //           $push: {
+    //             id: "$_id",
+    //             name: "$name",
+    //             cat: "$cat",
+    //             guard_name: "$guard_name",
+    //             created_at: "$created_at",
+    //           }
+    //         }
+    //       }
+    //     },
+    //     {
+    //       $project: {
+    //         role: "$_id",
+    //         permissions: 1,
+    //         _id: 0
+    //       }
+    //     }
+    //   ])
+    //   // const permissions = await Permission.find();
+    //   res.send(permissions);
+    // } catch(err) {
+    //   throw new Error(`Could not fetch permissions`)
+    // }
+  }
+);
+
 
 router.get(
   "/api/users/authorizations",
   requireAuth,
   async (req: Request, res: Response) => {
+    
     try {
       const permissions = await Permission.aggregate([
         {
@@ -34,7 +72,7 @@ router.get(
           }
         }
       ])
-      
+      // const permissions = await Permission.find();
       res.send(permissions);
     } catch(err) {
       throw new Error(`Could not fetch permissions`)
@@ -81,10 +119,9 @@ router.post(
   }
 );
 
-// Creating mock permission for the testing
+
 router.get(
   "/api/users/authorizations/mock",
-  requireAuth,
   async (req: Request, res: Response) => {
     try {
       const permissions = [

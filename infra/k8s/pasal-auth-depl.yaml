@@ -38,4 +38,4 @@ spec:
       protocol: TCP
       port: 3000
       targetPort: 3000
-# mongodb://pasal-auth-mongo-srv:27017/auth
+# 
