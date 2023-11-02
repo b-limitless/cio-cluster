@@ -1292,14 +1292,6 @@ router.post(
       throw new BadRequestError("All provided permissions was unable to find");
     }
 
-    // let selectedPermissionExists = await checkPermissionAllSet(permissions);
-
-    // if (!selectedPermissionExists.status) {
-    //   throw new BadRequestError(
-    //     `Error ${selectedPermissionExists.permissions}`
-    //   );
-    // }
-
     const user = await UserService.build({
       firstName,
       lastName,
@@ -1310,6 +1302,10 @@ router.post(
       verified: true,
       adminId,
     });
+
+    const mapIds = permissions.map((permission) => new mongoose.Types.ObjectId(permission));
+    // const findPermissions = await Permission.find({_id: {$in: mapIds}});
+    
 
     res.status(201).send(user);
 
