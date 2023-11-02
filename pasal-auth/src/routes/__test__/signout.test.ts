@@ -62,8 +62,8 @@ it("create user and clear the session", async () => {
  
   const logout = await request(app)
   .get("/api/users/signout")
-  .expect(401);
-  // expect(logout.get("Set-Cookie")[0]).toEqual(
-  //   "express:sess=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=pasal.dev; httponly"
-  // );
+  .expect(200);
+  expect(logout.get("Set-Cookie")[0]).toEqual(
+    "express:sess=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; domain=pasal.dev; httponly"
+  );
 });

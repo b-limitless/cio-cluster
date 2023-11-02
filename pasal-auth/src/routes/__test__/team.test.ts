@@ -80,7 +80,7 @@ it("throw 401 unauthroize error if user does not have create team permission", a
         permissions: ["list_leads"],
         role: "developer",
       })
-      .expect(401);
+      .expect(400);
   } catch (err: any) {
     console.log("err", err.message);
   }

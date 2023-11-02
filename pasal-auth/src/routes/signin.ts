@@ -8,6 +8,7 @@ import jwt from "jsonwebtoken";
 import { UserService } from "../services/User.service";
 import { Password } from "../utils/password";
 const router = express.Router();
+import { User } from "../models/user";
 
 router.post(
   "/api/users/signin",
@@ -22,10 +23,10 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    const existingUser = await UserService.findByWhereCluse({
+    const existingUser = await User.findOne({
       email,
       verified: true,
-    });
+    }).populate("permissions");
 
     if (!existingUser) {
       throw new BadRequestError("Invalid credentials", "message");
