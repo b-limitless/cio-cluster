@@ -3,22 +3,30 @@ import { User } from "../../models/user";
 
 export async function signUpVerifyUserGetToken(app: any) {
   const permission = {
-    name: "list_leads",
+    name: 'globalId',
     cat: "ifa",
     guard_name: "sales",
     role: "sales executive",
   };
-  await request(app)
-    .post("/api/users/permission/create")
-    .send(permission)
-    .expect(200);
+  
+  var globalId = null;
+  
+  
+    const res = await request(app)
+      .post("/api/users/permission/create")
+      .send(permission)
+      .expect(200);
+  
+    const {permission: {id}} = JSON.parse(res.text);
+    
+  
 
   const response = await request(app)
     .post("/api/users/signup")
     .send({
       email: "bharatrose1@gmail.com",
       password: "thisismylife",
-      permissions: ["list_leads"],
+      permissions: [id],
       role: "admin",
       employeeCount: 50,
       industry: ["fashion"],

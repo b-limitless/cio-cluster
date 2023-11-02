@@ -5,12 +5,6 @@ import { rabbitMQWrapper } from "../../__mock__/rabbitMQWrapper";
 import { UserCreatedPublisher } from "../../events/publishers/user-created-publisher";
 
 
-const permission = {
-  name: "list_leads",
-  cat: "ifa",
-  guard_name: "sales",
-  role: "sales executive",
-};
 
 
 
@@ -28,11 +22,23 @@ afterAll(async() => {
   await rabbitMQWrapper.close();
 });
 
+const permission = {
+  name: 'globalId',
+  cat: "ifa",
+  guard_name: "sales",
+  role: "sales executive",
+};
+
+var globalId = null;
+
 beforeEach(async () => {
-  await request(app)
+  const res = await request(app)
     .post("/api/users/permission/create")
     .send(permission)
     .expect(200);
+
+  const {permission: {id}} = JSON.parse(res.text);
+  globalId = id;
 });
 
 it("throw 401 error, if username and the password is not provided", async () => {
@@ -79,7 +85,7 @@ it("throws 400 error if no permission is provided", async () => {
 // const commonRequiredFiles = {
 //   email: "bharatrose4@gmail.com",
 //   password: "thisismylife",
-//   permissions: ["list_leads"],
+//   permissions: [globalId],
 //   role: "admin",
 //   employeeCount: 50,
 //   industry: ["fashion"],
@@ -107,7 +113,7 @@ it("registere user sucessfully initially user is not verified and its sends requ
       .send({
         email: "abcdefgh86@gmail.com",
         password: "test",
-        permissions: ["list_leads"],
+        permissions: [globalId],
         role: "admin",
         employeeCount: 50,
         industry: ["fashion"],
@@ -144,7 +150,7 @@ it("disallowed duplicate email registration", async () => {
       .send({
         email: "bharatrose1@gmail.com",
         password: "thisismylife",
-        permissions: ["list_leads"],
+        permissions: [globalId],
         role: "admin",
         employeeCount: 50,
         industry: ["fashion"],
@@ -156,7 +162,7 @@ it("disallowed duplicate email registration", async () => {
       .send({
         email: "bharatrose1@gmail.com",
         password: "thisismylife",
-        permissions: ["list_leads"],
+        permissions: [globalId],
         role: "admin",
         employeeCount: 50,
         industry: ["fashion"],
@@ -177,7 +183,7 @@ it("Register user with target market", async () => {
     .send({
       email: "bharatrose4@gmail.com",
       password: "thisismylife",
-      permissions: ["list_leads"],
+      permissions: [globalId],
       role: "admin",
       employeeCount: 50,
       industry: ["fashion"],
