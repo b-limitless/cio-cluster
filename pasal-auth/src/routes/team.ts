@@ -1341,11 +1341,12 @@ router.get("/api/users/team/v1", async (req: Request, res: Response) => {
 
   const users = await User.find(filterQuery, {})
     .skip(Number(pageNumber) * limit)
-    .limit(limit);
+    .limit(limit).populate("permissions");
 
   res.send({ users, affectedRows });
 });
-// 
+
+
 router.post(
   "/api/users/team/check-email",
   requireAuth,

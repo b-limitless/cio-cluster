@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Button, BasicTable } from "@pasal/cio-component-library"
 import styles from "@pasal/common-style/styles/components/_table.module.scss";
 import tableStyle from "./list.module.scss";
@@ -7,6 +7,11 @@ import { assetsCDN } from '../../../config/assetsCDN';
 import { DataTable } from '@pasal/cio-component-library';
 import { mockUsers } from '../../../mock/users';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { APIS } from '../../../config/apis';
+import { request } from '@pasal/cio-component-library';
+import { fetchUsers, fetchedError, fetchingUsers } from '../../../../reducers/userSlice';
 type Props = {}
 
 
@@ -68,11 +73,33 @@ export default function List({ }: Props) {
   const [page, setPage] = useState<number>(0);
   const filters:string[] = [];
 
+  const {users:{loading, users, error}} = useSelector((state:RootState) => state);
+  const dispatch = useDispatch();
+
   const tableHeader = ['fullName', 'role', 'phoneNumber', 'status','action'];
 
   const handleChange = () => {
 
   }
+
+  useEffect(() => {
+    const fetchUsersAPI = async() => {
+      dispatch(fetchingUsers(true));
+      try {
+        const users = await request({
+          url: APIS.user.users, 
+          method: 'get'
+        });
+        dispatch(fetchUsers(users)); 
+      } catch(err:any) {
+        // err.response.data
+        dispatch(fetchedError(err.response.data));
+        console.error(err);
+      }
+      dispatch(fetchingUsers(false));
+    }
+    fetchUsersAPI();
+  }, [])
 
   return (
             <div className={styles.table}>
@@ -93,7 +120,7 @@ export default function List({ }: Props) {
                   page={page}
                   setPage={setPage}
                   count={2} //Math.ceil(affectedRows/perPage)}
-                  loading={false}
+                  loading={loading}
                   rightButton={<Link to={'/users/add'}><Button variant='primary' text={'Add'} /></Link>}
                   handleFiltersOnChange={handleChange}
       />

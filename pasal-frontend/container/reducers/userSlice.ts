@@ -36,11 +36,11 @@ export const initialState: UserResponseInterface = {
   limit: 20,
   update: null,
   affectedRows: 0,
-  filters: { febricSeasons: [], brightness: [] },
+  filters: { },
 };
 
 export const productSlice = createSlice({
-  name: "product",
+  name: "users",
   initialState,
   reducers: {
     fetchUsers: (
@@ -49,7 +49,7 @@ export const productSlice = createSlice({
     ) => {
       return {
         ...state,
-        febrics: action.payload,
+        users: action.payload,
       };
     },
     fetchingUsers: (
@@ -82,7 +82,7 @@ export const productSlice = createSlice({
     addUser: (state: UserResponseInterface, action: PayloadAction<user>) => {
       return {
         ...state,
-        febrics: [...state.users, action.payload],
+        users: [...state.users, action.payload],
       };
     },
     updateUser: (
