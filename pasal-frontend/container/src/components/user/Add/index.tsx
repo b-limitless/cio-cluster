@@ -13,6 +13,9 @@ import { Authorization, PermissionInterface } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { addUser, fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
+import { Fragment } from 'react';
+import { useHistory } from 'react-router-dom';
+
 
 
 
@@ -90,9 +93,6 @@ const formInitialState = { firstName: '', lastName: '',  password: '', confirmPa
 export default function index({ }: Props) {
     const {users: {users, update}} = useSelector((state:RootState) => state); 
     const updateUser = users.filter(user => user.id === update);
-
-    console.log("users", users)
-
     const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({});
     const [formData, setFormData] = useState<any>(
@@ -103,12 +103,20 @@ export default function index({ }: Props) {
     const [{ authorizations, loading, error }, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
     
     const globalDispatch = useDispatch();
+    const history = useHistory();
     const isUpdateUserMode = useMemo(() => {
         return updateUser.length > 0;
     }, [updateUser]);
 
 
     console.log("APIS.user}/${updateUser[0].id", `${APIS.user}/${updateUser[0]?.id}`)
+
+    const editUser = (id:string) => {
+        globalDispatch(updateUserAction(id));
+        // send user to add user field
+        history.push('/users/add')
+    }
+
 
     const finalStepHandler = async() => {
         setErrors({...errors, permissions: null})
@@ -131,7 +139,7 @@ export default function index({ }: Props) {
         // Submit the form to server
         const { action, ...body} = formData;
         try {
-            await request({
+            const createOrUpdateUser = await request({
                 url: isUpdateUserMode ? `/api/users/v1/${updateUser[0].id}` : APIS.user.createTeam, 
                 method: isUpdateUserMode ? 'patch': 'post',
                 body
@@ -146,7 +154,8 @@ export default function index({ }: Props) {
             }
             
             if(!isUpdateUserMode) {
-                globalDispatch(addUser(formData));
+                const action = <Fragment><span onClick={() => editUser(createOrUpdateUser.id)}>Edit</span>{' '}<span>Delete</span></Fragment>
+                globalDispatch(addUser({...formData, action}));
             }
            
             setStep(formStepEnum.three);
@@ -185,13 +194,7 @@ export default function index({ }: Props) {
         setFormData({ ...formData, [name]: value });
     }
 
-    useEffect(() => {
-        if (Object.entries(errors).length === 0 && moveToNextStep) {
-            const getTheIndexOfStep = Object.keys(formStepEnum).indexOf(step);
-            setStep(Object.values(formStepEnum)[getTheIndexOfStep + 1]);
-            setMoveToNextStep(false);
-        }
-    }, [moveToNextStep, step, errors]);
+    
 
     const onMouseLeaveEventHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
         // We need to check if this email is already exists
@@ -241,6 +244,14 @@ export default function index({ }: Props) {
         }
         fetchPermissions();
     }, [])
+
+    useEffect(() => {
+        if (Object.entries(errors).length === 0 && moveToNextStep) {
+            const getTheIndexOfStep = Object.keys(formStepEnum).indexOf(step);
+            setStep(Object.values(formStepEnum)[getTheIndexOfStep + 1]);
+            setMoveToNextStep(false);
+        }
+    }, [moveToNextStep, step, errors]);
 
     
 
