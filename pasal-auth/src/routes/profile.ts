@@ -25,6 +25,7 @@ router.patch(
       spokenLanguage,
       about,
       profileImageLink,
+      permissions
     } = req.body;
 
     
@@ -37,7 +38,7 @@ router.patch(
       throw new BadRequestError("No authenticated user found");
     }
 
-    //
+    
 
     try {
       const findAndUpdate = await UserService.findByIdAndUpdate(
@@ -49,6 +50,7 @@ router.patch(
           spokenLanguage,
           about,
           profileImageLink,
+          permissions
         },
         { new: true }
       );

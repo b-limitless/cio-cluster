@@ -10,9 +10,9 @@ import StepThree from './Steps/Three';
 import styles from './add.module.scss';
 import './style.scss';
 import { Authorization, PermissionInterface } from '../types';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { updateUser as updateUserAction } from '../../../../reducers/userSlice';
+import { fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
 
 
 
@@ -91,7 +91,7 @@ export default function index({ }: Props) {
     const {users: {users, update}} = useSelector((state:RootState) => state); 
     const updateUser = users.filter(user => user.id === update);
 
-    console.log("updateUser", updateUser)
+    console.log("users", users)
 
     const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({});
@@ -101,10 +101,12 @@ export default function index({ }: Props) {
     const [moveToNextStep, setMoveToNextStep] = useState(false);
 
     const [{ authorizations, loading, error }, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
-   
+    
+    const globalDispatch = useDispatch();
     const isUpdateUserMode = useMemo(() => {
         return updateUser.length > 0;
     }, [updateUser]);
+
 
     console.log("APIS.user}/${updateUser[0].id", `${APIS.user}/${updateUser[0]?.id}`)
 
@@ -136,8 +138,16 @@ export default function index({ }: Props) {
             }); 
 
             if(isUpdateUserMode) {
-                dispatch(updateUserAction(null));
+                // Find the user with id index
+                const index = users.map(user => user.id).findIndex((x) => x === updateUser[0].id); 
+                const newValue = [...users];
+                newValue[index] = formData; 
+                globalDispatch(updateUserAction(null));
+                globalDispatch(fetchUsers(newValue));
             }
+            // Update the user as well
+           
+            
             setStep(formStepEnum.three);
         } catch(err:any) {
             console.error(`Could not ${isUpdateUserMode ? 'update ' : 'create '} team ${err.response.data}`);
