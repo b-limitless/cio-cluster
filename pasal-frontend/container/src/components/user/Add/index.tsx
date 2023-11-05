@@ -12,7 +12,7 @@ import './style.scss';
 import { Authorization, PermissionInterface } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
+import { addUser, fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
 
 
 
@@ -138,16 +138,17 @@ export default function index({ }: Props) {
             }); 
 
             if(isUpdateUserMode) {
-                // Find the user with id index
                 const index = users.map(user => user.id).findIndex((x) => x === updateUser[0].id); 
                 const newValue = [...users];
                 newValue[index] = formData; 
                 globalDispatch(updateUserAction(null));
                 globalDispatch(fetchUsers(newValue));
             }
-            // Update the user as well
-           
             
+            if(!isUpdateUserMode) {
+                globalDispatch(addUser(formData));
+            }
+           
             setStep(formStepEnum.three);
         } catch(err:any) {
             console.error(`Could not ${isUpdateUserMode ? 'update ' : 'create '} team ${err.response.data}`);
