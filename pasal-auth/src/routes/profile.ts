@@ -29,14 +29,15 @@ router.patch(
 
     
 
-    const id =
-      process.env.NODE_ENV !== "test" ? req?.currentUser?.id : req.params.id;
+    // const id =
+    //   process.env.NODE_ENV !== "test" ? req?.currentUser?.id : req.params.id;
+    const id = req.params.id;
 
     if (!id) {
       throw new BadRequestError("No authenticated user found");
     }
 
-    
+    //
 
     try {
       const findAndUpdate = await UserService.findByIdAndUpdate(
