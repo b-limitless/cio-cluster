@@ -11,9 +11,9 @@ import { UserService } from "../services/User.service";
 import { UserProfileUpdatedPublisher } from "../events/publishers/profile-updated-publisher";
 
 const router = express.Router();
-
+//
 router.patch(
-  "/api/users/:id?",
+  "/api/users/v1/:id?",
   UserProfileBodyRequest,
   requireAuth,
   validateRequest,
@@ -27,12 +27,16 @@ router.patch(
       profileImageLink,
     } = req.body;
 
+    
+
     const id =
       process.env.NODE_ENV !== "test" ? req?.currentUser?.id : req.params.id;
 
     if (!id) {
       throw new BadRequestError("No authenticated user found");
     }
+
+    
 
     try {
       const findAndUpdate = await UserService.findByIdAndUpdate(

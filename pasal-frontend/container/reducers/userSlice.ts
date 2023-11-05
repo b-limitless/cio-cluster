@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { ReactNode } from "react";
 const mockUser = {
   permissions: ["654395ad65b43a0019b18e5f"],
   verified: true,
@@ -15,10 +16,10 @@ const mockUser = {
   id: "6543a88c54acf302747895b2",
 };
 
-type user = typeof mockUser;
+export type userType = typeof mockUser & {action?:ReactNode};
 
 export interface UserResponseInterface {
-  users: user[];
+  users: userType[];
   loading: boolean;
   error: string | null;
   page: number;
@@ -45,7 +46,7 @@ export const productSlice = createSlice({
   reducers: {
     fetchUsers: (
       state: UserResponseInterface,
-      action: PayloadAction<user[]>
+      action: PayloadAction<userType[]>
     ) => {
       return {
         ...state,
@@ -79,7 +80,7 @@ export const productSlice = createSlice({
         page: action.payload,
       };
     },
-    addUser: (state: UserResponseInterface, action: PayloadAction<user>) => {
+    addUser: (state: UserResponseInterface, action: PayloadAction<userType>) => {
       return {
         ...state,
         users: [...state.users, action.payload],

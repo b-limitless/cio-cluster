@@ -1,6 +1,6 @@
 import { forStepType, formStepEnum, request } from '@pasal/cio-component-library';
 import { emailRegex, firstLetterUpperCase, validString } from '@pasal/common-functions';
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useMemo, useReducer, useState } from 'react';
 import FormTemplate from '../../common/FormTemplate/FormTemplate';
 import StepOne from './Steps/One';
 import StepTwo from './Steps/Two';
@@ -9,7 +9,10 @@ import { APIS } from '../../../config/apis';
 import StepThree from './Steps/Three';
 import styles from './add.module.scss';
 import './style.scss';
-import { PermissionInterface } from '../types';
+import { Authorization, PermissionInterface } from '../types';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { updateUser as updateUserAction } from '../../../../reducers/userSlice';
 
 
 
@@ -68,6 +71,7 @@ export const permissionIntialstate: PermissionInterface = {
     error: null
 }
 
+
 function permissionsReducer(state: PermissionInterface, action: any) {
     switch (action.type) {
         case 'FETCH_PERMISSIONS':
@@ -81,14 +85,28 @@ function permissionsReducer(state: PermissionInterface, action: any) {
     }
 }
 
+const formInitialState = { firstName: '', lastName: '',  password: '', confirmPassword: '', role: '', enabled: false, permissions: [] };
+
 export default function index({ }: Props) {
+    const {users: {users, update}} = useSelector((state:RootState) => state); 
+    const updateUser = users.filter(user => user.id === update);
+
+    console.log("updateUser", updateUser)
 
     const [step, setStep] = useState<forStepType>(formStepEnum.one);
     const [errors, setErrors] = useState<any>({});
-    const [formData, setFormData] = useState<any>({ firstName: '', lastName: '',  password: '', confirmPassword: '', role: '', enabled: false, permissions: [] });
+    const [formData, setFormData] = useState<any>(
+           updateUser.length > 0 ? updateUser[0] : formInitialState
+           );
     const [moveToNextStep, setMoveToNextStep] = useState(false);
 
     const [{ authorizations, loading, error }, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
+   
+    const isUpdateUserMode = useMemo(() => {
+        return updateUser.length > 0;
+    }, [updateUser]);
+
+    console.log("APIS.user}/${updateUser[0].id", `${APIS.user}/${updateUser[0]?.id}`)
 
     const finalStepHandler = async() => {
         setErrors({...errors, permissions: null})
@@ -103,16 +121,26 @@ export default function index({ }: Props) {
             return;
         }
 
+        // Cheke if updateForm is active
+        if(isUpdateUserMode) {
+            // Send update reuqest 
+        }
+
         // Submit the form to server
+        const { action, ...body} = formData;
         try {
             await request({
-                url: APIS.user.createTeam, 
-                method: 'post',
-                body: formData
+                url: isUpdateUserMode ? `/api/users/v1/${updateUser[0].id}` : APIS.user.createTeam, 
+                method: isUpdateUserMode ? 'patch': 'post',
+                body
             }); 
+
+            if(isUpdateUserMode) {
+                dispatch(updateUserAction(null));
+            }
             setStep(formStepEnum.three);
         } catch(err:any) {
-            console.error(`Could not create team ${err.response.data}`);
+            console.error(`Could not ${isUpdateUserMode ? 'update ' : 'create '} team ${err.response.data}`);
         }
         
     }
@@ -176,8 +204,8 @@ export default function index({ }: Props) {
         const { permissions } = formData;
 
         if (checked) {
-            permissions.push(name);
-            setFormData({ ...formData, permissions });
+            const updatePermssions = [...permissions, name];
+            setFormData({ ...formData, permissions: updatePermssions });
             return;
         } else {
             setFormData({ ...formData, permissions: permissions.filter((permission: string) => permission !== name) });
@@ -205,6 +233,7 @@ export default function index({ }: Props) {
 
     
 
+
     return (
 
         <div className={styles.root}>
@@ -220,10 +249,12 @@ export default function index({ }: Props) {
                     errors={errors}
                     setErrors={setErrors}
                     onBlur={onMouseLeaveEventHandler}
+                    updateUser={updateUser.length > 0}
                 />}
                 {step === formStepEnum.two && <StepTwo
                     onChangeHandler={handleChange}
                     authorizations={authorizations}
+                    permissions={formData.permissions}
                 //   setFormData={setFormData} 
                 //   formData={formData} 
                   errors={errors} 

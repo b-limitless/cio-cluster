@@ -1,5 +1,6 @@
 import {
   BadRequestError,
+  currentUser,
   hasPermissions,
   requireAuth,
   validateRequest,
@@ -1330,18 +1331,19 @@ router.post(
   }
 );
 
-router.get("/api/users/team/v1", async (req: Request, res: Response) => {
+router.get("/api/users/team/v1", requireAuth, async (req: Request, res: Response) => {
   const page = (req.query.page ?? 0) as string;
 
   const filters = req.query.filters as string;
 
   const { pageNumber, filterQuery } = getFilterQueryNPage({ page, filters });
+  const adminId = req.currentUser?.id;
+  const affectedRows = await User.countDocuments({...filterQuery, adminId});
 
-  const affectedRows = await User.countDocuments(filterQuery);
-
-  const users = await User.find(filterQuery, {})
+  const users = await User.find({...filterQuery, adminId}, {})
     .skip(Number(pageNumber) * limit)
-    .limit(limit).populate("permissions");
+    .limit(limit)
+    
 
   res.send({ users, affectedRows });
 });

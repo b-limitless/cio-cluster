@@ -4,14 +4,15 @@ import { roles } from '../../../../config/role';
 import styles from '../../../common/FormTemplate/form-steps.module.scss';
 import { CommonFormInterfaceStep } from '../../user.common.interface';
 
-export default function OneStep({ formData, errors, onChangeHandler, onBlur }: CommonFormInterfaceStep) {
+export default function OneStep({ formData, errors, onChangeHandler, onBlur, updateUser }: CommonFormInterfaceStep) {
+    console.log("formData", formData)
     return (
         <div className={`${styles.row} ${styles.childrens}`}>
             <div className={styles.form__row}>
                 <Input
                     label="First Name"
                     id="firstName"
-                    value={formData.firstName ?? undefined}
+                    value={formData?.firstName ?? undefined}
                     type="text"
                     name="firstName"
                     error={errors.firstName ? true : false}
@@ -22,7 +23,7 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
 <Input
                     label="Last Name"
                     id="lastName"
-                    value={formData.lastName ?? undefined}
+                    value={formData?.lastName ?? undefined}
                     type="text"
                     name="lastName"
                     error={errors.lastName ? true : false}
@@ -38,7 +39,7 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
                 <InputAdornments
                     label="Password"
                     id="password"
-                    value={formData.password ?? ""}
+                    value={formData?.password ?? ""}
                     type="password"
                     name="password"
                     error={errors.password ? true : false}
@@ -48,7 +49,7 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
                 <InputAdornments
                     label="Confirm password"
                     id="confirm-password"
-                    value={formData.confirmPassword ?? ""}
+                    value={formData?.confirmPassword ?? ""}
                     type="password"
                     name="confirmPassword"
                     error={errors.confirmPassword ? true : false}
@@ -60,7 +61,7 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
             <div className={styles.form__row}>
                 
                 <Select options={roles}
-                    value={formData.role ?? 0}
+                    value={formData?.role ?? 0}
                     label={"Role"}
                     name="role"
                     onChange={onChangeHandler}
@@ -71,13 +72,14 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
 <Input
                     label="Email"
                     id="email"
-                    defaultValue=""
+                    defaultValue={formData?.email}
                     type="email"
                     name="email"
                     onChange={onChangeHandler}
                     error={errors.email ? true : false}
                     helperText={errors.email ? errors.email : false}
                     onBlur={onBlur}
+                    disabled={!!updateUser}
 
                 // error={true}
                 // helperText="Incorrect entry."
@@ -87,7 +89,12 @@ export default function OneStep({ formData, errors, onChangeHandler, onBlur }: C
             </div>
             <div className={styles.form__row}>
             <div className="iv">
-                    <BasicSwitch label="Enable"/>
+                    <BasicSwitch 
+                     label="Enable"
+                    //  checked={formData?.enabled}
+                    //  onChange={onChangeHandler}
+                    //  name="enabled"
+                     />
                 </div>
             </div>
             

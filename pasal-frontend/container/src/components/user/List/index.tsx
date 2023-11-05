@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useState} from 'react'
 import { Button, BasicTable } from "@pasal/cio-component-library"
 import styles from "@pasal/common-style/styles/components/_table.module.scss";
 import tableStyle from "./list.module.scss";
@@ -11,9 +11,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { APIS } from '../../../config/apis';
 import { request } from '@pasal/cio-component-library';
-import { fetchUsers, fetchedError, fetchingUsers } from '../../../../reducers/userSlice';
+import { affectedRowAction, fetchUsers, fetchedError, fetchingUsers, updateUser } from '../../../../reducers/userSlice';
+import { userType } from '../../../../reducers/userSlice';
+import { useHistory } from 'react-router-dom';
 type Props = {}
-
 
 let tableData: any = [
   {
@@ -76,37 +77,52 @@ export default function List({ }: Props) {
   const {users:{loading, users, error}} = useSelector((state:RootState) => state);
   const dispatch = useDispatch();
 
-  const tableHeader = ['fullName', 'role', 'phoneNumber', 'status','action'];
+  const tableHeader = ['firstName', 'lastName', 'role', 'email', 'action'];
+  const history = useHistory();
 
   const handleChange = () => {
 
+  }
+
+  const editUser = (id:string) => {
+    dispatch(updateUser(id));
+    // send user to add user field
+    history.push('/users/add')
   }
 
   useEffect(() => {
     const fetchUsersAPI = async() => {
       dispatch(fetchingUsers(true));
       try {
-        const users = await request({
+        let {users, affectedRows} = await request({
           url: APIS.user.users, 
           method: 'get'
         });
+        users.map((user:userType, i:number) => {
+          user.action = <Fragment key={i}><span onClick={() => editUser(user.id)}>Edit</span>{' '}<span>Delete</span></Fragment>
+        });
+        dispatch(affectedRowAction(affectedRows));
         dispatch(fetchUsers(users)); 
       } catch(err:any) {
-        // err.response.data
         dispatch(fetchedError(err.response.data));
         console.error(err);
       }
       dispatch(fetchingUsers(false));
     }
     fetchUsersAPI();
-  }, [])
+  }, []);
+
+  
+
+  console.log('users', users)
 
   return (
             <div className={styles.table}>
                 <DataTable
                   setShowModel={setShowModel}
                   tableHeader={tableHeader}
-                  tableData={mockUsers}
+                  // @ts-ignore
+                  tableData={users}
                   // showFebricModels={showModel}
                   detailsComponents={null}
                   showDetailReactNode={<span>Hello</span>}

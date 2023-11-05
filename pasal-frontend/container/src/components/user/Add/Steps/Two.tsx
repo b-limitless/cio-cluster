@@ -11,10 +11,11 @@ type Props = {
     onChangeHandler: Function;
     authorizations: AuthorizationType
     errors: {[x:string]: string}
+    permissions:string[] 
 }
 
 
-export default function StepTwo({authorizations, onChangeHandler, errors}: Props) {
+export default function StepTwo({authorizations, onChangeHandler, errors, permissions}: Props) {
 
     return (
         <>
@@ -30,7 +31,7 @@ export default function StepTwo({authorizations, onChangeHandler, errors}: Props
                             <BasicSwitch 
                             label={camelCaseToNormal(permission.name)} 
                             onChange={onChangeHandler}
-                        
+                            checked={permissions.indexOf(permission.id) !== -1}
                             name={permission.id}
                             sx={{fontFamily: 'Poppins, san-sarif !important'}}
                             />

@@ -3,6 +3,7 @@ export type Authorization = {
     cat: string;
     guard_name: string;
     created_at: string;
+    id?:string;
   };
   
 export type Row = {[x:string]: Authorization[]};
