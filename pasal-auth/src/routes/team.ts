@@ -1408,4 +1408,21 @@ router.get('/api/users/v1/all', async(req:Request, res:Response) => {
   }
 })
 
+// Deleting team 
+router.delete('/api/users/team/v1/:id', async(req: Request, res:Response) => {
+  const {id} = req.params;
+
+  if(!id) {
+    throw new BadRequestError('Please provide user id to delete');
+  }
+
+  try {
+    await UserService.deleteOne(id);
+    res.send('User deleted successfully');
+  } catch(err) {
+    logger.log('error', `Could not delete error ${err}`);
+    throw new Error(`Could not delete error ${err}`);
+  }
+});
+
 export { router as teamRouter };

@@ -8,7 +8,7 @@ type Props = {
     children: ReactNode
 }
 
-
+// Set model with to 455px
 export default function ConfirmationDialog({children}: Props) {
     return (
         <Model ref={null}>
