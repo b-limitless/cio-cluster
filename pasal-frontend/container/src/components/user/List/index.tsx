@@ -103,8 +103,22 @@ export default function List({ }: Props) {
     
   }
 
-  const deleteConfirmedHandler = (id:string) => {
+  const deleteConfirmedHandler = async() => {
     setDeletingUser(true);
+    
+    try {
+       await request({
+        url: `/api/users/team/v1/${deleteUser}`,
+        method: 'delete'
+      });
+
+      dispatch(fetchUsers(users.filter((user) => user.id !== deleteUser)));
+
+    } catch (err) {
+      throw new Error(`Could not delete the user ${err}`);
+    }
+    setDeletingUser(false);
+    setDeleteUser(null);
   }
 
   useEffect(() => {
@@ -128,8 +142,6 @@ export default function List({ }: Props) {
     }
     fetchUsersAPI();
   }, []);
-
-  console.log("deleteUser", deleteUser)
 
 
   useEffect(() => {

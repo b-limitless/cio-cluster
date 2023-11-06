@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import logger from "../logger";
 import { User } from "../models/user";
 
@@ -44,6 +45,15 @@ export class UserServiceLocal {
             return user;
         } catch(err:any) {
             throw new Error(err.message);
+        }
+    }
+
+    async deleteOne(id:string) {
+        try {
+            await User.deleteOne({_id: new mongoose.Types.ObjectId(id)});
+        } catch(err) {
+            logger.log("info", `Can not delete user ${err}`);
+            throw new Error(`Can not delete user ${err}`);
         }
     }
 }

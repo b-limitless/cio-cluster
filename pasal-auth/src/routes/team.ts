@@ -1408,7 +1408,7 @@ router.get('/api/users/v1/all', async(req:Request, res:Response) => {
   }
 })
 
-// Deleting team 
+
 router.delete('/api/users/team/v1/:id', async(req: Request, res:Response) => {
   const {id} = req.params;
 

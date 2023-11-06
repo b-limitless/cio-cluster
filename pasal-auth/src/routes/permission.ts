@@ -45,7 +45,7 @@ router.get(
 
 router.get(
   "/api/users/authorizations",
-  requireAuth,
+  // requireAuth,
   async (req: Request, res: Response) => {
     
     try {
