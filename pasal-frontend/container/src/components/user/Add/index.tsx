@@ -12,7 +12,7 @@ import './style.scss';
 import { Authorization, PermissionInterface } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { addUser, fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
+import { addUser, addedUserAction, fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
 import { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -103,19 +103,10 @@ export default function index({ }: Props) {
     const [{ authorizations, loading, error }, dispatch] = useReducer(permissionsReducer, permissionIntialstate);
     
     const globalDispatch = useDispatch();
-    const history = useHistory();
+    
     const isUpdateUserMode = useMemo(() => {
         return updateUser.length > 0;
     }, [updateUser]);
-
-
-    console.log("APIS.user}/${updateUser[0].id", `${APIS.user}/${updateUser[0]?.id}`)
-
-    const editUser = (id:string) => {
-        globalDispatch(updateUserAction(id));
-        // send user to add user field
-        history.push('/users/add')
-    }
 
 
     const finalStepHandler = async() => {
@@ -130,13 +121,7 @@ export default function index({ }: Props) {
             setErrors({...errors, permissions: 'Please select at least one permission'}); 
             return;
         }
-
-        // Cheke if updateForm is active
-        if(isUpdateUserMode) {
-            // Send update reuqest 
-        }
-
-        // Submit the form to server
+      
         const { action, ...body} = formData;
         try {
             const createOrUpdateUser = await request({
@@ -154,10 +139,8 @@ export default function index({ }: Props) {
             }
             
             if(!isUpdateUserMode) {
-                const action = <Fragment><span onClick={() => editUser(createOrUpdateUser.id)}>Edit</span>{' '}<span>Delete</span></Fragment>
-                globalDispatch(addUser({...formData, action}));
+                globalDispatch(addedUserAction(createOrUpdateUser));
             }
-           
             setStep(formStepEnum.three);
         } catch(err:any) {
             console.error(`Could not ${isUpdateUserMode ? 'update ' : 'create '} team ${err.response.data}`);

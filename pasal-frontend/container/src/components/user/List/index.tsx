@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { APIS } from '../../../config/apis';
 import { request } from '@pasal/cio-component-library';
-import { affectedRowAction, fetchUsers, fetchedError, fetchingUsers, updateUser } from '../../../../reducers/userSlice';
+import { affectedRowAction, fetchUsers, fetchedError, fetchingUsers, updateUser, addUser, addedUserAction } from '../../../../reducers/userSlice';
 import { userType } from '../../../../reducers/userSlice';
 import { useHistory } from 'react-router-dom';
 type Props = {}
@@ -74,7 +74,7 @@ export default function List({ }: Props) {
   const [page, setPage] = useState<number>(0);
   const filters:string[] = [];
 
-  const {users:{loading, users, error}} = useSelector((state:RootState) => state);
+  const {users:{loading, users, error, addedUser}} = useSelector((state:RootState) => state);
   const dispatch = useDispatch();
 
   const tableHeader = ['firstName', 'lastName', 'role', 'email', 'action'];
@@ -113,8 +113,13 @@ export default function List({ }: Props) {
   }, []);
 
   
-
-  console.log('users', users)
+useEffect(() => {
+  if(addedUser) {
+    const addUserAction = {...addedUser, action: <Fragment><span onClick={() => editUser(addedUser.id)}>Edit</span>{' '}<span>Delete</span></Fragment>};
+    dispatch(addUser(addUserAction));
+    dispatch(addedUserAction(null));
+  }
+} , [addedUser]);
 
   return (
             <div className={styles.table}>

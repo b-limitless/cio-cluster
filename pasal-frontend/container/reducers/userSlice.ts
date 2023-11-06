@@ -27,6 +27,7 @@ export interface UserResponseInterface {
   update: string | null;
   affectedRows: number;
   filters: any; //{[x:string]:string[]};
+  addedUser: userType | null;
 }
 
 export const initialState: UserResponseInterface = {
@@ -38,6 +39,7 @@ export const initialState: UserResponseInterface = {
   update: null,
   affectedRows: 0,
   filters: { },
+  addedUser:null
 };
 
 export const productSlice = createSlice({
@@ -113,6 +115,16 @@ export const productSlice = createSlice({
         filters: action.payload,
       };
     },
+    addedUserAction: (
+      state: UserResponseInterface,
+      action: PayloadAction<userType | null >
+    ) => {
+      return {
+        ...state,
+        addedUser: action.payload,
+      };
+    },
+   
   },
 });
 
@@ -125,6 +137,7 @@ export const {
   updateUser,
   affectedRowAction,
   filterUser,
+  addedUserAction
 } = productSlice.actions;
 
 export const productActions = productSlice.actions;

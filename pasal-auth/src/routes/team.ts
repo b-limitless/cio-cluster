@@ -19,6 +19,10 @@ import { limit } from "../config/email";
 import { Permission } from "../models/permissions";
 import mongoose from "mongoose";
 
+// Rememer you are updating full resource therefore use PUT method rather then PATCH
+// PATCH is used when there is partial modification of resource
+// Update api and test and front end files 
+
 export const mockUsers = [
   {
     id: { $oid: "653e3045fc13ae0b66c76d68" },
@@ -1389,6 +1393,17 @@ router.get('/api/users/:id', requireAuth, async(req: Request, res:Response) => {
     res.send(user);
   } catch (err:any) {
     logger.log('error', `Can not find user ${err}`);
+    throw new Error(err);
+  }
+})
+
+// Getting all users
+// 
+router.get('/api/users/v1/all', async(req:Request, res:Response) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch(err:any) {
     throw new Error(err);
   }
 })

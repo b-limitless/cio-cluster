@@ -92,14 +92,14 @@ router.post(
     try {
       const getWelcomeEmailTempalte = await readFile("welcome.html", {});
   
-      const sendWelcomeEmail = await sendMail({
-        from: mailerEmail,
-        to: email,
-        subject: "Welcome to Customize.io",
-        text: "",
-        html: getWelcomeEmailTempalte,
-      });
-      logger.log("info", messages.wcSent, sendWelcomeEmail);
+      // const sendWelcomeEmail = await sendMail({
+      //   from: mailerEmail,
+      //   to: email,
+      //   subject: "Welcome to Customize.io",
+      //   text: "",
+      //   html: getWelcomeEmailTempalte,
+      // });
+      // logger.log("info", messages.wcSent, sendWelcomeEmail);
     } catch (err) {
       logger.log("error", `${messages.wcCanNotSent} ${err}`);
     }
