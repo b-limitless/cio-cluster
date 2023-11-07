@@ -125,7 +125,7 @@ export default function index({ }: Props) {
         const { action, ...body} = formData;
         try {
             const createOrUpdateUser = await request({
-                url: isUpdateUserMode ? `/api/users/v1/${updateUser[0].id}` : APIS.user.createTeam, 
+                url: isUpdateUserMode ? `/api/users/v1/${updateUser[0].id}` : APIS.user.teams, 
                 method: isUpdateUserMode ? 'patch': 'post',
                 body
             }); 

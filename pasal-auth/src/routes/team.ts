@@ -1272,7 +1272,7 @@ export const getFilterQueryNPage = ({
 const router = express.Router();
 
 router.post(
-  "/api/users/team",
+  "/api/users/team/v1",
   TeamBodyRequest,
   validateRequest,
   requireAuth,
@@ -1397,18 +1397,6 @@ router.get('/api/users/:id', requireAuth, async(req: Request, res:Response) => {
   }
 })
 
-// Getting all users
-// 
-router.get('/api/users/v1/all', async(req:Request, res:Response) => {
-  try {
-    const users = await User.find({});
-    res.send(users);
-  } catch(err:any) {
-    throw new Error(err);
-  }
-})
-
-
 router.delete('/api/users/team/v1/:id', async(req: Request, res:Response) => {
   const {id} = req.params;
 
@@ -1424,5 +1412,15 @@ router.delete('/api/users/team/v1/:id', async(req: Request, res:Response) => {
     throw new Error(`Could not delete error ${err}`);
   }
 });
+
+// APis only for the testing
+router.get('/api/users/v1/all', async(req:Request, res:Response) => {
+  try {
+    const users = await User.find({});
+    res.send(users);
+  } catch(err:any) {
+    throw new Error(err);
+  }
+})
 
 export { router as teamRouter };
