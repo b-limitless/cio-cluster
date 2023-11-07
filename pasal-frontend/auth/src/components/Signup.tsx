@@ -138,7 +138,7 @@ export default function Signup() {
         const response = await request({
           url: APIS.auth.signup,
           method: 'post',
-          body: {...form, role:'admin', permissions: ['65490957b2cd6e0018d327e3']}
+          body: {...form, role:'admin', permissions: ['65490957b2cd6e0018d327e6']}
         });
     
         const { verificationCode, user } = response; 

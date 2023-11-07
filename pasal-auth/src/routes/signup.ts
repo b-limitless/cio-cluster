@@ -104,22 +104,22 @@ router.post(
       logger.log("error", `${messages.wcCanNotSent} ${err}`);
     }
 
-    try {
-      const getHTMLTemplate = await readFile("email-verification.signup.html", {
-        verificationCode,
-      });
+    // try {
+    //   const getHTMLTemplate = await readFile("email-verification.signup.html", {
+    //     verificationCode,
+    //   });
 
-      const sendVerificationEmail = await sendMail({
-        from: mailerEmail,
-        to: email,
-        subject: messages.verifyEmail,
-        text: "",
-        html: getHTMLTemplate,
-      });
-      logger.log("info", sendVerificationEmail);
-    } catch (err) {
-      logger.log("error", err);
-    }
+    //   const sendVerificationEmail = await sendMail({
+    //     from: mailerEmail,
+    //     to: email,
+    //     subject: messages.verifyEmail,
+    //     text: "",
+    //     html: getHTMLTemplate,
+    //   });
+    //   logger.log("info", sendVerificationEmail);
+    // } catch (err) {
+    //   logger.log("error", err);
+    // }
   }
 );
 

@@ -9,6 +9,13 @@
         column-gap: 22px;
         align-items:center;
 
+        .avatar {
+            img {
+                width: 60px;
+                height: auto;
+            }
+        }
+
         @media only screen and (max-width: $bp-700) {
             flex-direction: column;
             row-gap: 1rem;

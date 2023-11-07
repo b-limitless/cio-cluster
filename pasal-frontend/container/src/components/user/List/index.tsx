@@ -126,7 +126,7 @@ export default function List({ }: Props) {
       dispatch(fetchingUsers(true));
       try {
         let { users, affectedRows } = await request({
-          url: APIS.user.users,
+          url: APIS.user.teams,
           method: 'get'
         });
         users.map((user: userType, i: number) => {

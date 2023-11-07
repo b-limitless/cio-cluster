@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Button, Input, Select,   MultipleSelect, TextArea, InputAdornments } from '@pasal/cio-component-library';
+import { useEffect, useState } from 'react';
+import { Button, Input, Select,   MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
 import React from 'react';
-import AvatarPNG from '../../../assets/img/avatar-1.png';
+import AvatarPNG from '../../../assets/svg/users.svg';
 import SideModel from '../SideModel';
 import styles from './profile.module.scss';
 import countries from '../../../data/countries.json';
@@ -40,6 +40,20 @@ export default function Profile({ showModel, setShowModel }: Props) {
     );
   };
 
+  // Fetching user profile details 
+  useEffect(() => {
+    const fetchUserProfile = async() => {
+      try {
+        const reponse = await request({
+          url: '', 
+          method: 'get'
+        })
+      } catch(err:any) {
+        throw new Error(err);
+      }
+     }
+  }, [])
+
 
   return (
      
@@ -48,7 +62,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
       <div className={styles.profile__container}>
         <div className={styles.avatar__actions}>
           <div className={styles.avatar}>
-            <img src={AvatarPNG} alt='' />
+            {/* <AvatarPNG/> */}
+            <img src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
           </div>
           <div className={styles.actions}>
             <Button variant='primary' text='Upload' />

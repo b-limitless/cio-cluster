@@ -13,7 +13,7 @@ export const APIS = {
   user: {
     checkEmail: `${userBaseURI}/team/check-email`,
     createTeam: `${userBaseURI}/team`,
-    users: `${userBaseURI}/team/v1`,
+    teams: `${userBaseURI}/team/v1`,
     user: `${userBaseURI}/v1`,
   },
 };
