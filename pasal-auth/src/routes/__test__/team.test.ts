@@ -27,19 +27,19 @@ beforeEach(async () => {
 });
 
 it("throw 401 error, if username and the password is not provided", async () => {
-  await request(app).post("/api/users/team").send({}).expect(400);
+  await request(app).post("/api/users/team/v1").send({}).expect(400);
 });
 
 it("usetype must be present while doing registration", async () => {
   await request(app)
-    .post("/api/users/team")
+    .post("/api/users/team/v1")
     .send({ email: "bharatrose1@gmail.com", password: "thisismylife" })
     .expect(400);
 });
 
 it("return with 400 with invalid passwod", async () => {
   await request(app)
-    .post("/api/users/team")
+    .post("/api/users/team/v1")
     .send({
       email: "bharatrose1@",
       password: "pas",
@@ -49,7 +49,7 @@ it("return with 400 with invalid passwod", async () => {
 
 it("return a 400 with missing email and password", async () => {
   const response = await request(app)
-    .post("/api/users/team")
+    .post("/api/users/team/v1")
     .send({
       email: "",
       password: "",
@@ -59,7 +59,7 @@ it("return a 400 with missing email and password", async () => {
 
 it("throws 400 error if no permission is provided", async () => {
   await request(app)
-    .post("/api/users/team")
+    .post("/api/users/team/v1")
     .send({
       email: "bharatrose1@gmail.com",
       password: "thisismylife",
@@ -70,7 +70,7 @@ it("throws 400 error if no permission is provided", async () => {
 it("throw 401 unauthroize error if user does not have create team permission", async () => {
   try {
     const res = await request(app)
-      .post("/api/users/team")
+      .post("/api/users/team/v1")
       .set("Cookie", global.signin([]))
       .send({
         firstName: "Bharat",
@@ -89,7 +89,7 @@ it("throw 401 unauthroize error if user does not have create team permission", a
 it("disallowed duplicate email registration", async () => {
   try {
     await request(app)
-      .post("/api/users/team")
+      .post("/api/users/team/v1")
       .set("Cookie", global.signin(["create_team"]))
       .send({
         email: "bharatrose1@gmail.com",
@@ -102,7 +102,7 @@ it("disallowed duplicate email registration", async () => {
       .expect(201);
 
     const res = await request(app)
-      .post("/api/users/team")
+      .post("/api/users/team/v1")
       .set("Cookie", global.signin(["create_team"]))
       .send({
         email: "bharatrose1@gmail.com",
@@ -127,7 +127,7 @@ it("It will create team with first name, lastname, email, role, permission, enab
 
   try {
     const res = await request(app)
-      .post("/api/users/team")
+      .post("/api/users/team/v1")
       .set("Cookie", signinUser)
       .send({
         firstName: "Bharat",
@@ -157,7 +157,7 @@ it("it will create team and verify is that team is belongs to created admin", as
   
   try {
     const res = await request(app)
-      .post("/api/users/team")
+      .post("/api/users/team/v1")
       .set("Cookie", signinUser)
       .send({
         firstName: "Bharat",
