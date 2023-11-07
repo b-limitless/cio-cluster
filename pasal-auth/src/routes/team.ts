@@ -1380,7 +1380,7 @@ router.get("/api/users/team/mock", async (req: Request, res: Response) => {
   }
 });
 
-router.get('/api/users/:id', requireAuth, async(req: Request, res:Response) => {
+router.get('/api/users/v1/:id', requireAuth, async(req: Request, res:Response) => {
   let id:string|mongoose.Types.ObjectId = '';
 
    const userId = req.params.id;

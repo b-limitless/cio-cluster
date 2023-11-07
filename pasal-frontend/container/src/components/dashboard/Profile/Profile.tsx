@@ -1,11 +1,17 @@
-import { useEffect, useState } from 'react';
-import { Button, Input, Select,   MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
+import { Dispatch, useEffect, useReducer, useState } from 'react';
+import { Button, Input, Select, MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
 import React from 'react';
 import AvatarPNG from '../../../assets/svg/users.svg';
 import SideModel from '../SideModel';
 import styles from './profile.module.scss';
 import countries from '../../../data/countries.json';
 import { languages } from '../../../config/languages';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
+import { APIS } from '../../../config/apis';
+import { userType } from '../../../../reducers/userSlice';
+import { onChangeHandler } from '../../../functions/onChangeHandler';
+
 
 type Props = {
   showModel: boolean;
@@ -20,18 +26,66 @@ enum tabsEnum {
 }
 type tabsType = `${tabsEnum}`
 
+interface UserDetailsInterface {
+  userDetails: userType | null
+  loading: boolean,
+  error: null | string
+}
+
+const userDetailsIntialState: UserDetailsInterface = {
+  userDetails: null,
+  loading: false,
+  error: null
+}
+
+const FETCHING_USER_DETAILS = 'FETCHING_USER_DETAILS';
+const FETCHED_USER_DETAILS = 'FETCHED_USER_DETAILS';
+const FETCHED_ERROR = 'FETCHED_ERROR';
+const UPDATE_PROFILE = 'UPDATE_FORM';
+
+function userDetailsReducer(state: UserDetailsInterface, action: any) {
+  switch (action.type) {
+
+    case UPDATE_PROFILE: {
+      const {name, value} = action.payload;
+      return {
+        ...state,
+        userDetails: {
+          ...state.userDetails,
+          [name]: value
+        }
+      }
+
+    }
+    case FETCHING_USER_DETAILS:
+      return { ...state, loading: action.payload };
+    case FETCHED_USER_DETAILS:
+      return { ...state, userDetails: action.payload };
+    case FETCHED_ERROR:
+      return { ...state, error: action.payload }
+    default:
+      return state;
+  }
+}
+
 
 export default function Profile({ showModel, setShowModel }: Props) {
+  type changeEvent = React.ChangeEvent<HTMLInputElement>;
   const [form, setForm] = useState({ country: "", aboutYou: "" });
   const [userLanguage, setUserLanguage] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
+
+  const { auth: { auth } } = useSelector((state: RootState) => state);
+  const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState)
+
+
 
   const countryChangeHandler = (event: any) => {
     const { value, name } = event.target;
     setForm({ ...form, [name]: value });
   };
 
-  const handleChange = (event: any) => {
+  const handleChange = (event: changeEvent) => {
     const {
       target: { value },
     } = event;
@@ -40,23 +94,58 @@ export default function Profile({ showModel, setShowModel }: Props) {
     );
   };
 
-  // Fetching user profile details 
+  const onChangeEventLocal = (e:changeEvent) => {
+    onChangeHandler(e, dispatch, UPDATE_PROFILE)
+  }
+
+  const languageChangeHandler = (e:changeEvent) => {
+    let {
+      target: { value },
+    } = e;
+
+    value = value.toString();
+
+    let languages = [...userDetails.spokenLanguage];
+
+   
+    if(languages.indexOf(value) === -1) {
+      languages = [...languages, value];
+    } else {
+      languages = languages.filter((language:string) => language !== value); 
+    }
+    dispatch({type: UPDATE_PROFILE, payload: {name: 'spokenLanguage', value: languages}})
+  }
+
+
   useEffect(() => {
-    const fetchUserProfile = async() => {
+    const fetchUserProfile = async () => {
+      if (!auth?.id) {
+        return;
+      }
+      dispatch({ type: FETCHING_USER_DETAILS, payload: true });
       try {
         const reponse = await request({
-          url: '', 
+          url: `${APIS.user.users}/${auth?.id}`,
           method: 'get'
-        })
-      } catch(err:any) {
+        });
+        dispatch({ type: FETCHED_USER_DETAILS, payload: reponse });
+
+      } catch (err: any) {
+        dispatch({ type: FETCHED_ERROR, payload: err });
         throw new Error(err);
       }
-     }
-  }, [])
+    }
+    fetchUserProfile();
+  }, [auth?.id]);
+
+  console.log("userDetails", userDetails)
+  console.log("userLanguage", userLanguage);
+
+  
 
 
   return (
-     
+
     <SideModel showModel={showModel} setShowModel={setShowModel}>
       {/* Content for the side model profile */}
       <div className={styles.profile__container}>
@@ -73,12 +162,12 @@ export default function Profile({ showModel, setShowModel }: Props) {
         <div className={styles.personal__security}>
           <div className={styles.tab__container}>
 
-            <input 
-              checked={activeTab === tabsEnum.peronalInfo ? true : false} 
-              hidden data-name='personal-info' 
-              type='radio' name='active-tab' 
-              id='personal-info' 
-              onChange={(e:any) => setActiveTab(e.target.checked ? tabsEnum.peronalInfo : tabsEnum.security)}
+            <input
+              checked={activeTab === tabsEnum.peronalInfo ? true : false}
+              hidden data-name='personal-info'
+              type='radio' name='active-tab'
+              id='personal-info'
+              onChange={(e: any) => setActiveTab(e.target.checked ? tabsEnum.peronalInfo : tabsEnum.security)}
               className={styles.tab__option__input} />
 
             <label htmlFor='personal-info' className={styles.tab__label}>
@@ -86,14 +175,14 @@ export default function Profile({ showModel, setShowModel }: Props) {
             </label>
 
 
-            <input checked={activeTab === tabsEnum.security ? true : false} 
-             hidden data-name='security' 
-             type='radio' 
-             name='active-tab' 
-             id='security' 
-             className={styles.tab__option__input} 
-             onChange={(e:any) => setActiveTab(e.target.checked ? tabsEnum.security : tabsEnum.peronalInfo)}
-             />
+            <input checked={activeTab === tabsEnum.security ? true : false}
+              hidden data-name='security'
+              type='radio'
+              name='active-tab'
+              id='security'
+              className={styles.tab__option__input}
+              onChange={(e: any) => setActiveTab(e.target.checked ? tabsEnum.security : tabsEnum.peronalInfo)}
+            />
 
             <label htmlFor='security' className={styles.tab__label}>
               <span className={styles.item}>SECURITY</span>
@@ -107,8 +196,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
                   <Input
                     label="First Name"
                     id="first-name"
-                    defaultValue=""
+                    value={userDetails?.firstName || ""}
                     type="text"
+                    name="firstName"
+                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
                   //  error={true}
                   // helperText="Incorrect entry."
                   />
@@ -116,8 +207,11 @@ export default function Profile({ showModel, setShowModel }: Props) {
                   <Input
                     label="Last Name"
                     id="last-name"
-                    defaultValue=""
+                    value={userDetails?.lastName || ""}
                     type="text"
+                    name="lastName"
+                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
+
                   //  error={true}
                   // helperText="Incorrect entry."
                   />
@@ -127,8 +221,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
                   <Input
                     label="Email Address"
                     id="email-address"
-                    defaultValue=""
+                    value={userDetails?.email || ""}
                     type="text"
+                    name="email"
+                    disabled={true}
                   //  error={true}
                   // helperText="Incorrect entry."
                   />
@@ -140,13 +236,20 @@ export default function Profile({ showModel, setShowModel }: Props) {
                   <Select options={countries}
                     value={form.country}
                     label={"Countries"}
-                    onChange={countryChangeHandler}
+                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
                     id={"countries"}
                     name="country"
                   />
                 </div>
                 <div className={styles.form__row}>
-                  <MultipleSelect size="large" options={getLanguagesInArray} handleChange={handleChange} label={"Langugaes"} id="languages" value={userLanguage} />
+                  <MultipleSelect size="large"
+                    options={getLanguagesInArray}
+                    handleChange={languageChangeHandler}
+                    label={"Langugaes"}
+                    id="languages"
+                    value={userLanguage}
+                    name="spokenLanguage"
+                  />
 
                 </div>
 

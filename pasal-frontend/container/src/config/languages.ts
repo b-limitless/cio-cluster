@@ -4,8 +4,8 @@ export const languages = [
     value: "en",
   },
   {
-    title: "Nepali",
-    value: "np",
+    title: "Hindi",
+    value: "Hi",
   },
   {
     title: "Italian",
