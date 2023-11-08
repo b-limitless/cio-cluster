@@ -11,7 +11,7 @@ import { UserService } from "../services/User.service";
 import { UserProfileUpdatedPublisher } from "../events/publishers/profile-updated-publisher";
 
 const router = express.Router();
-//
+
 router.put(
   "/api/users/v1/:id?",
   UserProfileBodyRequest,
@@ -37,8 +37,6 @@ router.put(
     if (!id) {
       throw new BadRequestError("No authenticated user found");
     }
-
-    
 
     try {
       const findAndUpdate = await UserService.findByIdAndUpdate(

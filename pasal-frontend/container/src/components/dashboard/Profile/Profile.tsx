@@ -74,6 +74,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const [form, setForm] = useState({ country: "", aboutYou: "" });
   const [userLanguage, setUserLanguage] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
+  const [updatingProfile, setUpdatingProfile] = useState<boolean>(false);
+  const [updateError, setUpdateError] = useState<null | string>(null); 
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
   const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState)
@@ -104,6 +106,31 @@ export default function Profile({ showModel, setShowModel }: Props) {
     } = e;
 
     dispatch({ type: UPDATE_PROFILE, payload: { name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value } })
+  }
+
+  const updateProfileHandler = async() => {
+    // Check if all field is filled
+    // All fields are optional therefore 
+    // No need to add validation 
+    // fields supports null value 
+    setUpdatingProfile(true);
+    const {id,verified,email,withCredentials, ...body} = userDetails;
+
+    try {
+        await request({
+        url: `${APIS.user.users}/${userDetails.id}`, 
+        method: 'put',
+        body
+       });
+    } catch(err:any) {
+      throw new Error(err);
+    }
+
+    setUpdatingProfile(false);
+    
+
+    
+
   }
 
 
@@ -142,10 +169,17 @@ export default function Profile({ showModel, setShowModel }: Props) {
         <div className={styles.avatar__actions}>
           <div className={styles.avatar}>
             {/* <AvatarPNG/> */}
-            <img src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
+            <input type="file" name="" id = "profile-image" hidden/>
+            <label htmlFor = "profile-image">
+            <img 
+              src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
+            </label>
+            
           </div>
           <div className={styles.actions}>
             <Button variant='primary' text='Upload' />
+            {/* <input type="file" name="" id="profile-picture" hidden/>
+            <label htmlFor='profile-picture'>Upload</label> */}
             <Button variant='light' text='Delete' />
           </div>
         </div>
@@ -190,8 +224,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
                     type="text"
                     name="firstName"
                     onChange={(e: changeEvent) => onChangeEventLocal(e)}
-                  //  error={true}
-                  // helperText="Incorrect entry."
+                    // error={errors.deliveryTime ? true : false}
+                    // helperText={errors.deliveryTime ? errors.deliveryTime : false} 
                   />
 
                   <Input
@@ -272,7 +306,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         </div>
 
         <div className={styles.actions__bottom}>
-          <Button variant='primary' text='Update' />
+          <Button variant='primary' text='Update' onClick={updateProfileHandler}/>
         </div>
       </div>
     </SideModel>
