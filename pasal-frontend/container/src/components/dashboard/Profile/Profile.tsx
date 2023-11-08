@@ -99,21 +99,11 @@ export default function Profile({ showModel, setShowModel }: Props) {
   }
 
   const languageChangeHandler = (e:changeEvent) => {
-    let {
+    const {
       target: { value },
     } = e;
 
-    value = value.toString();
-
-    let languages = [...userDetails.spokenLanguage];
-
-   
-    if(languages.indexOf(value) === -1) {
-      languages = [...languages, value];
-    } else {
-      languages = languages.filter((language:string) => language !== value); 
-    }
-    dispatch({type: UPDATE_PROFILE, payload: {name: 'spokenLanguage', value: languages}})
+    dispatch({type: UPDATE_PROFILE, payload: {name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value }})
   }
 
 
@@ -234,7 +224,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
                 <div className={styles.form__row}>
                   <Select options={countries}
-                    value={form.country}
+                  
+                    value={userDetails?.country ?? ""}
                     label={"Countries"}
                     onChange={(e:changeEvent) => onChangeEventLocal(e)}
                     id={"countries"}
@@ -247,7 +238,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
                     handleChange={languageChangeHandler}
                     label={"Langugaes"}
                     id="languages"
-                    value={userLanguage}
+                    value={userDetails?.spokenLanguage ?? []}
                     name="spokenLanguage"
                   />
 
