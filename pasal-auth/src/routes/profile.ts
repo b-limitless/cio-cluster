@@ -12,7 +12,7 @@ import { UserProfileUpdatedPublisher } from "../events/publishers/profile-update
 
 const router = express.Router();
 //
-router.patch(
+router.put(
   "/api/users/v1/:id?",
   UserProfileBodyRequest,
   requireAuth,

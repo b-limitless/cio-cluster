@@ -47,7 +47,7 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
   switch (action.type) {
 
     case UPDATE_PROFILE: {
-      const {name, value} = action.payload;
+      const { name, value } = action.payload;
       return {
         ...state,
         userDetails: {
@@ -94,16 +94,16 @@ export default function Profile({ showModel, setShowModel }: Props) {
     );
   };
 
-  const onChangeEventLocal = (e:changeEvent) => {
+  const onChangeEventLocal = (e: changeEvent) => {
     onChangeHandler(e, dispatch, UPDATE_PROFILE)
   }
 
-  const languageChangeHandler = (e:changeEvent) => {
+  const languageChangeHandler = (e: changeEvent) => {
     const {
       target: { value },
     } = e;
 
-    dispatch({type: UPDATE_PROFILE, payload: {name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value }})
+    dispatch({ type: UPDATE_PROFILE, payload: { name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value } })
   }
 
 
@@ -131,7 +131,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   console.log("userDetails", userDetails)
   console.log("userLanguage", userLanguage);
 
-  
+
 
 
   return (
@@ -189,7 +189,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
                     value={userDetails?.firstName || ""}
                     type="text"
                     name="firstName"
-                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
+                    onChange={(e: changeEvent) => onChangeEventLocal(e)}
                   //  error={true}
                   // helperText="Incorrect entry."
                   />
@@ -200,7 +200,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
                     value={userDetails?.lastName || ""}
                     type="text"
                     name="lastName"
-                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
+                    onChange={(e: changeEvent) => onChangeEventLocal(e)}
 
                   //  error={true}
                   // helperText="Incorrect entry."
@@ -224,10 +224,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
                 <div className={styles.form__row}>
                   <Select options={countries}
-                  
+
                     value={userDetails?.country ?? ""}
                     label={"Countries"}
-                    onChange={(e:changeEvent) => onChangeEventLocal(e)}
+                    onChange={(e: changeEvent) => onChangeEventLocal(e)}
                     id={"countries"}
                     name="country"
                   />
@@ -244,7 +244,14 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
                 </div>
 
-                <TextArea rows={6} name="aboutYou" setter={countryChangeHandler} getter={form.aboutYou} placeholder="About you" />
+                <TextArea 
+                rows={6} 
+                name="about" 
+                setter={onChangeEventLocal} 
+                getter={userDetails?.about ?? ""} 
+                placeholder="About you" 
+                
+                />
 
               </div>
               <div className={styles.item} id='content-security' data-name='security'>
