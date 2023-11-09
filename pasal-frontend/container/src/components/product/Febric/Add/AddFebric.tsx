@@ -19,6 +19,7 @@ import StepSix from './Steps/Six';
 import StepThree from './Steps/Three';
 import StepTwo from './Steps/Two';
 import { CompositionInterface } from './Steps/steps.interface';
+import { handleMediaChange } from '../../../../functions/handleMediaChange';
 
 
 type Props = {}
@@ -159,7 +160,7 @@ export default function AddFebric({ }: Props) {
 
     
 
-    const [step, setStep] = useState<formStepType>(formStepEnum.one);
+    const [step, setStep] = useState<formStepType>(formStepEnum.four);
     const [errors, setErrors] = useState<any>({ compositions: null });
     const [febric, setFebric] = useState<any>(updateFebric.length > 0 ? updateFebric[0] :febricInitalState);
     const [moveToNextStep, setMoveToNextStep] = useState(false);
@@ -258,37 +259,40 @@ export default function AddFebric({ }: Props) {
 
     }
 
-    const handleImageChange: React.ChangeEventHandler<HTMLInputElement> = (
+    const handleImageChange = (
         event: ChangeEvent<HTMLInputElement>
     ) => {
-        setFebricImageError(null);
-        const file = event.target.files && event.target.files[0];
+        handleMediaChange(event, setFebricImageError, setFebricImage)
+        // setFebricImageError(null);
+        // const file = event.target.files && event.target.files[0];
 
-        const allowedTypes = ['image/jpeg', 'image/png', , 'image/webp']; // Add more allowed types if needed
-        const maxFileSizeKB = 1024 * 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
+        // const allowedTypes = ['image/jpeg', 'image/png', , 'image/webp']; // Add more allowed types if needed
+        // const maxFileSizeKB = 1024 * 1024 * 3; // Maximum allowed file size in kilobytes (1MB * 3)
 
-        if (!file) {
-            setFebricImageError('Please select a file');
-            return;
-        }
+        // if (!file) {
+        //     setFebricImageError('Please select a file');
+        //     return;
+        // }
 
-        if (file.size > maxFileSizeKB) {
-            setFebricImageError(`File size exceeds, Only ${maxFileSizeKB / 1024} MB allowed`);
-            return;
-        }
+        // if (file.size > maxFileSizeKB) {
+        //     setFebricImageError(`File size exceeds, Only ${maxFileSizeKB / 1024} MB allowed`);
+        //     return;
+        // }
 
-        if (!allowedTypes.includes(file.type)) {
-            setFebricImageError(`Invalid image type, only jpeg, png, gif, webp extension is allwoed`);
-            return;
-        }
+        // if (!allowedTypes.includes(file.type)) {
+        //     setFebricImageError(`Invalid image type, only jpeg, png, gif, webp extension is allwoed`);
+        //     return;
+        // }
 
-        // Validate before setting to state 
+        // // Validate before setting to state 
 
-        if (file) {
-            setFebricImage(file);
-            setFebricImageError(null);
-        }
+        // if (file) {
+        //     setFebricImage(file);
+        //     setFebricImageError(null);
+        // }
     };
+
+    console.log("febricImage", febricImage)
 
     const compositionNextStepHandler = useCallback(() => {
         setErrors({});

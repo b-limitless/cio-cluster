@@ -79,22 +79,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
   const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState)
-
-
-
-  const countryChangeHandler = (event: any) => {
-    const { value, name } = event.target;
-    setForm({ ...form, [name]: value });
-  };
-
-  const handleChange = (event: changeEvent) => {
-    const {
-      target: { value },
-    } = event;
-    setUserLanguage(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
+ 
 
   const onChangeEventLocal = (e: changeEvent) => {
     onChangeHandler(e, dispatch, UPDATE_PROFILE)
@@ -169,7 +154,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         <div className={styles.avatar__actions}>
           <div className={styles.avatar}>
             {/* <AvatarPNG/> */}
-            <input type="file" name="" id = "profile-image" hidden/>
+            <input type="file" name="" id = "profile-image" accept="image/*" hidden/>
             <label htmlFor = "profile-image">
             <img 
               src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
