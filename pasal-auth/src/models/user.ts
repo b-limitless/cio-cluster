@@ -26,7 +26,9 @@ interface UserDoc extends mongoose.Document {
   spokenLanguage: string[];
   about: string | null;
   profileImageLink: string | null;
-  adminId?: mongoose.Types.ObjectId | null
+  adminId?: mongoose.Types.ObjectId | null;
+  originalImageUrl?:string;
+  thumbnailImageUrl?:string;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -80,7 +82,15 @@ const userSchema = new mongoose.Schema(
     adminId: {
       type: mongoose.Types.ObjectId || null, 
       required: false
-    }
+    },
+    originalImageUrl: {
+      type: String,
+      default: null,
+    },
+    thumbnailImageUrl: {
+      type: String,
+      default: null,
+    },
     
   },
   {

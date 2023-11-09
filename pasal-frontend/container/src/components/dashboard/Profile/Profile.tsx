@@ -13,6 +13,7 @@ import { userType } from '../../../../reducers/userSlice';
 import { onChangeHandler } from '../../../functions/onChangeHandler';
 import { handleMediaChange } from '../../../functions/handleMediaChange';
 import axios from 'axios';
+import { defaultProfileImage } from '../../../config/mis';
 
 
 type Props = {
@@ -185,7 +186,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         reader.readAsDataURL(file);
       } else {
         if(imageRef.current) {
-          imageRef.current.src = '';
+          imageRef.current.src = defaultProfileImage;
         }
       }
     }
@@ -219,6 +220,15 @@ export default function Profile({ showModel, setShowModel }: Props) {
     }
     dispatchMedia({type: MEDIA_UPLOADING, payload: false}); 
 
+  }
+
+  const onDeleteProfileImageHandler = () => {
+    if(imageRef.current && imageRef.current.src) {
+      imageRef.current.src = defaultProfileImage;
+      // Dispatch in the form as well empty the value for the profileImage
+    }
+    
+    
   }
 
   console.log("profileImage", profileImage)
@@ -278,7 +288,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
             <Button variant='primary' text= {!uploading ? 'Upload' : 'UPLOADING'}onClick={!uploading ? uploadProfileMediaHandler : null}/>
             {/* <input type="file" name="" id="profile-picture" hidden/>
             <label htmlFor='profile-picture'>Upload</label> */}
-            <Button variant='light' text='Delete' />
+            <Button variant='light' text='Delete' onClick={onDeleteProfileImageHandler}/>
           </div>
         </div>
         <div className={styles.personal__security}>
