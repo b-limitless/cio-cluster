@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useReducer, useState, ChangeEvent } from 'react';
+import {useRef, Dispatch, useEffect, useReducer, useState, ChangeEvent } from 'react';
 import { Button, Input, Select, MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
 import React from 'react';
 import AvatarPNG from '../../../assets/svg/users.svg';
@@ -124,7 +124,9 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const { auth: { auth } } = useSelector((state: RootState) => state);
   const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
   const [{mediaUploaded, uploading, uploadError}, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
- 
+  
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const imageRef = useRef< HTMLImageElement| null>(null);
 
   const onChangeEventLocal = (e: changeEvent) => {
     onChangeHandler(e, dispatch, UPDATE_PROFILE)
@@ -166,6 +168,27 @@ export default function Profile({ showModel, setShowModel }: Props) {
  
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     handleMediaChange(event, setProfileImageError, setProfileImage);
+
+    // Need to display the selected file to dom 
+    if(fileInputRef.current && imageRef.current) {
+      const file = fileInputRef.current.files && fileInputRef.current.files[0]; 
+
+      if(file) {
+        const reader = new FileReader();
+
+        reader.onload = function(e:ProgressEvent<FileReader>) {
+          if(imageRef.current) {
+            imageRef.current.src = e.target?.result as string;
+          }
+        }
+
+        reader.readAsDataURL(file);
+      } else {
+        if(imageRef.current) {
+          imageRef.current.src = '';
+        }
+      }
+    }
   }
 
   const uploadProfileMediaHandler = async() => {
@@ -180,12 +203,16 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
     dispatchMedia({type: MEDIA_UPLOADING, payload: true}); 
     try {
-      await axios.post(APIS.product.upload, formData, {
+      const uploadMedia = await axios.post(APIS.product.upload, formData, {
         headers: {
 
           'Content-Type': 'multipart/form-data',
       }
       });
+      const { originalImageUrl, thumbnailImageUrl } = uploadMedia.data;
+      
+      dispatch({type: UPDATE_PROFILE, payload: {name: 'originalImageUrl', value: originalImageUrl}});
+      dispatch({type: UPDATE_PROFILE, payload: {name: 'thumbnailImageUrl', value: thumbnailImageUrl}});
       dispatchMedia({type: MEDIA_UPLOADED, payload: true});
     } catch(err) {
       dispatchMedia({type: MEDIA_UPLOAD_ERROR, payload: err}); 
@@ -193,6 +220,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
     dispatchMedia({type: MEDIA_UPLOADING, payload: false}); 
 
   }
+
+  console.log("profileImage", profileImage)
 
 
   useEffect(() => {
@@ -218,6 +247,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   
 
   console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
+  console.log("userDetails", userDetails)
 
 
   return (
@@ -235,15 +265,17 @@ export default function Profile({ showModel, setShowModel }: Props) {
               accept="image/*" 
               onChange={handleProfileImageUpload}
               hidden
+              ref={fileInputRef}
               />
             <label htmlFor = "profile-image">
             <img 
+              ref={imageRef}
               src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
             </label>
             
           </div>
           <div className={styles.actions}>
-            <Button variant='primary' text= {!uploading ? 'Upload' : 'Please wait..'}onClick={!uploading ? uploadProfileMediaHandler : null}/>
+            <Button variant='primary' text= {!uploading ? 'Upload' : 'UPLOADING'}onClick={!uploading ? uploadProfileMediaHandler : null}/>
             {/* <input type="file" name="" id="profile-picture" hidden/>
             <label htmlFor='profile-picture'>Upload</label> */}
             <Button variant='light' text='Delete' />
