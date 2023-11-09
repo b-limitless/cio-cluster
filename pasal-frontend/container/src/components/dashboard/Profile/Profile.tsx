@@ -1,4 +1,4 @@
-import { Dispatch, useEffect, useReducer, useState } from 'react';
+import { Dispatch, useEffect, useReducer, useState, ChangeEvent } from 'react';
 import { Button, Input, Select, MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
 import React from 'react';
 import AvatarPNG from '../../../assets/svg/users.svg';
@@ -11,6 +11,8 @@ import { RootState } from '../../../store';
 import { APIS } from '../../../config/apis';
 import { userType } from '../../../../reducers/userSlice';
 import { onChangeHandler } from '../../../functions/onChangeHandler';
+import { handleMediaChange } from '../../../functions/handleMediaChange';
+import axios from 'axios';
 
 
 type Props = {
@@ -32,16 +34,38 @@ interface UserDetailsInterface {
   error: null | string
 }
 
+interface UploadMedia {
+  mediaUploaded: boolean;
+  uploading: boolean;
+  uploadError: null | string;
+}
+
 const userDetailsIntialState: UserDetailsInterface = {
   userDetails: null,
   loading: false,
   error: null
 }
 
+const uploadMediaInitialState: UploadMedia = {
+  mediaUploaded: false,
+  uploading: false, 
+  uploadError: null
+}
+
+
+
+// Fetching users constant
 const FETCHING_USER_DETAILS = 'FETCHING_USER_DETAILS';
 const FETCHED_USER_DETAILS = 'FETCHED_USER_DETAILS';
 const FETCHED_ERROR = 'FETCHED_ERROR';
 const UPDATE_PROFILE = 'UPDATE_FORM';
+
+
+// Upload media constant
+const MEDIA_UPLOADING = 'MEDIA_UPLOADING';
+const MEDIA_UPLOADED = 'MEDIA_UPLOADED';
+const MEDIA_UPLOAD_ERROR = 'MEDIA_UPLOADED';
+const MEDIA_ONCHANGE = 'MEDIA_UPLOADED';
 
 function userDetailsReducer(state: UserDetailsInterface, action: any) {
   switch (action.type) {
@@ -68,6 +92,24 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
   }
 }
 
+function uploadMediaReducer(state: UploadMedia, action:any) {
+  switch(action.type) {
+    case MEDIA_ONCHANGE:
+      return {...state, file: action.payload}
+    case MEDIA_UPLOADING: 
+      return {...state, uploading: action.payload}
+
+    case MEDIA_UPLOADED:
+      return {...state, success: action.payload};
+
+    case MEDIA_UPLOAD_ERROR:
+      return {...state, uploadError: action.payload}
+    default:
+      return state; 
+  }
+}
+
+
 
 export default function Profile({ showModel, setShowModel }: Props) {
   type changeEvent = React.ChangeEvent<HTMLInputElement>;
@@ -76,9 +118,12 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
   const [updatingProfile, setUpdatingProfile] = useState<boolean>(false);
   const [updateError, setUpdateError] = useState<null | string>(null); 
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [profileImageError, setProfileImageError] = useState<null | string>(null);
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
-  const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState)
+  const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
+  const [{mediaUploaded, uploading, uploadError}, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
  
 
   const onChangeEventLocal = (e: changeEvent) => {
@@ -118,6 +163,37 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
   }
 
+ 
+  const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    handleMediaChange(event, setProfileImageError, setProfileImage);
+  }
+
+  const uploadProfileMediaHandler = async() => {
+    // Check file is set
+    if(!profileImage) {
+      dispatchMedia({type: MEDIA_UPLOAD_ERROR, payload: 'Please select profile image to upload'});
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('image', profileImage); 
+
+    dispatchMedia({type: MEDIA_UPLOADING, payload: true}); 
+    try {
+      await axios.post(APIS.product.upload, formData, {
+        headers: {
+
+          'Content-Type': 'multipart/form-data',
+      }
+      });
+      dispatchMedia({type: MEDIA_UPLOADED, payload: true});
+    } catch(err) {
+      dispatchMedia({type: MEDIA_UPLOAD_ERROR, payload: err}); 
+    }
+    dispatchMedia({type: MEDIA_UPLOADING, payload: false}); 
+
+  }
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -139,11 +215,9 @@ export default function Profile({ showModel, setShowModel }: Props) {
     }
     fetchUserProfile();
   }, [auth?.id]);
+  
 
-  console.log("userDetails", userDetails)
-  console.log("userLanguage", userLanguage);
-
-
+  console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
 
 
   return (
@@ -154,7 +228,14 @@ export default function Profile({ showModel, setShowModel }: Props) {
         <div className={styles.avatar__actions}>
           <div className={styles.avatar}>
             {/* <AvatarPNG/> */}
-            <input type="file" name="" id = "profile-image" accept="image/*" hidden/>
+            <input 
+              type="file" 
+              name="" 
+              id = "profile-image" 
+              accept="image/*" 
+              onChange={handleProfileImageUpload}
+              hidden
+              />
             <label htmlFor = "profile-image">
             <img 
               src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
@@ -162,7 +243,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
             
           </div>
           <div className={styles.actions}>
-            <Button variant='primary' text='Upload' />
+            <Button variant='primary' text= {!uploading ? 'Upload' : 'Please wait..'}onClick={!uploading ? uploadProfileMediaHandler : null}/>
             {/* <input type="file" name="" id="profile-picture" hidden/>
             <label htmlFor='profile-picture'>Upload</label> */}
             <Button variant='light' text='Delete' />
