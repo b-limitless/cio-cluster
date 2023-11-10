@@ -168,6 +168,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
  
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log("running handleProfileImageUpload")
     handleMediaChange(event, setProfileImageError, setProfileImage);
 
     // Need to display the selected file to dom 
@@ -188,7 +189,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
         if(imageRef.current) {
           imageRef.current.src = defaultProfileImage;
         }
+        fileInputRef.current.value = '';
       }
+    } else {
+      console.log("no currnet")
     }
   }
 
@@ -226,12 +230,15 @@ export default function Profile({ showModel, setShowModel }: Props) {
     if(imageRef.current && imageRef.current.src) {
       imageRef.current.src = defaultProfileImage;
       // Dispatch in the form as well empty the value for the profileImage
+      dispatch({type: UPDATE_PROFILE, payload: {name: 'originalImageUrl', value: false}});
+      dispatch({type: UPDATE_PROFILE, payload: {name: 'thumbnailImageUrl', value: false}})
+      setProfileImage(null);
     }
     
     
   }
 
-  console.log("profileImage", profileImage)
+  
 
 
   useEffect(() => {
@@ -256,8 +263,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
   }, [auth?.id]);
   
 
-  console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
-  console.log("userDetails", userDetails)
+  // console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
+  // console.log("userDetails", userDetails)
+  // console.log("imageref", imageRef)
+  // console.log("proile image", profileImage)
 
 
   return (
@@ -276,6 +285,9 @@ export default function Profile({ showModel, setShowModel }: Props) {
               onChange={handleProfileImageUpload}
               hidden
               ref={fileInputRef}
+              onClick={(e) => {
+                e.currentTarget.value = '';
+              }}
               />
             <label htmlFor = "profile-image">
             <img 

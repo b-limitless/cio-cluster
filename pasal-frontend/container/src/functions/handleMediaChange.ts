@@ -35,7 +35,7 @@ export const handleMediaChange: HandleMediaChange = (
   }
 
   // Validate before setting to state
-  console.log("file",)
+  console.log("file",file)
 
   if (file) {
     setImage(file);
