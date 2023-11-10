@@ -25,7 +25,9 @@ router.put(
       spokenLanguage,
       about,
       profileImageLink,
-      permissions
+      permissions, 
+      originalImageUrl, 
+      thumbnailImageUrl
     } = req.body;
 
     
@@ -47,8 +49,9 @@ router.put(
           country,
           spokenLanguage,
           about,
-          profileImageLink,
-          permissions
+          permissions, 
+          originalImageUrl, 
+          thumbnailImageUrl
         },
         { new: true }
       );

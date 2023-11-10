@@ -1,4 +1,4 @@
-import {useRef, Dispatch, useEffect, useReducer, useState, ChangeEvent } from 'react';
+import {useRef, Dispatch, useEffect, useReducer, useState, ChangeEvent, useCallback } from 'react';
 import { Button, Input, Select, MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
 import React from 'react';
 import AvatarPNG from '../../../assets/svg/users.svg';
@@ -141,7 +141,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
     dispatch({ type: UPDATE_PROFILE, payload: { name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value } })
   }
 
-  const updateProfileHandler = async() => {
+  const updateProfileHandler = useCallback( async() => {
     // Check if all field is filled
     // All fields are optional therefore 
     // No need to add validation 
@@ -164,7 +164,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
     
 
-  }
+  }, [userDetails])
 
  
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -264,7 +264,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   
 
   // console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
-  // console.log("userDetails", userDetails)
+  console.log("userDetails", userDetails)
   // console.log("imageref", imageRef)
   // console.log("proile image", profileImage)
 
