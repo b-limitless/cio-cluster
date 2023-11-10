@@ -32,19 +32,22 @@ type tabsType = `${tabsEnum}`
 interface UserDetailsInterface {
   userDetails: userType | null
   loading: boolean,
-  error: null | string
+  error: null | string,
+  updatingProfile: boolean
 }
 
 interface UploadMedia {
   mediaUploaded: boolean;
   uploading: boolean;
   uploadError: null | string;
+
 }
 
 const userDetailsIntialState: UserDetailsInterface = {
   userDetails: null,
   loading: false,
-  error: null
+  error: null,
+  updatingProfile:false
 }
 
 const uploadMediaInitialState: UploadMedia = {
@@ -60,6 +63,7 @@ const FETCHING_USER_DETAILS = 'FETCHING_USER_DETAILS';
 const FETCHED_USER_DETAILS = 'FETCHED_USER_DETAILS';
 const FETCHED_ERROR = 'FETCHED_ERROR';
 const UPDATE_PROFILE = 'UPDATE_FORM';
+const UPDATING_PROFILE = 'UPDATING_PROFILE';
 
 
 // Upload media constant
@@ -82,6 +86,10 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
       }
 
     }
+    case UPDATING_PROFILE:  {
+      return {...state, updatingProfile: action.payload}
+    }
+    
     case FETCHING_USER_DETAILS:
       return { ...state, loading: action.payload };
     case FETCHED_USER_DETAILS:
@@ -117,13 +125,13 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const [form, setForm] = useState({ country: "", aboutYou: "" });
   const [userLanguage, setUserLanguage] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
-  const [updatingProfile, setUpdatingProfile] = useState<boolean>(false);
+
   const [updateError, setUpdateError] = useState<null | string>(null); 
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImageError, setProfileImageError] = useState<null | string>(null);
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
-  const [{ userDetails, loading, error }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
+  const [{ userDetails, loading, error, updatingProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
   const [{mediaUploaded, uploading, uploadError}, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
   
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -146,7 +154,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
     // All fields are optional therefore 
     // No need to add validation 
     // fields supports null value 
-    setUpdatingProfile(true);
+    dispatch({type: UPDATING_PROFILE, payload: true});
     const {id,verified,email,withCredentials, ...body} = userDetails;
 
     try {
@@ -159,12 +167,11 @@ export default function Profile({ showModel, setShowModel }: Props) {
       throw new Error(err);
     }
 
-    setUpdatingProfile(false);
-    
+    dispatch({type: UPDATING_PROFILE, payload: false});
+  
+  }, [userDetails]);
 
-    
-
-  }, [userDetails])
+  console.log("updatingProfile", updatingProfile)
 
  
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
@@ -292,7 +299,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
             <label htmlFor = "profile-image">
             <img 
               ref={imageRef}
-              src={'https://e7.pngegg.com/pngimages/456/700/png-clipart-computer-icons-avatar-user-profile-avatar-heroes-logo.png'} alt='' />
+              src={userDetails?.originalImageUrl ?? defaultProfileImage} alt='' />
             </label>
             
           </div>
@@ -426,7 +433,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         </div>
 
         <div className={styles.actions__bottom}>
-          <Button variant='primary' text='Update' onClick={updateProfileHandler}/>
+          <Button variant='primary' text={updatingProfile ? 'Please wait...' : 'Update'} onClick={updatingProfile ? null :  updateProfileHandler}/>
         </div>
       </div>
     </SideModel>
