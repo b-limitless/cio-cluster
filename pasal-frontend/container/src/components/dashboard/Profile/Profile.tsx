@@ -14,6 +14,7 @@ import { onChangeHandler } from '../../../functions/onChangeHandler';
 import { handleMediaChange } from '../../../functions/handleMediaChange';
 import axios from 'axios';
 import { defaultProfileImage } from '../../../config/mis';
+import TransitionsSnackbar from '../../common/SnackBar';
 
 
 type Props = {
@@ -34,6 +35,7 @@ interface UserDetailsInterface {
   loading: boolean,
   error: null | string,
   updatingProfile: boolean
+  updatedProfile: boolean
 }
 
 interface UploadMedia {
@@ -47,7 +49,8 @@ const userDetailsIntialState: UserDetailsInterface = {
   userDetails: null,
   loading: false,
   error: null,
-  updatingProfile:false
+  updatingProfile:false, 
+  updatedProfile: false
 }
 
 const uploadMediaInitialState: UploadMedia = {
@@ -64,6 +67,7 @@ const FETCHED_USER_DETAILS = 'FETCHED_USER_DETAILS';
 const FETCHED_ERROR = 'FETCHED_ERROR';
 const UPDATE_PROFILE = 'UPDATE_FORM';
 const UPDATING_PROFILE = 'UPDATING_PROFILE';
+const UPDATED_PROFILE = 'UPDATED_PROFILE';
 
 
 // Upload media constant
@@ -89,6 +93,8 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
     case UPDATING_PROFILE:  {
       return {...state, updatingProfile: action.payload}
     }
+    case UPDATED_PROFILE:
+      return {...state, updatedProfile: action.payload}
     
     case FETCHING_USER_DETAILS:
       return { ...state, loading: action.payload };
@@ -131,7 +137,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const [profileImageError, setProfileImageError] = useState<null | string>(null);
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
-  const [{ userDetails, loading, error, updatingProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
+  const [{ userDetails, loading, error, updatingProfile, updatedProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
   const [{mediaUploaded, uploading, uploadError}, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
   
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -163,6 +169,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         method: 'put',
         body
        });
+       dispatch({type: UPDATED_PROFILE, payload: true});
     } catch(err:any) {
       throw new Error(err);
     }
@@ -279,6 +286,11 @@ export default function Profile({ showModel, setShowModel }: Props) {
   return (
 
     <SideModel showModel={showModel} setShowModel={setShowModel}>
+      <TransitionsSnackbar
+      open={updatedProfile} 
+      severity='success'
+      message='Profile is updated'
+      />
       {/* Content for the side model profile */}
       <div className={styles.profile__container}>
         <div className={styles.avatar__actions}>
