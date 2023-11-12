@@ -1,22 +1,19 @@
-import {useRef, Dispatch, useEffect, useReducer, useState, ChangeEvent, useCallback } from 'react';
-import { Button, Input, Select, MultipleSelect, TextArea, InputAdornments, request } from '@pasal/cio-component-library';
-import React from 'react';
-import AvatarPNG from '../../../assets/svg/users.svg';
+import { Button, Input, InputAdornments, MultipleSelect, Select, TextArea, request } from '@pasal/cio-component-library';
+import axios from 'axios';
+import React, { ChangeEvent, useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { userType } from '../../../../reducers/userSlice';
+import { APIS } from '../../../config/apis';
+import { languages } from '../../../config/languages';
+import { defaultProfileImage } from '../../../config/mis';
+import countries from '../../../data/countries.json';
+import { handleMediaChange } from '../../../functions/handleMediaChange';
+import { onChangeHandler } from '../../../functions/onChangeHandler';
+import { RootState } from '../../../store';
+import TransitionsSnackbar from '../../common/SnackBar';
 import SideModel from '../SideModel';
 import styles from './profile.module.scss';
-import countries from '../../../data/countries.json';
-import { languages } from '../../../config/languages';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
-import { APIS } from '../../../config/apis';
-import { userType } from '../../../../reducers/userSlice';
-import { onChangeHandler } from '../../../functions/onChangeHandler';
-import { handleMediaChange } from '../../../functions/handleMediaChange';
-import axios from 'axios';
-import { defaultProfileImage } from '../../../config/mis';
-import TransitionsSnackbar from '../../common/SnackBar';
-import { SyntheticEvent } from 'react';
-import { SnackbarCloseReason } from '@material-ui/core';
+import { passwordRegex } from '@pasal/cio-component-library';
 
 type Props = {
   showModel: boolean;
@@ -34,7 +31,7 @@ type tabsType = `${tabsEnum}`
 interface UserDetailsInterface {
   userDetails: userType | null
   loading: boolean,
-  error: null | string,
+  errors: {[x:string]:string} | null,
   updatingProfile: boolean
   updatedProfile: boolean
 }
@@ -49,14 +46,14 @@ interface UploadMedia {
 const userDetailsIntialState: UserDetailsInterface = {
   userDetails: null,
   loading: false,
-  error: null,
-  updatingProfile:false, 
+  errors: null,
+  updatingProfile: false,
   updatedProfile: false
 }
 
 const uploadMediaInitialState: UploadMedia = {
   mediaUploaded: false,
-  uploading: false, 
+  uploading: false,
   uploadError: null
 }
 
@@ -69,6 +66,7 @@ const FETCHED_ERROR = 'FETCHED_ERROR';
 const UPDATE_PROFILE = 'UPDATE_FORM';
 const UPDATING_PROFILE = 'UPDATING_PROFILE';
 const UPDATED_PROFILE = 'UPDATED_PROFILE';
+const UPDATE_ERROR = 'UPDATE_ERROR';
 
 
 // Upload media constant
@@ -89,14 +87,24 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
           [name]: value
         }
       }
-
     }
-    case UPDATING_PROFILE:  {
-      return {...state, updatingProfile: action.payload}
+    case UPDATE_ERROR: {
+      const { name, value } = action.payload;
+      return {
+        ...state,
+        errors: {
+          ...state.errors,
+          [name]: value
+        }
+      }
+    }
+    case UPDATING_PROFILE: {
+      return { ...state, updatingProfile: action.payload }
     }
     case UPDATED_PROFILE:
-      return {...state, updatedProfile: action.payload}
+      return { ...state, updatedProfile: action.payload }
     
+
     case FETCHING_USER_DETAILS:
       return { ...state, loading: action.payload };
     case FETCHED_USER_DETAILS:
@@ -108,20 +116,20 @@ function userDetailsReducer(state: UserDetailsInterface, action: any) {
   }
 }
 
-function uploadMediaReducer(state: UploadMedia, action:any) {
-  switch(action.type) {
+function uploadMediaReducer(state: UploadMedia, action: any) {
+  switch (action.type) {
     case MEDIA_ONCHANGE:
-      return {...state, file: action.payload}
-    case MEDIA_UPLOADING: 
-      return {...state, uploading: action.payload}
+      return { ...state, file: action.payload }
+    case MEDIA_UPLOADING:
+      return { ...state, uploading: action.payload }
 
     case MEDIA_UPLOADED:
-      return {...state, success: action.payload};
+      return { ...state, success: action.payload };
 
     case MEDIA_UPLOAD_ERROR:
-      return {...state, uploadError: action.payload}
+      return { ...state, uploadError: action.payload }
     default:
-      return state; 
+      return state;
   }
 }
 
@@ -133,18 +141,41 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const [userLanguage, setUserLanguage] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
 
-  const [updateError, setUpdateError] = useState<null | string>(null); 
+  const [updateError, setUpdateError] = useState<null | string>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImageError, setProfileImageError] = useState<null | string>(null);
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
-  const [{ userDetails, loading, error, updatingProfile, updatedProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
-  const [{mediaUploaded, uploading, uploadError}, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
-  
+  const [{ userDetails, loading, errors, updatingProfile, updatedProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
+  const [{ mediaUploaded, uploading, uploadError }, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const imageRef = useRef< HTMLImageElement| null>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  const validatePassword = (e:changeEvent) => {
+    const {name, value} = e.target;
+    if(name === 'password' 
+    && value.length > 0
+    && !passwordRegex.test(value.trim())) {
+      // Validate password then only
+        dispatch({type: UPDATE_ERROR, payload: {name: 'password', value: 'Invalid password'}});
+    } else {
+      dispatch({type: UPDATE_ERROR, payload: {name: 'password', value: null}});
+    }
+
+    // Both password must matched
+    if(name === 'confirmPassword' && value.length > 0 && userDetails.password !== value) {
+      dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: 'Invalid password'}});
+    } else {
+      dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: null}});
+    }
+  }
 
   const onChangeEventLocal = (e: changeEvent) => {
+    // We need to validate the form here 
+   
+    validatePassword(e);
+    
     onChangeHandler(e, dispatch, UPDATE_PROFILE)
   }
 
@@ -156,50 +187,47 @@ export default function Profile({ showModel, setShowModel }: Props) {
     dispatch({ type: UPDATE_PROFILE, payload: { name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value } })
   }
 
-  const updateProfileHandler = useCallback( async() => {
-    // Check if all field is filled
-    // All fields are optional therefore 
-    // No need to add validation 
-    // fields supports null value 
-    dispatch({type: UPDATING_PROFILE, payload: true});
-    const {id,verified,email,withCredentials, ...body} = userDetails;
+  const updateProfileHandler = useCallback(async () => {
+    dispatch({ type: UPDATING_PROFILE, payload: true });
+    const { id, verified, email, withCredentials, ...body } = userDetails;
 
     try {
-        await request({
-        url: `${APIS.user.users}/${userDetails.id}`, 
+      await request({
+        url: `${APIS.user.users}/${userDetails.id}`,
         method: 'put',
         body
-       });
-       dispatch({type: UPDATED_PROFILE, payload: true});
-    } catch(err:any) {
+      });
+      dispatch({ type: UPDATED_PROFILE, payload: true });
+      setShowModel(false);
+    } catch (err: any) {
       throw new Error(err);
     }
 
-    dispatch({type: UPDATING_PROFILE, payload: false});
-  
+    dispatch({ type: UPDATING_PROFILE, payload: false });
+
   }, [userDetails]);
 
- 
+
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     console.log("running handleProfileImageUpload")
     handleMediaChange(event, setProfileImageError, setProfileImage);
 
     // Need to display the selected file to dom 
-    if(fileInputRef.current && imageRef.current) {
-      const file = fileInputRef.current.files && fileInputRef.current.files[0]; 
+    if (fileInputRef.current && imageRef.current) {
+      const file = fileInputRef.current.files && fileInputRef.current.files[0];
 
-      if(file) {
+      if (file) {
         const reader = new FileReader();
 
-        reader.onload = function(e:ProgressEvent<FileReader>) {
-          if(imageRef.current) {
+        reader.onload = function (e: ProgressEvent<FileReader>) {
+          if (imageRef.current) {
             imageRef.current.src = e.target?.result as string;
           }
         }
 
         reader.readAsDataURL(file);
       } else {
-        if(imageRef.current) {
+        if (imageRef.current) {
           imageRef.current.src = defaultProfileImage;
         }
         fileInputRef.current.value = '';
@@ -209,55 +237,50 @@ export default function Profile({ showModel, setShowModel }: Props) {
     }
   }
 
-  const uploadProfileMediaHandler = async() => {
+  const uploadProfileMediaHandler = async () => {
     // Check file is set
-    if(!profileImage) {
-      dispatchMedia({type: MEDIA_UPLOAD_ERROR, payload: 'Please select profile image to upload'});
+    if (!profileImage) {
+      dispatchMedia({ type: MEDIA_UPLOAD_ERROR, payload: 'Please select profile image to upload' });
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', profileImage); 
+    formData.append('image', profileImage);
 
-    dispatchMedia({type: MEDIA_UPLOADING, payload: true}); 
+    dispatchMedia({ type: MEDIA_UPLOADING, payload: true });
     try {
       const uploadMedia = await axios.post(APIS.product.upload, formData, {
         headers: {
 
           'Content-Type': 'multipart/form-data',
-      }
+        }
       });
       const { originalImageUrl, thumbnailImageUrl } = uploadMedia.data;
-      
-      dispatch({type: UPDATE_PROFILE, payload: {name: 'originalImageUrl', value: originalImageUrl}});
-      dispatch({type: UPDATE_PROFILE, payload: {name: 'thumbnailImageUrl', value: thumbnailImageUrl}});
-      dispatchMedia({type: MEDIA_UPLOADED, payload: true});
-    } catch(err) {
-      dispatchMedia({type: MEDIA_UPLOAD_ERROR, payload: err}); 
+
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: originalImageUrl } });
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: thumbnailImageUrl } });
+      dispatchMedia({ type: MEDIA_UPLOADED, payload: true });
+    } catch (err) {
+      dispatchMedia({ type: MEDIA_UPLOAD_ERROR, payload: err });
     }
-    dispatchMedia({type: MEDIA_UPLOADING, payload: false}); 
+    dispatchMedia({ type: MEDIA_UPLOADING, payload: false });
 
   }
 
   const onDeleteProfileImageHandler = () => {
-    if(imageRef.current && imageRef.current.src) {
+    if (imageRef.current && imageRef.current.src) {
       imageRef.current.src = defaultProfileImage;
       // Dispatch in the form as well empty the value for the profileImage
-      dispatch({type: UPDATE_PROFILE, payload: {name: 'originalImageUrl', value: false}});
-      dispatch({type: UPDATE_PROFILE, payload: {name: 'thumbnailImageUrl', value: false}})
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: false } });
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: false } })
       setProfileImage(null);
     }
-    
-    
+
+
   }
 
-  // const handleCloseAlert = (event: Event | SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => {
-  //   // Your logic for handling the close event
-  // };
-
   const handleCloseAlert = () => {
-    console.log("Closing the tootip")
-    dispatch({type: UPDATED_PROFILE, payload: false});
+    dispatch({ type: UPDATED_PROFILE, payload: false });
   }
 
 
@@ -281,52 +304,48 @@ export default function Profile({ showModel, setShowModel }: Props) {
     }
     fetchUserProfile();
   }, [auth?.id]);
-  
 
-  // console.log('mediaUploaded, uploading, uploadError', mediaUploaded, uploading, uploadError);
-  console.log("userDetails", userDetails)
-  // console.log("imageref", imageRef)
-  // console.log("proile image", profileImage)
 
-  console.log("updatedProfile", updatedProfile)
+  console.log(userDetails)
+  console.log('errors', errors);
+
   return (
 
     <SideModel showModel={showModel} setShowModel={setShowModel}>
       <TransitionsSnackbar
-      open={updatedProfile} 
-      handleCloseAlert={handleCloseAlert}
-      severity='success'
-      message='Profile is updated'
+        open={updatedProfile}
+        handleCloseAlert={handleCloseAlert}
+        severity='success'
+        message='Profile is updated successfully'
       />
-      {/* Content for the side model profile */}
       <div className={styles.profile__container}>
         <div className={styles.avatar__actions}>
           <div className={styles.avatar}>
             {/* <AvatarPNG/> */}
-            <input 
-              type="file" 
-              name="" 
-              id = "profile-image" 
-              accept="image/*" 
+            <input
+              type="file"
+              name=""
+              id="profile-image"
+              accept="image/*"
               onChange={handleProfileImageUpload}
               hidden
               ref={fileInputRef}
               onClick={(e) => {
                 e.currentTarget.value = '';
               }}
-              />
-            <label htmlFor = "profile-image">
-            <img 
-              ref={imageRef}
-              src={userDetails?.originalImageUrl ?? defaultProfileImage} alt='' />
+            />
+            <label htmlFor="profile-image">
+              <img
+                ref={imageRef}
+                src={userDetails?.originalImageUrl ?? defaultProfileImage} alt='' />
             </label>
-            
+
           </div>
           <div className={styles.actions}>
-            <Button variant='primary' text= {!uploading ? 'Upload' : 'UPLOADING'}onClick={!uploading ? uploadProfileMediaHandler : null}/>
+            <Button variant='primary' text={!uploading ? 'Upload' : 'UPLOADING'} onClick={!uploading ? uploadProfileMediaHandler : null} />
             {/* <input type="file" name="" id="profile-picture" hidden/>
             <label htmlFor='profile-picture'>Upload</label> */}
-            <Button variant='light' text='Delete' onClick={onDeleteProfileImageHandler}/>
+            <Button variant='light' text='Delete' onClick={onDeleteProfileImageHandler} />
           </div>
         </div>
         <div className={styles.personal__security}>
@@ -370,8 +389,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
                     type="text"
                     name="firstName"
                     onChange={(e: changeEvent) => onChangeEventLocal(e)}
-                    // error={errors.deliveryTime ? true : false}
-                    // helperText={errors.deliveryTime ? errors.deliveryTime : false} 
+                  // error={errors.deliveryTime ? true : false}
+                  // helperText={errors.deliveryTime ? errors.deliveryTime : false} 
                   />
 
                   <Input
@@ -424,23 +443,39 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
                 </div>
 
-                <TextArea 
-                rows={6} 
-                name="about" 
-                setter={onChangeEventLocal} 
-                getter={userDetails?.about ?? ""} 
-                placeholder="About you" 
-                
+                <TextArea
+                  rows={6}
+                  name="about"
+                  setter={onChangeEventLocal}
+                  getter={userDetails?.about ?? ""}
+                  placeholder="About you"
+
                 />
 
               </div>
               <div className={styles.item} id='content-security' data-name='security'>
                 <div className={styles.form__row}>
-                  <InputAdornments label="New password" />
+                  <InputAdornments
+                    label="New password"
+                    id="password"
+                    value={userDetails?.password || ""}
+                    name="password"
+                    onChange={(e: changeEvent) => onChangeEventLocal(e)}
+                     error={errors?.password}
+                  helperText={errors?.password}
+                  />
                 </div>
 
                 <div className={styles.form__row}>
-                  <InputAdornments label="Confirm password" />
+                  <InputAdornments
+                    label="Confirm password"
+                    id="confirmPassword"
+                    value={userDetails?.confirmPassword || ""}
+                    name="confirmPassword"
+                    onChange={(e: changeEvent) => onChangeEventLocal(e)}
+                    error={errors?.confirmPassword}
+                    helperText={errors?.confirmPassword}
+                  />
                 </div>
 
 
@@ -452,7 +487,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
         </div>
 
         <div className={styles.actions__bottom}>
-          <Button variant='primary' text={updatingProfile ? 'Please wait...' : 'Update'} onClick={updatingProfile ? null :  updateProfileHandler}/>
+          <Button variant='primary' text={updatingProfile ? 'Please wait...' : 'Update'} onClick={updatingProfile ? null : updateProfileHandler} />
         </div>
       </div>
     </SideModel>

@@ -141,6 +141,7 @@ export default function index({ }: Props) {
             if(!isUpdateUserMode) {
                 globalDispatch(addedUserAction(createOrUpdateUser));
             }
+            
             setStep(formStepEnum.three);
         } catch(err:any) {
             console.error(`Could not ${isUpdateUserMode ? 'update ' : 'create '} team ${err.response.data}`);

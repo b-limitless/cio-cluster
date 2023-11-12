@@ -22,7 +22,7 @@ interface TransitionsSnackbar {
 }
 
 export default function TransitionsSnackbar({ severity, message, open, handleCloseAlert }: TransitionsSnackbar) {
-    const [state, setState] = React.useState<{
+    const [state, ] = React.useState<{
         open: boolean;
         Transition: React.ComponentType<
             TransitionProps & {
