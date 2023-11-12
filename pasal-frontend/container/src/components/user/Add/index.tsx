@@ -12,7 +12,7 @@ import './style.scss';
 import { Authorization, PermissionInterface } from '../types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../store';
-import { addUser, addedUserAction, fetchUsers, updateUser as updateUserAction } from '../../../../reducers/userSlice';
+import { addUser, addedUserAction, fetchUsers, updateUser as updateUserAction, userType } from '../../../../reducers/userSlice';
 import { Fragment } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -131,7 +131,7 @@ export default function index({ }: Props) {
             }); 
 
             if(isUpdateUserMode) {
-                const index = users.map(user => user.id).findIndex((x) => x === updateUser[0].id); 
+                const index = users.map((user:userType) => user.id).findIndex((x) => x === updateUser[0].id); 
                 const newValue = [...users];
                 newValue[index] = formData; 
                 globalDispatch(updateUserAction(null));

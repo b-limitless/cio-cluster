@@ -15,7 +15,8 @@ import { handleMediaChange } from '../../../functions/handleMediaChange';
 import axios from 'axios';
 import { defaultProfileImage } from '../../../config/mis';
 import TransitionsSnackbar from '../../common/SnackBar';
-
+import { SyntheticEvent } from 'react';
+import { SnackbarCloseReason } from '@material-ui/core';
 
 type Props = {
   showModel: boolean;
@@ -178,8 +179,6 @@ export default function Profile({ showModel, setShowModel }: Props) {
   
   }, [userDetails]);
 
-  console.log("updatingProfile", updatingProfile)
-
  
   const handleProfileImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     console.log("running handleProfileImageUpload")
@@ -252,7 +251,14 @@ export default function Profile({ showModel, setShowModel }: Props) {
     
   }
 
-  
+  // const handleCloseAlert = (event: Event | SyntheticEvent<any, Event>, reason: SnackbarCloseReason) => {
+  //   // Your logic for handling the close event
+  // };
+
+  const handleCloseAlert = () => {
+    console.log("Closing the tootip")
+    dispatch({type: UPDATED_PROFILE, payload: false});
+  }
 
 
   useEffect(() => {
@@ -282,12 +288,13 @@ export default function Profile({ showModel, setShowModel }: Props) {
   // console.log("imageref", imageRef)
   // console.log("proile image", profileImage)
 
-
+  console.log("updatedProfile", updatedProfile)
   return (
 
     <SideModel showModel={showModel} setShowModel={setShowModel}>
       <TransitionsSnackbar
       open={updatedProfile} 
+      handleCloseAlert={handleCloseAlert}
       severity='success'
       message='Profile is updated'
       />

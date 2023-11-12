@@ -1,7 +1,5 @@
-import MuiAlert, { AlertProps, AlertColor } from '@mui/material/Alert';
-import Button from '@mui/material/Button';
+import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert';
 import Fade from '@mui/material/Fade';
-import Grow, { GrowProps } from '@mui/material/Grow';
 import Snackbar from '@mui/material/Snackbar';
 import { TransitionProps } from '@mui/material/transitions';
 import * as React from 'react';
@@ -15,19 +13,15 @@ const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-function GrowTransition(props: GrowProps) {
-    return <Grow {...props} />;
-}
-
-// type AlertColor = "error" | "success" | "info" | "warning"
 
 interface TransitionsSnackbar {
     severity: AlertColor
     message: string;
     open:boolean;
+    handleCloseAlert?: any //Event | SyntheticEvent<any, Event>
 }
 
-export default function TransitionsSnackbar({ severity, message, open }: TransitionsSnackbar) {
+export default function TransitionsSnackbar({ severity, message, open, handleCloseAlert }: TransitionsSnackbar) {
     const [state, setState] = React.useState<{
         open: boolean;
         Transition: React.ComponentType<
@@ -40,36 +34,14 @@ export default function TransitionsSnackbar({ severity, message, open }: Transit
         Transition: Fade,
     });
 
-    const handleClick =
-        (
-            Transition: React.ComponentType<
-                TransitionProps & {
-                    children: React.ReactElement<any, any>;
-                }
-            >,
-        ) =>
-            () => {
-                setState({
-                    open: true,
-                    Transition,
-                });
-            };
-
-    const handleClose = () => {
-        setState({
-            ...state,
-            open: false,
-        });
-    };
-
     return (
             <Snackbar
-                open={state.open}
-                onClose={handleClose}
+                open={open}
+                onClose={handleCloseAlert}
                 TransitionComponent={state.Transition}
                 key={state.Transition.name}
             >
-                <Alert onClose={handleClose}
+                <Alert onClose={handleCloseAlert}
                     severity={severity}
                     sx={{
                         width: '100%',
