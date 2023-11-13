@@ -14,6 +14,7 @@ import TransitionsSnackbar from '../../common/SnackBar';
 import SideModel from '../SideModel';
 import styles from './profile.module.scss';
 import { passwordRegex } from '@pasal/cio-component-library';
+import { hasError } from '../../../functions/hasError';
 
 type Props = {
   showModel: boolean;
@@ -153,7 +154,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const imageRef = useRef<HTMLImageElement | null>(null);
 
   const validatePassword = (e:changeEvent) => {
-    const {name, value} = e.target;
+    const {value} = e.target;
 
     if( value.length > 0
     && !passwordRegex.test(value.trim())) {
@@ -164,7 +165,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
   }
 
   const validateConfirmPassword = (e:changeEvent) => {
-    const {name, value} = e.target;
+    const {value} = e.target;
     if(value.length > 0 && userDetails.password !== value) {
       dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: 'Both password did not matched'}});
     } else {
@@ -175,7 +176,6 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
 
   const onChangeEventLocal = (e: changeEvent) => {
-    // We need to validate the form here 
    if(e.target.name === 'password') {
       validatePassword(e);
    } 
@@ -195,7 +195,13 @@ export default function Profile({ showModel, setShowModel }: Props) {
     dispatch({ type: UPDATE_PROFILE, payload: { name: 'spokenLanguage', value: typeof value === 'string' ? value.split(',') : value } })
   }
 
+  
   const updateProfileHandler = useCallback(async () => {
+
+    if(hasError(errors)) {
+      console.log("can not submit the file");
+      return;
+    }
     dispatch({ type: UPDATING_PROFILE, payload: true });
     const { id, verified, email, withCredentials, ...body } = userDetails;
 
@@ -313,9 +319,9 @@ export default function Profile({ showModel, setShowModel }: Props) {
     fetchUserProfile();
   }, [auth?.id]);
 
-
-  console.log(userDetails)
+  console.log('userDetails', userDetails);
   console.log('errors', errors);
+
 
   return (
 
