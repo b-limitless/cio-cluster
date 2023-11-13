@@ -154,27 +154,35 @@ export default function Profile({ showModel, setShowModel }: Props) {
 
   const validatePassword = (e:changeEvent) => {
     const {name, value} = e.target;
-    if(name === 'password' 
-    && value.length > 0
+
+    if( value.length > 0
     && !passwordRegex.test(value.trim())) {
-      // Validate password then only
         dispatch({type: UPDATE_ERROR, payload: {name: 'password', value: 'Invalid password'}});
     } else {
       dispatch({type: UPDATE_ERROR, payload: {name: 'password', value: null}});
     }
+  }
 
-    // Both password must matched
-    if(name === 'confirmPassword' && value.length > 0 && userDetails.password !== value) {
-      dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: 'Invalid password'}});
+  const validateConfirmPassword = (e:changeEvent) => {
+    const {name, value} = e.target;
+    if(value.length > 0 && userDetails.password !== value) {
+      dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: 'Both password did not matched'}});
     } else {
       dispatch({type: UPDATE_ERROR, payload: {name: 'confirmPassword', value: null}});
     }
   }
 
+
+
   const onChangeEventLocal = (e: changeEvent) => {
     // We need to validate the form here 
-   
-    validatePassword(e);
+   if(e.target.name === 'password') {
+      validatePassword(e);
+   } 
+    
+    if(e.target.name === 'confirmPassword') {
+      validateConfirmPassword(e);
+    } 
     
     onChangeHandler(e, dispatch, UPDATE_PROFILE)
   }
