@@ -285,8 +285,8 @@ export default function Profile({ showModel, setShowModel }: Props) {
     if (imageRef.current && imageRef.current.src) {
       imageRef.current.src = defaultProfileImage;
       // Dispatch in the form as well empty the value for the profileImage
-      dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: false } });
-      dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: false } })
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: null } });
+      dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: null } })
       setProfileImage(null);
     }
 
@@ -351,7 +351,7 @@ export default function Profile({ showModel, setShowModel }: Props) {
             <label htmlFor="profile-image">
               <img
                 ref={imageRef}
-                src={userDetails?.originalImageUrl ?? defaultProfileImage} alt='' />
+                src={userDetails?.originalImageUrl ?? defaultProfileImage } alt='' />
             </label>
 
           </div>
