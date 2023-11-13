@@ -15,6 +15,7 @@ import SideModel from '../SideModel';
 import styles from './profile.module.scss';
 import { passwordRegex } from '@pasal/cio-component-library';
 import { hasError } from '../../../functions/hasError';
+import { useMemo } from 'react';
 
 type Props = {
   showModel: boolean;
@@ -41,6 +42,7 @@ interface UploadMedia {
   mediaUploaded: boolean;
   uploading: boolean;
   uploadError: null | string;
+  success: boolean
 
 }
 
@@ -55,7 +57,8 @@ const userDetailsIntialState: UserDetailsInterface = {
 const uploadMediaInitialState: UploadMedia = {
   mediaUploaded: false,
   uploading: false,
-  uploadError: null
+  uploadError: null,
+  success: false
 }
 
 
@@ -75,6 +78,7 @@ const MEDIA_UPLOADING = 'MEDIA_UPLOADING';
 const MEDIA_UPLOADED = 'MEDIA_UPLOADED';
 const MEDIA_UPLOAD_ERROR = 'MEDIA_UPLOADED';
 const MEDIA_ONCHANGE = 'MEDIA_UPLOADED';
+const SUCCESS = 'SUCCESS';
 
 function userDetailsReducer(state: UserDetailsInterface, action: any) {
   switch (action.type) {
@@ -125,10 +129,12 @@ function uploadMediaReducer(state: UploadMedia, action: any) {
       return { ...state, uploading: action.payload }
 
     case MEDIA_UPLOADED:
-      return { ...state, success: action.payload };
+      return { ...state, mediaUploaded: action.payload };
 
     case MEDIA_UPLOAD_ERROR:
       return { ...state, uploadError: action.payload }
+    case SUCCESS:
+      return {...state, success: action.payload}
     default:
       return state;
   }
@@ -138,17 +144,14 @@ function uploadMediaReducer(state: UploadMedia, action: any) {
 
 export default function Profile({ showModel, setShowModel }: Props) {
   type changeEvent = React.ChangeEvent<HTMLInputElement>;
-  const [form, setForm] = useState({ country: "", aboutYou: "" });
-  const [userLanguage, setUserLanguage] = useState<string[]>([]);
+  
   const [activeTab, setActiveTab] = useState<tabsType>(tabsEnum.peronalInfo);
-
-  const [updateError, setUpdateError] = useState<null | string>(null);
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [profileImageError, setProfileImageError] = useState<null | string>(null);
 
   const { auth: { auth } } = useSelector((state: RootState) => state);
   const [{ userDetails, loading, errors, updatingProfile, updatedProfile }, dispatch] = useReducer(userDetailsReducer, userDetailsIntialState);
-  const [{ mediaUploaded, uploading, uploadError }, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
+  const [{ mediaUploaded, uploading, uploadError, success }, dispatchMedia] = useReducer(uploadMediaReducer, uploadMediaInitialState);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
@@ -271,9 +274,10 @@ export default function Profile({ showModel, setShowModel }: Props) {
       });
       const { originalImageUrl, thumbnailImageUrl } = uploadMedia.data;
 
+      dispatchMedia({ type: SUCCESS, payload: true });
       dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: originalImageUrl } });
       dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: thumbnailImageUrl } });
-      dispatchMedia({ type: MEDIA_UPLOADED, payload: true });
+      
     } catch (err) {
       dispatchMedia({ type: MEDIA_UPLOAD_ERROR, payload: err });
     }
@@ -284,7 +288,6 @@ export default function Profile({ showModel, setShowModel }: Props) {
   const onDeleteProfileImageHandler = () => {
     if (imageRef.current && imageRef.current.src) {
       imageRef.current.src = defaultProfileImage;
-      // Dispatch in the form as well empty the value for the profileImage
       dispatch({ type: UPDATE_PROFILE, payload: { name: 'originalImageUrl', value: null } });
       dispatch({ type: UPDATE_PROFILE, payload: { name: 'thumbnailImageUrl', value: null } })
       setProfileImage(null);
@@ -319,18 +322,38 @@ export default function Profile({ showModel, setShowModel }: Props) {
     fetchUserProfile();
   }, [auth?.id]);
 
-  console.log('userDetails', userDetails);
-  console.log('errors', errors);
+  
+  const getMessage = useMemo(() => {
+    let message = '';
 
+    if(updatedProfile) {
+      message = 'Profile is updated successfully'
+    }
+    if(success) {
+      message = 'Profile picture uploaded successfully'
+    }
+    return message;
+
+  }, [updatedProfile, success]);
+
+  const openSnackBar = useMemo(() => {
+
+    if(updatedProfile || success) {
+      return true;
+    }
+
+    return false;
+
+  }, [updatedProfile, success]);
 
   return (
 
     <SideModel showModel={showModel} setShowModel={setShowModel}>
       <TransitionsSnackbar
-        open={updatedProfile}
+        open={openSnackBar}
         handleCloseAlert={handleCloseAlert}
         severity='success'
-        message='Profile is updated successfully'
+        message={getMessage}
       />
       <div className={styles.profile__container}>
         <div className={styles.avatar__actions}>
@@ -357,8 +380,6 @@ export default function Profile({ showModel, setShowModel }: Props) {
           </div>
           <div className={styles.actions}>
             <Button variant='primary' text={!uploading ? 'Upload' : 'UPLOADING'} onClick={!uploading ? uploadProfileMediaHandler : null} />
-            {/* <input type="file" name="" id="profile-picture" hidden/>
-            <label htmlFor='profile-picture'>Upload</label> */}
             <Button variant='light' text='Delete' onClick={onDeleteProfileImageHandler} />
           </div>
         </div>
