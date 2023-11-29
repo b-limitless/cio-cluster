@@ -3,10 +3,16 @@ CIO.io is a comprehensive solution designed to automate tailoring business activ
 
 # Used technologies
 ## Backend
-[![Stack Used](https://skillicons.dev/icons?i=typescript,js,mongodb,rabbitmq&theme=dark)](https://skillicons.dev)
+[![Stack Used](https://skillicons.dev/icons?i=nodejs,typescript,js,mongodb,rabbitmq&theme=dark)](https://skillicons.dev)
 
 ## Front End
-[![Stack Used](https://skillicons.dev/icons?i=typescript,js,html,scss,css,react,redux,figma&theme=dark)](https://skillicons.dev)
+[![Stack Used](https://skillicons.dev/icons?i=typescript,js,html,scss,css,react,redux,nextjs,figma&theme=dark)](https://skillicons.dev)
 
 ## DevOps
 [![Stack Used](https://skillicons.dev/icons?i=githubactions,docker,kubernetes,git,github&theme=dark)](https://skillicons.dev)
+
+# Features
+- User account managements
+- Product management - [Febric]
+- Team members managements
+- Product customization using 3d Model using Three JS
