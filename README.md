@@ -1,6 +1,6 @@
-# CIO.io
+# cio-cluster
 
-**CIO.io** is a comprehensive solution designed to automate tailoring business activities, streamlining processes for both B2B and B2C interactions.
+**cio-cluster** is a comprehensive solution designed to automate tailoring business activities, streamlining processes for both B2B and B2C interactions.
 
 ## Used Technologies
 
@@ -29,6 +29,25 @@
 
 ## Prerequisites
 - Node JS, Minikube (currently using on Mac), Docker, Skaffold
+
+## Getting Started
+1. Clone the repository:
+
+    ```bash
+    git clone https://github.com/your-username/cio-cluster.git
+    ```
+
+2. Navigate to the project directory:
+
+    ```bash
+    cd cio-cluster
+    ```
+
+3. Install dependencies:
+
+    ```bash
+    skaffold dev
+    ```
 
 ## Roadmap
 - Implement shirt model customization
