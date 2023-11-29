@@ -6,7 +6,7 @@ import App from "./App";
 // Mount function to start up the app
 const mount = (
   el,
-  { onNavigate, defaultHistory, initialPath, onSignIn, isSignedIn }
+  { onNavigate, defaultHistory, initialPath }
 ) => {
   const history =
     defaultHistory ||
@@ -19,7 +19,7 @@ const mount = (
   }
 
   const root = createRoot(el);
-  root.render(<App history={history} onSignIn={onSignIn} isSignedIn={isSignedIn} />);
+  root.render(<App history={history} />);
 
   return {
     onParentNavigate({ pathname: nextPathname }) {

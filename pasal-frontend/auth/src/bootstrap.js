@@ -11,8 +11,8 @@ const mount = (
     onNavigate,
     defaultHistory,
     initialPath,
-    onSignIn,
-    isSignedIn
+    actions, 
+    globalDispatch
   }
 ) => {
   const history =
@@ -28,8 +28,9 @@ const mount = (
    
       <App
         history={history}
-        onSignIn={onSignIn}
-        isSignedIn={isSignedIn}
+        actions={actions}
+        globalDispatch={globalDispatch}
+        
       />
       ,
 

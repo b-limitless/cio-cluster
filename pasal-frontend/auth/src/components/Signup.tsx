@@ -120,7 +120,7 @@ export default function Signup() {
   }
 
   const onMouseLeaveEventHandler = (name: keyof FormInterface, value: string) => {
-    if (!userModel[name].test(value)) {
+    if (!userModel[name]?.test(value)) {
       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name, value: `${camelCaseToNormal(name, true)} is required` } })
     } else {
       dispatch({ type: 'FORM_ERROR', payload: { name, value: null, formHasError: false } })
@@ -138,7 +138,7 @@ export default function Signup() {
         const response = await request({
           url: APIS.auth.signup,
           method: 'post',
-          body: {...form, role:'admin', permissions: ['all']}
+          body: {...form, role:'admin', permissions: ['65490957b2cd6e0018d327e6']}
         });
     
         const { verificationCode, user } = response; 

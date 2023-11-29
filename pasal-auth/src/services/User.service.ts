@@ -1,10 +1,11 @@
+import mongoose from "mongoose";
 import logger from "../logger";
-import { User } from "../models/user";
+import { User, UserAttrs } from "../models/user";
+import { NotFoundError } from "@pasal/common";
 
 export class UserServiceLocal {
     async findOne(email:string ) {
         const existingUser = await User.findOne({ email });
-
         return existingUser;
     }
 
@@ -21,7 +22,8 @@ export class UserServiceLocal {
 
     async findByIdAndUpdate(id:string, update:any, options:any) {
         try {
-            const updated = await User.findByIdAndUpdate(id, update, options)
+            const updated = await User.findByIdAndUpdate(id, update, options);
+            
             return updated;
         } catch(err) {
             logger.log("info", `Can not find and update`);
@@ -45,6 +47,15 @@ export class UserServiceLocal {
             return user;
         } catch(err:any) {
             throw new Error(err.message);
+        }
+    }
+
+    async deleteOne(id:string) {
+        try {
+            await User.deleteOne({_id: new mongoose.Types.ObjectId(id)});
+        } catch(err) {
+            logger.log("info", `Can not delete user ${err}`);
+            throw new Error(`Can not delete user ${err}`);
         }
     }
 }

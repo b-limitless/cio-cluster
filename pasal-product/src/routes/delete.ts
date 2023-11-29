@@ -8,18 +8,23 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import { FebricDeletedPublisher } from "../events/publishers/febric-deleted-publisher";
 import { FebricService } from "../services/FebricService";
+import { deleteMedia } from "../../src/common/uploadFileToCloudinary";
 
 const router = express.Router();
 
 router.delete(
   "/api/products/v1/:id",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   async (req: Request, res: Response) => {
     const { id } = req.params;
     try {
       const deleteFebric = await FebricService.findByIdAndDelete(id);
-      console.log("deleteFebric", deleteFebric);
+      // Delete the media from the CND as well
+      // deleteFebric?.originalImageUrl
+      // deleteFebric?.thumbnailImageUrl
+      await deleteMedia(deleteFebric?.originalImageUrl);
+      await deleteMedia(deleteFebric?.thumbnailImageUrl);
       res.status(200).send(deleteFebric);
       // Publish the event that febric is deleted
       const febricId = new mongoose.Types.ObjectId(id);

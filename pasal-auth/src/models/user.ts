@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Password } from "../utils/password";
+import { Schema } from "mongoose";
 export interface UserAttrs {
   email: string;
   password: string;
@@ -11,6 +12,7 @@ export interface UserAttrs {
   spokenLanguage: string[];
   about: string | null;
   profileImageLink: string | null; 
+  adminId?: mongoose.Types.ObjectId | null
 }
 interface UserDoc extends mongoose.Document {
   email: string;
@@ -23,7 +25,10 @@ interface UserDoc extends mongoose.Document {
   country: string | null;
   spokenLanguage: string[];
   about: string | null;
-  profileImageLink: string | null; 
+  profileImageLink: string | null;
+  adminId?: mongoose.Types.ObjectId | null;
+  originalImageUrl?:string;
+  thumbnailImageUrl?:string;
 }
 interface UserModel extends mongoose.Model<UserDoc> {
   build(attrs: UserAttrs): UserDoc;
@@ -42,10 +47,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    permissions: {
-      type: [String],
-      default: [],
-    },
+    permissions: [{
+      type: Schema.Types.ObjectId,
+      ref: "Permission", // Reference to the Permission model
+    }],
     verified: {
       type: Boolean, 
       default: false
@@ -74,6 +79,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    adminId: {
+      type: mongoose.Types.ObjectId || null, 
+      required: false
+    },
+    originalImageUrl: {
+      type: String,
+      default: null,
+    },
+    thumbnailImageUrl: {
+      type: String,
+      default: null,
+    },
+    
   },
   {
     toJSON: {

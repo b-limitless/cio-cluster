@@ -6,7 +6,7 @@ const AddUserLazy = lazy(() => import("./components/User/Add"));
 
 
 
-export default ({ history, onSignIn, isSignedIn }) => {
+export default ({ history}) => {
   return (
     <div>
       <Router history={history}>

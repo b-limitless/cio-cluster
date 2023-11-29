@@ -3,7 +3,9 @@ import VerifyFeature from './features/verify.feature';
 import Template from '../common/Template';
 import BackLeftIcon from '../assets/svg/back-left-icon.svg';
 
-export default function VerifyRegisteredAccount() {
+
+export default function VerifyRegisteredAccount({actions, globalDispatch}) {
+  
   return (
     <Template>
       <div className='right col'>
@@ -24,7 +26,7 @@ export default function VerifyRegisteredAccount() {
         
       
 
-        <VerifyFeature/>
+        <VerifyFeature actions={actions} globalDispatch={globalDispatch}/>
       </div>
     </Template>
   )

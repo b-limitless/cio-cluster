@@ -10,8 +10,12 @@ import { FormHelperText } from '@material-ui/core';
 import { colors } from '@pasal/cio-component-library';
 import { Link } from 'react-router-dom';
 import { request } from '@pasal/cio-component-library';
+import { useDispatch } from 'react-redux';
 
-type Props = {}
+type Props = {
+  actions:any;
+  globalDispatch:any
+}
 
 const validLength = {
   inputProps: {
@@ -23,7 +27,7 @@ const validLength = {
 
 
 
-export default function VerifyFeature({ }: Props) {
+export default function VerifyFeature({actions, globalDispatch}: Props) {
   const [verifying, setVerifying] = useState(false);
   const [userVerificationError, setUserVerificationError] = useState<null | string>(null);
   const [userVerified, setUserVerified] = useState(false);
@@ -34,6 +38,7 @@ export default function VerifyFeature({ }: Props) {
     useRef(null),
     useRef(null),
   ];
+  
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const value = event.target.value;
@@ -99,7 +104,7 @@ export default function VerifyFeature({ }: Props) {
       });
 
       if(response.verified) {
-        
+        globalDispatch(actions.authenticatedUser(response))
         setUserVerified(true);
       
       }

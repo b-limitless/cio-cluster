@@ -38,7 +38,7 @@ async(req:Request, res:Response) => {
     const {userId} = getVerficationCode;
 
     try {
-        const user = await User.findByIdAndUpdate(userId, {verified: true}, {new: true});
+        const user = await User.findByIdAndUpdate(userId, {verified: true}, {new: true}).populate('permissions');
 
         if(!user) {
             throw new NotFoundError("Unable find the user");
@@ -69,7 +69,6 @@ async(req:Request, res:Response) => {
             logger.log("error", "Could not pulish the verify user event")
         }
         logger.log("info", `User successfully verified`);
-        res.setHeader('Authorization', `Bearer ${userJWT}`);
         res.send(user);
         return;
     } catch(err) {

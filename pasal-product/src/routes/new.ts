@@ -17,13 +17,17 @@ import { febricBodyRequest } from "../body-request/FebricBodyRequest";
 import { FebricCreatedPublisher } from "../events/publishers/febric-created-publisher";
 import { FebricService } from "../services/FebricService";
 import { hasPermissions } from "@pasal/common";
+import { deleteMedia } from "../../src/common/uploadFileToCloudinary";
+import { Febric } from "../../src/models/febric";
+import {febrics} from "./dummyFebric";
+
 
 const router = express.Router();
 
 router.post(
   "/api/products/v1",
   requireAuth,
-  hasPermissions(["create_febric"]),
+  // hasPermissions(["create_febric"]),
   febricBodyRequest,
   validateRequest,
   async (req: Request, res: Response) => {
@@ -34,13 +38,13 @@ router.post(
       excellence,
       warmth,
       weight,
-      season,
+      // season,
       threadStyle,
       brightness,
       superShiny,
-      material,
+      // material,
       tone,
-      threadCount,
+      // threadCount,
       opacity,
       waterproof,
       stretchyText,
@@ -54,6 +58,7 @@ router.post(
       characters,
       thumbnailImageUrl,
       originalImageUrl,
+      compositions
     } = req.body;
 
     const userId = new mongoose.Types.ObjectId(req?.currentUser?.id);
@@ -66,13 +71,13 @@ router.post(
         excellence,
         warmth,
         weight,
-        season,
+        // season,
         threadStyle,
         brightness,
         superShiny,
-        material,
+        // material,
         tone,
-        threadCount,
+        // threadCount,
         opacity,
         waterproof,
         stretchyText,
@@ -86,6 +91,7 @@ router.post(
         characters,
         thumbnailImageUrl,
         originalImageUrl,
+        compositions
       });
       res.status(201).send(febric);
 
@@ -108,10 +114,24 @@ router.post(
 
       return;
     } catch (err) {
-      logger.log("error", "Could not create febric");
-      throw new Error("Could not create febric");
+      logger.log("error", `Could not create febric ${err}`);
+      console.log(`Could not create febric ${err}`)
+
+      throw new Error(`Could not create febric ${err}`);
     }
   }
 );
+
+router.get('/api/products/insert', async(req: Request, res:Response) => {
+  try {
+    await Febric.insertMany(febrics);
+    res.send('data inserted sucessfully')
+  } catch(err:any) {
+    throw new Error(`Can not insert data ${err}`);
+  }
+  
+});
+
+// 
 
 export { router as createFebricRouter };

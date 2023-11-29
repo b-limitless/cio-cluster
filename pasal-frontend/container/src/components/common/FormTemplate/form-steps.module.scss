@@ -1,0 +1,111 @@
+@import "@pasal/common-style/styles/base/functions.scss";
+@import "@pasal/common-style/styles/abstract/variables.scss";
+
+.row {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1rem;
+  width: 100%;
+
+  .title {
+    font-style: normal;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 150%;
+    /* or 42px */
+    font-family: $secondary-font-family;
+
+    /* Dark-1 */
+
+    color: #1a1a1c;
+  }
+  .form__row {
+    display: flex;
+    column-gap: 1rem;
+    flex-basis: 100%;
+    max-height: pxToRem(268);
+    overflow: auto;
+    padding: 1rem 1rem 1rem 0;
+
+    .characters__label {
+      display: grid;
+      column-gap: 1rem;
+      grid-template-columns: repeat(auto-fill, pxToRem(220));
+    }
+
+    .febric__media {
+      display: flex;
+      width: 100%;
+      // align-items: center;
+      // column-gap: 8px;
+      .febric__image {
+        display: flex;
+        align-items: center;
+        column-gap: 8px;
+        background-color: #efbb40;
+        padding: 19px;
+        font-family: $secondary-font-family;
+        font-weight: 700;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        span:nth-child(2) {
+          font-size: 14px;
+          line-height: 17px;
+        }
+      }
+    }
+
+    .compositions {
+      display: flex;
+      flex-direction: column;
+      row-gap: 1rem;
+      .item {
+        display: flex;
+        align-items: center;
+        column-gap: 2rem;
+        .col {
+          flex-basis: 20%;
+          .title {
+            font-size: 1rem;
+            font-family: $secondary-font-family;
+          }
+        }
+        .psersantage {
+          margin-right: auto;
+        }
+      }
+    }
+  }
+}
+
+.form__row > div {
+  flex: 1;
+}
+
+.childrens {
+  animation: example 1s;
+  min-height: 200px;
+}
+
+@keyframes rightToLeft {
+  0% {
+    display: none;
+    // translateY: -3rem;
+  }
+
+  100% {
+    display: flex;
+    // translateY: 0rem;
+  }
+}
+
+@keyframes example {
+  0% {
+    transform: translateX(100px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}

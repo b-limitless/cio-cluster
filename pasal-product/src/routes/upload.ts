@@ -7,7 +7,7 @@ import { BadRequestError, requireAuth } from "@pasal/common";
 
 const router = express.Router();
 const upload = multer();
-
+// Make server available
 router.post('/api/products/v1/upload', 
 requireAuth,
 upload.single('image'), async (req, res) => {

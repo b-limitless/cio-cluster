@@ -2,6 +2,25 @@ import request from "supertest";
 import { app } from "../../app";
 import { User } from "../../models/user";
 
+const permission = {
+  name: 'globalId',
+  cat: "ifa",
+  guard_name: "sales",
+  role: "sales executive",
+};
+
+var globalId = null;
+
+beforeEach(async () => {
+  const res = await request(app)
+    .post("/api/users/permission/create")
+    .send(permission)
+    .expect(200);
+
+  const {permission: {id}} = JSON.parse(res.text);
+  globalId = id;
+});
+
 it("throw 400 error when no email supplied", async () => {
   await request(app).post("/api/users/signin").send({}).expect(400);
 });
@@ -34,24 +53,14 @@ it("faild when invalid username and password is provided", async () => {
 
 it("sign in with the unverified dummyUser", async () => {
   const dummyUser = { email: "bharatrose1@gmail.com", password: "thisismylife" };
-  const permission = {
-    name: "list_leads",
-    cat: "ifa",
-    guard_name: "sales",
-    role: "sales executive",
-  };
-  await request(app)
-    .post("/api/users/permission/create")
-    .send(permission)
-    .expect(200);
+  
 
   await request(app)
     .post("/api/users/signup")
     .send({
       ...dummyUser,
-      permissions: ["list_leads"],
+      permissions: [globalId],
       role: "admin",
-      employeeCount: 50,
       industry: ["fashion"],
     })
     .expect(201);
@@ -69,22 +78,13 @@ it("sign in with the unverified dummyUser", async () => {
 
 it("create user, verify and successfully signin", async () => {
   const dummyUser = { email: "bharatrose1@gmail.com", password: "thisismylife" };
-  const permission = {
-    name: "list_leads",
-    cat: "ifa",
-    guard_name: "sales",
-    role: "sales executive",
-  };
-  await request(app)
-    .post("/api/users/permission/create")
-    .send(permission)
-    .expect(200);
+ 
 
   const response = await request(app)
     .post("/api/users/signup")
     .send({
       ...dummyUser,
-      permissions: ["list_leads"],
+      permissions: [globalId],
       role: "admin",
       employeeCount: 50,
       industry: ["fashion"],

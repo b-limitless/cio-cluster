@@ -1,14 +1,82 @@
 import express, { Request, response, Response } from "express";
 import { body } from "express-validator";
 import { Permission } from "../models/permissions";
-import { validateRequest, BadRequestError } from "@pasal/common";
+import { validateRequest, BadRequestError, requireAuth } from "@pasal/common";
 
 const router = express.Router();
 
 router.get(
-  "/api/users/permission/create",
+  "/api/users/get-authorizations",
+  // requireAuth,
   async (req: Request, res: Response) => {
-    res.status(200).json({ message: "all is good" });
+    res.send("fuck you")
+    // try {
+    //   const permissions = await Permission.aggregate([
+    //     {
+    //       $group: {
+    //         _id: "$role",
+    //         permissions: {
+    //           $push: {
+    //             id: "$_id",
+    //             name: "$name",
+    //             cat: "$cat",
+    //             guard_name: "$guard_name",
+    //             created_at: "$created_at",
+    //           }
+    //         }
+    //       }
+    //     },
+    //     {
+    //       $project: {
+    //         role: "$_id",
+    //         permissions: 1,
+    //         _id: 0
+    //       }
+    //     }
+    //   ])
+    //   // const permissions = await Permission.find();
+    //   res.send(permissions);
+    // } catch(err) {
+    //   throw new Error(`Could not fetch permissions`)
+    // }
+  }
+);
+
+
+router.get(
+  "/api/users/authorizations",
+  // requireAuth,
+  async (req: Request, res: Response) => {
+    
+    try {
+      const permissions = await Permission.aggregate([
+        {
+          $group: {
+            _id: "$role",
+            permissions: {
+              $push: {
+                id: "$_id",
+                name: "$name",
+                cat: "$cat",
+                guard_name: "$guard_name",
+                created_at: "$created_at",
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            role: "$_id",
+            permissions: 1,
+            _id: 0
+          }
+        }
+      ])
+      // const permissions = await Permission.find();
+      res.send(permissions);
+    } catch(err) {
+      throw new Error(`Could not fetch permissions`)
+    }
   }
 );
 router.post(
@@ -29,7 +97,6 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-   
     const { name, cat, guard_name, role } = req.body;
 
     const existingPermission = await Permission.findOne({ name, cat });
@@ -49,6 +116,58 @@ router.post(
     await permission.save();
 
     res.status(200).json({ permission });
+  }
+);
+
+
+router.get(
+  "/api/users/authorizations/mock",
+  async (req: Request, res: Response) => {
+    try {
+      const permissions = [
+        {
+          name: "all",
+          cat: "all",
+          guard_name: "all",
+          role: "all",
+        },
+        {
+          name: "customerCare",
+          cat: "customerCare",
+          guard_name: "customerCare",
+          role: "Customer Care",
+        },
+        {
+          name: "acceptCall",
+          cat: "customerCare",
+          guard_name: "acceptCall",
+          role: "Customer Care",
+        },
+        {
+          name: "makeCall",
+          cat: "customerCare",
+          guard_name: "makeCall",
+          role: "Customer Care",
+        },
+        {
+          name: "createUser",
+          cat: "createUser",
+          guard_name: "createUser",
+          role: "Administrator",
+        },
+        {
+          name: "deleteUser",
+          cat: "deleteUser",
+          guard_name: "deleteUser",
+          role: "Administrator",
+        },
+      ];
+
+      await Permission.insertMany(permissions);
+      res.send("Permission has been successfully added.");
+    } catch (err) {
+      res.send(`Could not insert mock data ${err}`);
+    }
   }
 );
 

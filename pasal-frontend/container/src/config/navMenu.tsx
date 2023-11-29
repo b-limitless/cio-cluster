@@ -6,6 +6,7 @@ import ArrowDown from "../assets/svg/arrow-down.svg";
 import Users from "../assets/svg/users.svg";
 import Payments from "../assets/svg/users.svg";
 
+
 export const menuIcons = {
     product: <ProductIcon />,
     dashboard: <DashboardIcon />,
@@ -14,13 +15,13 @@ export const menuIcons = {
     payments: <Payments/>
 
 }
-
+// /products/thread
 export enum menuEnum {
     Dashboard = "Dashboard",
     Products_Febric = "Products_Febric",
     Product_Shirts = "Product_Shirts",
     Product_Pants = "Product_Pants",
-    Product_Thread = "Product_Thread",
+    Products_Thread = "Products_Thread",
     Auth_Signin = "Auth_Signin",
     Auth_Signup = "Auth_Signup", 
     Users = "Users", 
@@ -40,21 +41,22 @@ export const sideNavConfig = [
     },
     {
         title: "Products", icon: menuIcons.product,
-        children: [{ title: "Febric", component: "" }, { title: "Thread", component: "" }, { title: "Shirts", component: "" }, { title: "Pants", component: "" }]
+        children: [{ title: "Febric", component: "" }, { title: "Thread", component: "" }]
+        // { title: "Shirts", component: "" }, { title: "Pants", component: "" }
     },
-    {
-        title: "Orders", icon: menuIcons.pricing,
-        children: []
-        // children: [{ title: "Pricing one" }, { title: "Pricing Two" }]
-    },
+    // {
+    //     title: "Orders", icon: menuIcons.pricing,
+    //     children: []
+    //     // children: [{ title: "Pricing one" }, { title: "Pricing Two" }]
+    // },
     {
         title: "Users", icon: menuIcons.users,
         children: []
     }, 
-    {
-        title: "Payments", icon: menuIcons.payments,
-        children: []
-    }
+    // {
+    //     title: "Payments", icon: menuIcons.payments,
+    //     children: []
+    // }
 ];
 
 

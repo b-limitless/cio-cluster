@@ -1,6 +1,7 @@
 import { mount } from "auth/AuthApp";
 import useRemoteApp from "../../hooks/useRemoteApp";
 
-export default ({ onSingIn, isSignIn }) => {
-  return useRemoteApp(mount, { onSingIn, isSignIn });
+export default ({actions, globalDispatch }) => {
+
+  return useRemoteApp(mount, {actions, globalDispatch });
 };

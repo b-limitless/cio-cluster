@@ -1,0 +1,41 @@
+@import "../../../styles/abstract/variables";
+
+$model_width: 562px;
+
+.model.show {
+    right: 0;
+    
+}
+.model.hide {
+    // display: none;
+    right: -($model_width);
+    // position: absolute;
+}
+
+.model {
+    width: $model_width;
+    height: 100vh;
+    position: fixed;
+    transition: all 0.2s ease-out;
+    top:0;
+    // right: -562px;
+    z-index: 1000;
+
+    @media only screen and (max-width: $bp-700) {
+        width: 100%;
+    }
+    
+    background-color: #fff;
+    .model__side {
+        .close {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 28px;
+            margin-left: auto;
+            svg {
+                cursor: pointer;
+            }
+        }
+    }
+}
+

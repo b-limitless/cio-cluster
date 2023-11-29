@@ -37,7 +37,8 @@ app.use(
   cookieSession({
     signed: isProd(),
     secure: isProd(),
-    domain: process.env.domain || 'pasal.dev'
+    domain: process.env.domain || 'pasal.dev',
+    maxAge: 3600000 // 10000 * 60 minutes * 60 seconds
     
   })
 );
@@ -58,7 +59,7 @@ app.all("*", async (req, res) => {
   throw new NotFoundError("Route did not find");
 });
 
-console.log("well this is working")
+// Working not 
 app.use(errorHandler);
 
 export { app };

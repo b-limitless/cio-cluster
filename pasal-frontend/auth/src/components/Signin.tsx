@@ -10,6 +10,8 @@ import { request } from "@pasal/cio-component-library";
 import { APIS } from "../config/apis";
 import { useHistory } from "react-router-dom";
 import { FormHelperText } from "@material-ui/core";
+import useUserIsAuthenticated from "../hooks/useUserIsAuthenticated";
+
 
 
 interface SigninProcess {
@@ -91,14 +93,17 @@ function signInProcessReducer(state: SigninProcess, action: any) {
   }
 }
 
+interface SignInInterface {
+  actions:any;
+  globalDispatch:any;
+}
 
-export default function Signin() {
-
+export default function Signin({actions, globalDispatch}: SignInInterface) {
   const history = useHistory();
   const [{form, formError, formHasError, formSubmitted}, dispatch] = useReducer(signInProcessReducer, signinInitialState);
 
   const onMouseLeaveEventHandler = (name: keyof SigninForm, value: string) => {
-    if (!signInModel[name].test(value)) {
+    if (!signInModel[name]?.test(value)) {
       dispatch({ type: 'FORM_ERROR', payload: { formHasError: true, name, value: `${camelCaseToNormal(name, true)} is required` } })
     } else {
       dispatch({ type: 'FORM_ERROR', payload: { name, value: null, formHasError: false } })
@@ -109,15 +114,18 @@ export default function Signin() {
     onSubmitHandler(form, signInModel, dispatch, 'signin')
    }
 
+  
+   
    useEffect(() => {
     const submitFormToServer = async () => {
       try {
-        const response = await request({
+         const response = await request({
           url: APIS.auth.signin,
           method: 'post',
           body: form
         });
-    
+  
+        globalDispatch(actions.authenticatedUser(response))
         history.push('/dashboard');
 
       } catch (err: any) {
@@ -137,8 +145,12 @@ export default function Signin() {
     }
    }, [formHasError, formSubmitted]);
 
-   console.log('formError', formError)
+
+   
+
+  //  If user is already logged in then redirect them to dashboard
   
+
   return (
     <Template>
       <div className="right col">
