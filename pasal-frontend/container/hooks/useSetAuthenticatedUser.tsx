@@ -1,9 +1,9 @@
 import { request } from '@pasal/cio-component-library';
-import { useEffect, useInsertionEffect, useLayoutEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { authenticatedUser } from '../reducers/authSlice';
-import { RootState } from '../src/store';
 import { APIS } from '../src/apis';
+import { RootState } from '../src/store';
 
 interface AuthenticatedUserInterface {
     setLoading: Function;

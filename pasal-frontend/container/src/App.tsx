@@ -14,7 +14,6 @@ const ListUserLazy = lazy(() => import("./components/user/List"));
 const AddUserLazy = lazy(() => import("./components/user/Add"));
 
 import { menuIds } from "./config/navMenu";
-
 import "./styles/main.scss";
 const LazyFebric = lazy(() => import("./components/product/Febric/Febric"));
 type Props = {}

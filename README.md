@@ -5,7 +5,7 @@
 ## Used Technologies
 
 ### Back End
-[![Stack Used](https://skillicons.dev/icons?i=nodejs,typescript,js,mongodb,rabbitmq&theme=dark)](https://skillicons.dev)
+[![Stack Used](https://skillicons.dev/icons?i=nodejs,expressjs,typescript,js,mongodb,rabbitmq&theme=dark)](https://skillicons.dev)
 
 ### Front End
 [![Stack Used](https://skillicons.dev/icons?i=typescript,js,html,scss,css,react,redux,nextjs,figma&theme=dark)](https://skillicons.dev)
@@ -28,7 +28,7 @@
 - GitHub Actions and workflows
 
 ## Prerequisites
-- Node JS, Minikube (currently using on Mac), Docker, Skaffold
+- Node JS, Minikube (currently using on Mac), Docker, Skaffold, Kubernetes
 
 ## Getting Started
 1. Clone the repository:
@@ -50,8 +50,19 @@
     ```
 
 ## Roadmap
-- Implement shirt model customization
-- Use 3D model and different parts to provide users more flexibility to customize the shirt, such as collars, buttons, fabrics, styles, accents, etc.
+- Shirt Model Customization:
+
+- Implement the functionality to customize shirt models.
+Utilize a 3D model with different parts, providing users with enhanced flexibility for customization (e.g., collars, buttons, fabrics, styles, accents).
+Snapshot of Customized 3D Model:
+
+- Develop the capability to capture snapshots of the customized 3D model.
+Integrate with the cart to ensure seamless updates when users customize their shirts.
+User Measurement Integration:
+
+- Explore tools such as TensorFlow or other convenient solutions for capturing and processing user measurements.
+
+- Streamline the user order process, including shipping and payment procedures.
 
 ## Contact Information
 For questions or feedback, reach out to us at bharatrose1@gmail.com.
