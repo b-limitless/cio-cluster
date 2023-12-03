@@ -20,8 +20,8 @@
 - Product customization using 3D Model using Three JS - under processing
 
 ## System
-- Microservice with Event-driven architecture with RabbitMQ
-- React JS with Microfront end architecture
+- Microservice with Event-driven architecture
+- Microfront end architecture
 
 ## Development Process
 - Test Driven Development: Chai, Mocha, Supertest, Cypress JS
